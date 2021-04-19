@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FragmentsLab</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment Merge Test</string>
+    <string name="button_first_red">Red Fragment Merge conflict</string>
+    <string name="button_first_green">Green Fragment merge conflict</string>
+    <string name="button_first_blue">Blue Fragment merge conflict</string>
+    <string name="color_text">Color</string>
+</resources>
