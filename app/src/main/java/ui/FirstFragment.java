@@ -28,6 +28,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener {
 
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
+        Log.i("FirstFragment", "onCreate");
         return binding.getRoot();
     }
 
