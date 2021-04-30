@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_chats"
-        android:name="edu.uw.tcss450.stran373.ui.Chat.ChatFragment"
-        android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        android:name="edu.uw.tcss450.stran373.ui.Chat.ChatListFragment"
+        android:label="@string/title_chats"
+        tools:layout="@layout/fragment_chat_list" />
     <fragment
         android:id="@+id/navigation_weather"
         android:name="edu.uw.tcss450.stran373.ui.Weather.WeatherFragment"

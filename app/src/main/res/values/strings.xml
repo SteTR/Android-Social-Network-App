@@ -11,6 +11,13 @@
     <string name="title_home">Home</string>
     <string name="title_weather">Weather</string>
     <string name="title_contacts">Contacts</string>
+
+    <!--  Chat List  -->
     <string name="title_chats">Chats</string>
+
+    <!--  Chat Card  -->
+    <string name="chat_card_name">Placeholder Name</string>
+    <string name="chat_card_time">12:00 AM</string>
+    <string name="chat_card_last_message">This is a placeholder message. :)</string>
 
 </resources>
