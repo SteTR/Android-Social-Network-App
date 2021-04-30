@@ -8,9 +8,16 @@
     <string name="edittext_signin_password">Enter Password </string>
     <string name="button_signin_signin">Sign In</string>
     <string name="button_signin_register">Create an Account</string>
+    <string name="text_home_welcome">Welcome Back!</string>
+    <string name="text_home_name">Name</string>
+    <string name="text_home_location">Location</string>
+    <string name="text_home_temperature">Temperature</string>
+    <string name="text_home_notifications">Notifications</string>
+    <string name="text_home_recent">Recent Chats</string>
     <string name="title_home">Home</string>
     <string name="title_weather">Weather</string>
     <string name="title_contacts">Contacts</string>
     <string name="title_chats">Chats</string>
+
 
 </resources>
