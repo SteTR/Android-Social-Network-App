@@ -4,17 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.auth0.android.jwt.JWT;
+
 public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
 
 
 //    private final JWT mJwt;
-//
+
+    private static String mJwt;
+    private String mEmail;
+
 //    private UserInfoViewModel(JWT jwt) {
 //        mJwt = jwt;
 //    }
 
-    private static String mJwt;
-    private String mEmail;
 
     private UserInfoViewModel(String jwt, String email) {
         mJwt = jwt;

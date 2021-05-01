@@ -87,8 +87,8 @@ public class SignInFragment extends Fragment {
         String emailString = email.getText().toString();
         String pwString = password.getText().toString();
         boolean verifyE = verifyEmail(emailString);
-        boolean verifyPW = TextUtils.isEmpty(pwString);
-        if (!verifyE || verifyPW) {
+        boolean verifyPW = verifyPW(pwString);
+        if (!verifyE || !verifyPW) {
             if (!verifyE) {
                 email.setError("Invalid Email");
             } else {
@@ -146,6 +146,10 @@ public class SignInFragment extends Fragment {
                     }
                 }
             }
+        }
+
+        if (!pw) {
+            myBinding.editText2.setError("Special character missing");
         }
 
         return pw;
