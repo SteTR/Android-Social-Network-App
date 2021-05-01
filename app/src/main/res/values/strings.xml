@@ -1,6 +1,25 @@
 <resources>
-    <string name="app_name">FragmentsLab</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">MyLabAppleej232</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="signin">Sign In</string>
+    <string name="reg">Register</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="confirm">Confirm Password</string>
+    <string name="hello">Hello </string>
+    <string name="home">Home</string>
+    <string name="blog">Blog</string>
+
+    <string name="placeholder">Blank</string>
+    <string name="action_link">Full Post</string>
+
+    <string name="successLabel">Success!</string>
+    <string name="blogList">Blog Posts</string>
+    <string name="blogPost">Post</string>
+
+    <string name="blogDate">Date</string>
+    <string name="blogTitle">Title</string>
+    <string name="blogPreview">Preview</string>
 </resources>
