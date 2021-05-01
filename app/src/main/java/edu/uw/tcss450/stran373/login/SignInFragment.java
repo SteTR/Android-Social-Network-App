@@ -95,16 +95,7 @@ public class SignInFragment extends Fragment {
                 password.setError("Invalid Password");
             }
         } else {
-//            SignInFragmentDirections.ActionSignInFragmentToSuccessFragment directions =
-//                    SignInFragmentDirections.actionSignInFragmentToSuccessFragment(emailString, "");
-//            Navigation.findNavController(getView()).navigate(directions);
-//            Navigation.findNavController(
-//                    getView())
-//                    .navigate(SignInFragmentDirections
-//                            .actionSignInFragmentToMainActivity(generateJwt(emailString)));
-//            getActivity().finish();
             verifyAuthWithServer();
-
         }
 
     }
@@ -145,7 +136,16 @@ public class SignInFragment extends Fragment {
         if (thePW.length() < 8) {
             myBinding.editText2.setError("Password is less than 8 characters.");
         } else {
-            if (thePW.contains)
+            for (int i = 0; i < thePW.length(); i++) {
+                int j = 0;
+                while (j < mySpecials.length && !pw) {
+                    if (thePW.charAt(i) == mySpecials[j]) {
+                        pw = true;
+                    } else {
+                        j++;
+                    }
+                }
+            }
         }
 
         return pw;
