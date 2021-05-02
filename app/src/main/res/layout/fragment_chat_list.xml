@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_margin="5dp"
     app:cardCornerRadius="5dp"
-    tools:context=".ui.Chat.ChatCardFragment">
+    tools:context=".ui.Chat.Card.ChatCardFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/list_chat_add_button"

@@ -1,18 +1,23 @@
-package edu.uw.tcss450.stran373.ui.Chat;
+package edu.uw.tcss450.stran373.ui.Chat.Card;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentChatCardBinding;
+import edu.uw.tcss450.stran373.ui.Chat.ChatListFragmentDirections;
 
+/**
+ * A RecycleView holder to hold the chat cards
+ * @author Steven Tran
+ */
 public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRecycleViewAdapter.ChatCardViewHolder> {
 
     private final List<ChatCard> mChatCards;
@@ -31,7 +36,7 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
 
     @Override
     public void onBindViewHolder(@NonNull final ChatCardViewHolder holder, final int position) {
-
+        holder.setChat(mChatCards.get(position));
     }
 
     @Override
@@ -43,23 +48,27 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
 
         public final View mView;
         public FragmentChatCardBinding binding;
-        private ChatCard mBlog;
+        private ChatCard mChat;
 
         public ChatCardViewHolder(@NonNull final View itemView) {
             super(itemView);
             mView = itemView;
             binding = FragmentChatCardBinding.bind(itemView);
-            binding.cardConstraint.setOnClickListener(this::openChat);
         }
 
         /**
          * Listener to open the chat corresponding to the chat card
          *
-         * @param button a chat card
+         * @param chat a chat card
          */
-        private void openChat(final View button)
+        private void setChat(final ChatCard chat)
         {
-            Log.d("Button was clicked", button.toString());
+            mChat = chat;
+
+            // Moves to the chat id in the chatcard
+            binding.cardConstraint.setOnClickListener(view ->
+                    Navigation.findNavController(mView).navigate(ChatListFragmentDirections
+                            .actionNavigationChatsToNavigationSingleChat(mChat.getChatID())));
         }
     }
 }

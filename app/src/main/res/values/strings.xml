@@ -20,4 +20,7 @@
     <string name="chat_card_time">12:00 AM</string>
     <string name="chat_card_last_message">This is a placeholder message. :)</string>
 
+    <!--  Database URLS  -->
+    <string name="base_url">TODO</string>
+
 </resources>

@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#03A9F4</color>
     <color name="white">#FF5722</color>
+
+
+<!--    TEMP -->
+    <color name="primaryLightColor">#7953d2</color>
+    <color name="secondaryTextColorFade">#222222</color>
+    <color name="secondaryLightColor">#ead6a9</color>
 </resources>

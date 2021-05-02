@@ -1,4 +1,4 @@
-package edu.uw.tcss450.stran373.ui.Chat;
+package edu.uw.tcss450.stran373.ui.Chat.Card;
 
 import android.os.Bundle;
 
@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import edu.uw.tcss450.stran373.R;
 
 /**
- * create an instance of this chat fragment.
+ * create an instance of this chat card fragment.
+ * Currently not used for anything besides representing a card
+ * @author Steven Tran
  */
 public class ChatCardFragment extends Fragment {
 
