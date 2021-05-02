@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_graph"
-    app:startDestination="@id/signInFragment">
-
+    app:startDestination="@id/SignInFragment">
     <fragment
-        android:id="@+id/signInFragment"
+        android:id="@+id/SignInFragment"
         android:name="edu.uw.tcss450.stran373.login.SignInFragment"
         android:label="SignInFragment" >
         <action
             android:id="@+id/action_signInFragment_to_successFragment"
-            app:destination="@id/successFragment" />
+            app:destination="@id/SuccessFragment" />
     </fragment>
     <fragment
-        android:id="@+id/successFragment"
+        android:id="@+id/SuccessFragment"
         android:name="edu.uw.tcss450.stran373.ui.SuccessFragment"
         android:label="SuccessFragment" >
         <argument

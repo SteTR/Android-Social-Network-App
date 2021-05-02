@@ -15,6 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,9 +71,9 @@ public class SignInFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 //        binding.registerButton.setOnClickListener(this);
         myBinding.signInButton.setOnClickListener(this::verify);
-        mSignInModel.addResponseObserver(
-                getViewLifecycleOwner(),
-                this::observeResponse);
+//        mSignInModel.addResponseObserver(
+//                getViewLifecycleOwner(),
+//                this::observeResponse);
 
 //        SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
 //        binding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
@@ -95,7 +99,12 @@ public class SignInFragment extends Fragment {
                 password.setError("Invalid Password");
             }
         } else {
-            verifyAuthWithServer();
+            Navigation.findNavController(
+                    getView())
+                    .navigate(SignInFragmentDirections
+                            .actionSignInFragmentToSuccessFragment(generateJwt(emailString), emailString));
+//            getActivity().finish();
+//            verifyAuthWithServer();
         }
 
     }
@@ -155,20 +164,20 @@ public class SignInFragment extends Fragment {
         return pw;
     }
 
-//    private String generateJwt(final String email) {
-//        String token;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
-//                    "production code!!!");
-//            token = JWT.create()
-//                    .withIssuer("auth0")
-//                    .withClaim("email", email)
-//                    .sign(algorithm);
-//        } catch (JWTCreationException exception){
-//            throw new RuntimeException("JWT Failed to Create.");
-//        }
-//        return token;
-//    }
+    private String generateJwt(final String email) {
+        String token;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
+                    "production code!!!");
+            token = JWT.create()
+                    .withIssuer("auth0")
+                    .withClaim("email", email)
+                    .sign(algorithm);
+        } catch (JWTCreationException exception){
+            throw new RuntimeException("JWT Failed to Create.");
+        }
+        return token;
+    }
 
     private void verifyAuthWithServer() {
         mSignInModel.connect(
