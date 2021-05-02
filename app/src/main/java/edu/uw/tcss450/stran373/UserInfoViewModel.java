@@ -6,19 +6,34 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.auth0.android.jwt.JWT;
 
+/**
+ *
+ */
 public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
 
 
 //    private final JWT mJwt;
 
+    /**
+     *
+     */
     private static String mJwt;
+
+    /**
+     *
+     */
     private String mEmail;
 
 //    private UserInfoViewModel(JWT jwt) {
 //        mJwt = jwt;
 //    }
 
-
+    /**
+     *
+     *
+     * @param jwt
+     * @param email
+     */
     private UserInfoViewModel(String jwt, String email) {
         mJwt = jwt;
         mEmail = email;
@@ -28,6 +43,11 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
 //        return mJwt.isExpired(0);
 //    }
 
+    /**
+     *
+     *
+     * @return
+     */
     public String getEmail() {
 //        if (!mJwt.isExpired(0)) {
 //            return mJwt.getClaim("email").asString();
@@ -37,26 +57,54 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
         return mEmail;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public static String getJwt() {
         return mJwt;
     }
 
+    /**
+     *
+     */
     public static class UserInfoViewModelFactory implements ViewModelProvider.Factory {
 
 //        private final JWT jwt;
 
+        /**
+         *
+         */
         private final String jwt;
+
+        /**
+         *
+         */
         private final String email;
 
 //        public UserInfoViewModelFactory(JWT jwt) {
 //            this.jwt = jwt;
 //        }
 
+        /**
+         *
+         *
+         * @param jwt
+         * @param email
+         */
         public UserInfoViewModelFactory(final String jwt, final String email) {
             this.jwt = jwt;
             this.email = email;
         }
 
+        /**
+         *
+         *
+         * @param modelClass
+         * @param <T>
+         * @return
+         */
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

@@ -30,12 +30,26 @@ import edu.uw.tcss450.stran373.databinding.FragmentSignInBinding;
  */
 public class SignInFragment extends Fragment {
 
+    /**
+     *
+     */
     private FragmentSignInBinding myBinding;
 
+    /**
+     *
+     */
     private SignInViewModel mSignInModel;
 
+    /**
+     *
+     */
     private char[] mySpecials;
 
+    /**
+     *
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +58,14 @@ public class SignInFragment extends Fragment {
                 .get(SignInViewModel.class);
     }
 
+    /**
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,6 +76,9 @@ public class SignInFragment extends Fragment {
         return myBinding.getRoot();
     }
 
+    /**
+     *
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -67,6 +92,12 @@ public class SignInFragment extends Fragment {
 //        Navigation.findNavController(getView()).navigate(directions2);
 //    }
 
+    /**
+     *
+     *
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 //        binding.registerButton.setOnClickListener(this);
@@ -164,6 +195,12 @@ public class SignInFragment extends Fragment {
         return pw;
     }
 
+    /**
+     *
+     *
+     * @param email
+     * @return
+     */
     private String generateJwt(final String email) {
         String token;
         try {
@@ -187,6 +224,7 @@ public class SignInFragment extends Fragment {
 
     /**
      * Helper to abstract the navigation to the Activity past Authentication.
+     *
      * @param email users email
      * @param jwt the JSON Web Token supplied by the server
      */

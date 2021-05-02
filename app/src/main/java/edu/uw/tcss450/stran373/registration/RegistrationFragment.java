@@ -2,65 +2,261 @@ package edu.uw.tcss450.stran373.registration;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
-import edu.uw.tcss450.stran373.R;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import edu.uw.tcss450.stran373.databinding.FragmentRegistrationBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RegistrationFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
-public class RegistrationFragment extends Fragment {
+public class RegistrationFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    /**
+     *
+     */
+    private FragmentRegistrationBinding myBinding;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    /**
+     *
+     */
+    private RegistrationViewModel mRegisterModel;
 
-    public RegistrationFragment() {
-        // Required empty public constructor
+    /**
+     *
+     */
+    private char[] mySpecials;
+
+    /**
+     *
+     *
+     * @param savedInstanceState
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mySpecials = new char[] {'!', '?', '&', '$', '#'};
+        mRegisterModel = new ViewModelProvider(getActivity())
+                .get(RegistrationViewModel.class);
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegistrationFragment.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
-    public static RegistrationFragment newInstance(String param1, String param2) {
-        RegistrationFragment fragment = new RegistrationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration, container, false);
+//        binding = FragmentRegisterBinding.inflate(inflater, container, false);
+        myBinding = FragmentRegistrationBinding.inflate(inflater);
+        return myBinding.getRoot();
     }
+
+    /**
+     *
+     *
+     * @param view
+     * @param savedInstanceState
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        myBinding.button.setOnClickListener(this);
+//        mRegisterModel.addResponseObserver(getViewLifecycleOwner(),
+//                this::observeResponse);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        myBinding = null;
+    }
+
+    /**
+     *
+     *
+     * @param view
+     */
+    @Override
+    public void onClick(View view) {
+        EditText email = myBinding.editText;
+        EditText pw1 = myBinding.editText2;
+        EditText pw2 = myBinding.editText3;
+        EditText first = myBinding.editText4;
+        EditText last = myBinding.editText5;
+
+        int match = pw1.getText().toString().compareTo(pw2.getText().toString());
+        boolean emptyPW1 = TextUtils.isEmpty(pw1.getText().toString());
+        boolean emptyPW2 = TextUtils.isEmpty(pw2.getText().toString());
+        boolean emptyE = TextUtils.isEmpty(email.getText().toString());
+        boolean emptyFirst = TextUtils.isEmpty(first.getText().toString());
+        boolean emptyLast = TextUtils.isEmpty(last.getText().toString());
+        boolean verifyE = verifyEmail(email.getText().toString());
+
+        if (emptyE || !verifyE) {
+            email.setError("Invalid Email");
+        } else if (emptyPW1) {
+            pw1.setError("Invalid Password");
+        } else if (emptyPW2 || match != 0) {
+            pw2.setError("Passwords do not match");
+        } else if (emptyFirst) {
+            first.setError("Invalid Name");
+        } else if (emptyLast) {
+            last.setError("Invalid Name");
+        } else {
+//            String emailStr = email.getText().toString();
+//            Navigation.findNavController(
+//                    getView())
+//                    .navigate(RegisterFragmentDirections
+//                            .actionRegisterFragmentToMainActivity(generateJwt(emailStr)));
+//            getActivity().finish();
+            verifyAuthWithServer();
+        }
+    }
+
+    /**
+     * Helper method used to verify the email.
+     *
+     * @param theEmail
+     * @return
+     */
+    private boolean verifyEmail(String theEmail) {
+        int i = 0;
+        boolean found = false;
+        while (i < theEmail.length() && !found) {
+            if (theEmail.charAt(i) == '@') {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        return found;
+    }
+
+    /**
+     * Helper method to verify the password.
+     *
+     * @param thePW
+     * @return
+     */
+    private boolean verifyPW(String thePW) {
+        boolean pw = false;
+        if (thePW.length() < 8) {
+            myBinding.editText2.setError("Password is less than 8 characters.");
+        } else {
+            for (int i = 0; i < thePW.length(); i++) {
+                int j = 0;
+                while (j < mySpecials.length && !pw) {
+                    if (thePW.charAt(i) == mySpecials[j]) {
+                        pw = true;
+                    } else {
+                        j++;
+                    }
+                }
+            }
+        }
+
+        if (!pw) {
+            myBinding.editText2.setError("Special character missing");
+        }
+
+        return pw;
+    }
+
+    /**
+     *
+     *
+     * @param email
+     * @return
+     */
+    private String generateJwt(final String email) {
+        String token;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
+                    "production code!!!");
+            token = JWT.create()
+                    .withIssuer("auth0")
+                    .withClaim("email", email)
+                    .sign(algorithm);
+        } catch (JWTCreationException exception){
+            throw new RuntimeException("JWT Failed to Create.");
+        }
+        return token;
+    }
+
+    /**
+     *
+     */
+    private void verifyAuthWithServer() {
+        mRegisterModel.connect(
+                myBinding.editText4.getText().toString(),
+                myBinding.editText5.getText().toString(),
+                myBinding.editText.getText().toString(),
+                myBinding.editText2.getText().toString());
+    }
+
+//    /**
+//     *
+//     */
+//    private void navigateToLogin() {
+//        RegisterFragmentDirections.ActionRegisterFragmentToSignInFragment directions =
+//                RegisterFragmentDirections.actionRegisterFragmentToSignInFragment();
+//
+//        directions.setEmail(binding.editText.getText().toString());
+//        directions.setPassword(binding.editText2.getText().toString());
+//
+//        Navigation.findNavController(getView()).navigate(directions);
+//
+//    }
+
+//    /**
+//     * An observer on the HTTP Response from the web server. This observer should be
+//     * attached to SignInViewModel.
+//     *
+//     * @param response the Response from the server
+//     */
+//    private void observeResponse(final JSONObject response) {
+//        if (response.length() > 0) {
+//            if (response.has("code")) {
+//                try {
+//                    binding.editText.setError(
+//                            "Error Authenticating: " +
+//                                    response.getJSONObject("data").getString("message"));
+//
+//                } catch (JSONException e) {
+//                    Log.e("JSON Parse Error", e.getMessage());
+//                }
+//            } else {
+//                navigateToLogin();
+//            }
+//        } else {
+//            Log.d("JSON Response", "No Response");
+//        }
+//    }
+
 }

@@ -25,21 +25,43 @@ import java.util.Objects;
 
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
+/**
+ *
+ */
 public class SignInViewModel extends AndroidViewModel {
 
+    /**
+     *
+     */
     private MutableLiveData<JSONObject> mResponse;
 
+    /**
+     *
+     *
+     * @param application
+     */
     public SignInViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     *
+     *
+     * @param owner
+     * @param observer
+     */
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
     }
 
+    /**
+     *
+     *
+     * @param error
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -64,6 +86,12 @@ public class SignInViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     *
+     *
+     * @param email
+     * @param password
+     */
     public void connect(final String email, final String password) {
         String url = "https://cfb3-tcss450-labs-2021sp.herokuapp.com/auth";
         Request request = new JsonObjectRequest(
