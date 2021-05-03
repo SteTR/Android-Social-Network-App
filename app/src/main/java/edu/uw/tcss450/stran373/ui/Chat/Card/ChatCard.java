@@ -11,7 +11,7 @@ public class ChatCard implements Serializable {
     private final String mName;
     private final String mLastMessage;
     private final Date mTime;
-    private final int mChatId;
+    private final int mChatId; // TODO maybe not have the chat card store the chat id but move it to the chat list.
 //    private final _ mPicture;
 
     /**

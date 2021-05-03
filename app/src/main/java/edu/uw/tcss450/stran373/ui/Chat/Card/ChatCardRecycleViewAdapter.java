@@ -12,7 +12,6 @@ import java.util.List;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentChatCardBinding;
-import edu.uw.tcss450.stran373.ui.Chat.ChatListFragmentDirections;
 
 /**
  * A RecycleView holder to hold the chat cards
@@ -20,6 +19,7 @@ import edu.uw.tcss450.stran373.ui.Chat.ChatListFragmentDirections;
  */
 public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRecycleViewAdapter.ChatCardViewHolder> {
 
+    // List of chat cards to be displayed
     private final List<ChatCard> mChatCards;
 
     public ChatCardRecycleViewAdapter(final List<ChatCard> theChatCards)
@@ -57,7 +57,7 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
         }
 
         /**
-         * Listener to open the chat corresponding to the chat card
+         * Sets the chat to the holder and sets the button to navigate to the single chat fragment
          *
          * @param chat a chat card
          */
@@ -67,7 +67,7 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
 
             // Moves to the chat id in the chatcard
             binding.cardConstraint.setOnClickListener(view ->
-                    Navigation.findNavController(mView).navigate(ChatListFragmentDirections
+                    Navigation.findNavController(mView).navigate(ChatCardListFragmentDirections
                             .actionNavigationChatsToNavigationSingleChat(mChat.getChatID())));
         }
     }

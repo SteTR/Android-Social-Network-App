@@ -15,7 +15,9 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentChatListBinding;
 
 /**
- * Create a fragment that lists all the chat cards before entering a chat
+ * Create a fragment that lists all the chat cards before entering a chat.
+ * Not changed at the moment.
+ * @author Steven Tran
  */
 public class ChatCardListFragment extends Fragment {
 

@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uw.tcss450.stran373.databinding.FragmentChatBinding;
-import edu.uw.tcss450.stran373.ui.Chat.ChatFragmentArgs;
 
 import static edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel.TEST_CHAT_ID;
 import static edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel.USER_NAME;

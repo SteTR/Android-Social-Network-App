@@ -12,6 +12,8 @@ import edu.uw.tcss450.stran373.R;
 
 /**
  * create an instance of this fragment.
+ * Mostly not used but still required.
+ * @author Steven Tran
  */
 public class ChatMessageFragment extends Fragment {
 

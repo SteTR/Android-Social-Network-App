@@ -13,7 +13,12 @@ import java.util.List;
 
 import edu.uw.tcss450.stran373.ui.Chat.Card.ChatCard;
 
+/**
+ * A view model to hold all the chat cards as a list
+ * @author Steven Tran
+ */
 public class ChatListViewModel extends AndroidViewModel {
+
 
     private final MutableLiveData<List<ChatCard>> mCardList;
 
@@ -24,6 +29,12 @@ public class ChatListViewModel extends AndroidViewModel {
         mCardList.setValue(generateChatCards());
     }
 
+    /**
+     * Makes the owner observe the lists for any updates
+     *
+     * @param owner owner to watch
+     * @param observer the function to perform upon observation
+     */
     public void addChatListObserver(@NonNull LifecycleOwner owner, @NonNull Observer<? super List<ChatCard>> observer) {
         mCardList.observe(owner, observer);
     }

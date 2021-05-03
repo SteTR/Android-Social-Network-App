@@ -8,6 +8,9 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
+/**
+ * A class that encapsulates all the necessary information for a chat message
+ */
 public class ChatMessage implements Serializable {
     private final int mMessageId;
     private final String mMessage;

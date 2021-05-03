@@ -24,9 +24,13 @@ import java.util.Objects;
 
 import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
 
+/**
+ * A view model that keeps track of all the chats by id and their messages
+ * @author Steven Tran
+ */
 public class ChatViewModel extends AndroidViewModel {
 
-    // TODO figure out if I should merge the two view models
+    // TODO possibly need to merge the two view models
     public static final int TEST_CHAT_ID = 1;
     public static final String USER_NAME = "BradPitt@handsomeclub.com";
     public static final String OTHER_USER = "JohnCena@bigman.com";
@@ -45,6 +49,10 @@ public class ChatViewModel extends AndroidViewModel {
         mMessages.get(TEST_CHAT_ID).setValue(generateSampleText());
     }
 
+    /**
+     * Generates a sample chat log for display
+     * @return a list of chatmessages
+     */
     private static List<ChatMessage> generateSampleText() {
         final List<ChatMessage> chatMessages = new ArrayList<>();
 
