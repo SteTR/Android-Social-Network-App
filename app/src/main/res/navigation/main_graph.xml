@@ -9,6 +9,17 @@
         <action
             android:id="@+id/action_signInFragment_to_successFragment"
             app:destination="@id/SuccessFragment" />
+        <action
+            android:id="@+id/action_SignInFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="password"
+            app:argType="string"
+            android:defaultValue="default" />
     </fragment>
     <fragment
         android:id="@+id/SuccessFragment"
@@ -20,5 +31,16 @@
         <argument
             android:name="email"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="edu.uw.tcss450.stran373.registration.RegistrationFragment"
+        android:label="RegistrationFragment" >
+        <action
+            android:id="@+id/action_registrationFragment_to_SignInFragment"
+            app:destination="@id/SignInFragment" />
+        <argument
+            android:name="navi"
+            app:argType="integer" />
     </fragment>
 </navigation>

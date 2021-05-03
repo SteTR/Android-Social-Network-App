@@ -57,8 +57,8 @@ public class SuccessFragment extends Fragment {
         SuccessFragmentArgs args = SuccessFragmentArgs.fromBundle(getArguments());
         binding.textLabel.setText("Hello " + args.getEmail());
 
-//        UserInfoViewModel model = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
-//        binding.textLabel.setText("Hello " + model.getEmail() + "!");
+        UserInfoViewModel model = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
+        binding.textLabel.setText("Hello " + model.getEmail() + "!");
     }
 
     /**

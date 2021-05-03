@@ -28,7 +28,7 @@ import edu.uw.tcss450.stran373.databinding.FragmentSignInBinding;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SignInFragment extends Fragment {
+public class SignInFragment extends Fragment implements View.OnClickListener {
 
     /**
      *
@@ -85,12 +85,12 @@ public class SignInFragment extends Fragment {
         myBinding = null;
     }
 
-//    @Override
-//    public void onClick(View view) {
-//        SignInFragmentDirections.ActionSignInFragmentToRegisterFragment directions2 =
-//                SignInFragmentDirections.actionSignInFragmentToRegisterFragment(0);
-//        Navigation.findNavController(getView()).navigate(directions2);
-//    }
+    @Override
+    public void onClick(View view) {
+        SignInFragmentDirections.ActionSignInFragmentToRegistrationFragment directions2 =
+                SignInFragmentDirections.actionSignInFragmentToRegistrationFragment(0);
+        Navigation.findNavController(getView()).navigate(directions2);
+    }
 
     /**
      *
@@ -100,15 +100,15 @@ public class SignInFragment extends Fragment {
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        binding.registerButton.setOnClickListener(this);
+        myBinding.registerButton.setOnClickListener(this);
         myBinding.signInButton.setOnClickListener(this::verify);
-//        mSignInModel.addResponseObserver(
-//                getViewLifecycleOwner(),
-//                this::observeResponse);
+        mSignInModel.addResponseObserver(
+                getViewLifecycleOwner(),
+                this::observeResponse);
 
-//        SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
-//        binding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
-//        binding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+        SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
+        myBinding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
+        myBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
     }
 
     /**
@@ -130,12 +130,12 @@ public class SignInFragment extends Fragment {
                 password.setError("Invalid Password");
             }
         } else {
-            Navigation.findNavController(
-                    getView())
-                    .navigate(SignInFragmentDirections
-                            .actionSignInFragmentToSuccessFragment(generateJwt(emailString), emailString));
+//            Navigation.findNavController(
+//                    getView())
+//                    .navigate(SignInFragmentDirections
+//                            .actionSignInFragmentToSuccessFragment(generateJwt(emailString), emailString));
 //            getActivity().finish();
-//            verifyAuthWithServer();
+            verifyAuthWithServer();
         }
 
     }

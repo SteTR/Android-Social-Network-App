@@ -84,8 +84,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         myBinding.button.setOnClickListener(this);
-//        mRegisterModel.addResponseObserver(getViewLifecycleOwner(),
-//                this::observeResponse);
+        mRegisterModel.addResponseObserver(getViewLifecycleOwner(),
+                this::observeResponse);
     }
 
     /**
@@ -111,8 +111,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         EditText last = myBinding.editText5;
 
         int match = pw1.getText().toString().compareTo(pw2.getText().toString());
-        boolean emptyPW1 = TextUtils.isEmpty(pw1.getText().toString());
-        boolean emptyPW2 = TextUtils.isEmpty(pw2.getText().toString());
+        boolean validPW1 = verifyPW(pw1.getText().toString());
         boolean emptyE = TextUtils.isEmpty(email.getText().toString());
         boolean emptyFirst = TextUtils.isEmpty(first.getText().toString());
         boolean emptyLast = TextUtils.isEmpty(last.getText().toString());
@@ -120,9 +119,9 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         if (emptyE || !verifyE) {
             email.setError("Invalid Email");
-        } else if (emptyPW1) {
+        } else if (validPW1) {
             pw1.setError("Invalid Password");
-        } else if (emptyPW2 || match != 0) {
+        } else if (match != 0) {
             pw2.setError("Passwords do not match");
         } else if (emptyFirst) {
             first.setError("Invalid Name");
@@ -148,7 +147,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     private boolean verifyEmail(String theEmail) {
         int i = 0;
         boolean found = false;
-        while (i < theEmail.length() && !found) {
+        while (i < theEmail.length() && !found &&
+                !TextUtils.isEmpty(theEmail)) {
             if (theEmail.charAt(i) == '@') {
                 found = true;
             } else {
@@ -220,43 +220,43 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 myBinding.editText2.getText().toString());
     }
 
-//    /**
-//     *
-//     */
-//    private void navigateToLogin() {
-//        RegisterFragmentDirections.ActionRegisterFragmentToSignInFragment directions =
-//                RegisterFragmentDirections.actionRegisterFragmentToSignInFragment();
-//
-//        directions.setEmail(binding.editText.getText().toString());
-//        directions.setPassword(binding.editText2.getText().toString());
-//
-//        Navigation.findNavController(getView()).navigate(directions);
-//
-//    }
+    /**
+     *
+     */
+    private void navigateToLogin() {
+        RegistrationFragmentDirections.ActionRegistrationFragmentToSignInFragment directions =
+                RegistrationFragmentDirections.actionRegistrationFragmentToSignInFragment();
 
-//    /**
-//     * An observer on the HTTP Response from the web server. This observer should be
-//     * attached to SignInViewModel.
-//     *
-//     * @param response the Response from the server
-//     */
-//    private void observeResponse(final JSONObject response) {
-//        if (response.length() > 0) {
-//            if (response.has("code")) {
-//                try {
-//                    binding.editText.setError(
-//                            "Error Authenticating: " +
-//                                    response.getJSONObject("data").getString("message"));
-//
-//                } catch (JSONException e) {
-//                    Log.e("JSON Parse Error", e.getMessage());
-//                }
-//            } else {
-//                navigateToLogin();
-//            }
-//        } else {
-//            Log.d("JSON Response", "No Response");
-//        }
-//    }
+        directions.setEmail(myBinding.editText.getText().toString());
+        directions.setPassword(myBinding.editText2.getText().toString());
+
+        Navigation.findNavController(getView()).navigate(directions);
+
+    }
+
+    /**
+     * An observer on the HTTP Response from the web server. This observer should be
+     * attached to SignInViewModel.
+     *
+     * @param response the Response from the server
+     */
+    private void observeResponse(final JSONObject response) {
+        if (response.length() > 0) {
+            if (response.has("code")) {
+                try {
+                    myBinding.editText.setError(
+                            "Error Authenticating: " +
+                                    response.getJSONObject("data").getString("message"));
+
+                } catch (JSONException e) {
+                    Log.e("JSON Parse Error", e.getMessage());
+                }
+            } else {
+                navigateToLogin();
+            }
+        } else {
+            Log.d("JSON Response", "No Response");
+        }
+    }
 
 }
