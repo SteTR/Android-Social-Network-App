@@ -119,7 +119,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         if (emptyE || !verifyE) {
             email.setError("Invalid Email");
-        } else if (validPW1) {
+        } else if (!validPW1) {
             pw1.setError("Invalid Password");
         } else if (match != 0) {
             pw2.setError("Passwords do not match");
