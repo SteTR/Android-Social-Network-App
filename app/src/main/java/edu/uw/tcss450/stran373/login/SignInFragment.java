@@ -195,26 +195,26 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         return pw;
     }
 
-    /**
-     *
-     *
-     * @param email
-     * @return
-     */
-    private String generateJwt(final String email) {
-        String token;
-        try {
-            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
-                    "production code!!!");
-            token = JWT.create()
-                    .withIssuer("auth0")
-                    .withClaim("email", email)
-                    .sign(algorithm);
-        } catch (JWTCreationException exception){
-            throw new RuntimeException("JWT Failed to Create.");
-        }
-        return token;
-    }
+//    /**
+//     *
+//     *
+//     * @param email
+//     * @return
+//     */
+//    private String generateJwt(final String email) {
+//        String token;
+//        try {
+//            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
+//                    "production code!!!");
+//            token = JWT.create()
+//                    .withIssuer("auth0")
+//                    .withClaim("email", email)
+//                    .sign(algorithm);
+//        } catch (JWTCreationException exception){
+//            throw new RuntimeException("JWT Failed to Create.");
+//        }
+//        return token;
+//    }
 
     private void verifyAuthWithServer() {
         mSignInModel.connect(

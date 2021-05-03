@@ -194,20 +194,20 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
      * @param email
      * @return
      */
-    private String generateJwt(final String email) {
-        String token;
-        try {
-            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
-                    "production code!!!");
-            token = JWT.create()
-                    .withIssuer("auth0")
-                    .withClaim("email", email)
-                    .sign(algorithm);
-        } catch (JWTCreationException exception){
-            throw new RuntimeException("JWT Failed to Create.");
-        }
-        return token;
-    }
+//    private String generateJwt(final String email) {
+//        String token;
+//        try {
+//            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
+//                    "production code!!!");
+//            token = JWT.create()
+//                    .withIssuer("auth0")
+//                    .withClaim("email", email)
+//                    .sign(algorithm);
+//        } catch (JWTCreationException exception){
+//            throw new RuntimeException("JWT Failed to Create.");
+//        }
+//        return token;
+//    }
 
     /**
      *
