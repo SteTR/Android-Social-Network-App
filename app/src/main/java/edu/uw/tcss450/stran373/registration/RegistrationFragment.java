@@ -25,69 +25,69 @@ import org.json.JSONObject;
 import edu.uw.tcss450.stran373.databinding.FragmentRegistrationBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment used to house the registration feature.
  */
 public class RegistrationFragment extends Fragment implements View.OnClickListener {
 
     /**
-     *
+     * Binding for this fragment.
      */
     private FragmentRegistrationBinding myBinding;
 
     /**
-     *
+     * ViewModel used to store information regarding registration.
      */
-    private RegistrationViewModel mRegisterModel;
+    private RegistrationViewModel myRegisterModel;
 
     /**
-     *
+     * Set of special characters used for password validation.
      */
     private char[] mySpecials;
 
     /**
+     * Initializes the registration page for the user.
      *
-     *
-     * @param savedInstanceState
+     * @param theSavedInstanceState is a Bundle object.
      */
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(@Nullable Bundle theSavedInstanceState) {
+        super.onCreate(theSavedInstanceState);
         mySpecials = new char[] {'!', '?', '&', '$', '#'};
-        mRegisterModel = new ViewModelProvider(getActivity())
+        myRegisterModel = new ViewModelProvider(getActivity())
                 .get(RegistrationViewModel.class);
     }
 
     /**
+     * Creates a view hierarchy for the user.
      *
-     *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param theInflater is a LayoutInflater object.
+     * @param theContainer is a ViewGroup object.
+     * @param theSavedInstanceState is a Bundle object.
+     * @return the application's view hierarchy
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        myBinding = FragmentRegistrationBinding.inflate(inflater);
+    public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
+                             Bundle theSavedInstanceState) {
+        myBinding = FragmentRegistrationBinding.inflate(theInflater);
         return myBinding.getRoot();
     }
 
     /**
+     * Initializes the buttons and functionalities of the registration page.
      *
-     *
-     * @param view
-     * @param savedInstanceState
+     * @param theView is a View object.
+     * @param theSavedInstanceState is a Bundle object.
      */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
+        super.onViewCreated(theView, theSavedInstanceState);
         myBinding.button.setOnClickListener(this);
-        mRegisterModel.addResponseObserver(getViewLifecycleOwner(),
+        myRegisterModel.addResponseObserver(getViewLifecycleOwner(),
                 this::observeResponse);
     }
 
     /**
-     *
+     * Used to clear the contents of the registration page.
      */
     @Override
     public void onDestroyView() {
@@ -96,12 +96,12 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     /**
+     * Called when the user clicks on the "register" button to complete registration.
      *
-     *
-     * @param view
+     * @param theView is the current View of the application.
      */
     @Override
-    public void onClick(View view) {
+    public void onClick(View theView) {
         EditText email = myBinding.editText;
         EditText pw1 = myBinding.editText2;
         EditText pw2 = myBinding.editText3;
@@ -133,8 +133,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     /**
      * Helper method used to verify the email.
      *
-     * @param theEmail
-     * @return
+     * @param theEmail is the email the user types in.
+     * @return true if it is valid email, false otherwise.
      */
     private boolean verifyEmail(String theEmail) {
         int i = 0;
@@ -153,8 +153,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     /**
      * Helper method to verify the password.
      *
-     * @param thePW
-     * @return
+     * @param thePW is the password the user types in.
+     * @return true if it is an acceptable password, false otherwise.
      */
     private boolean verifyPW(String thePW) {
         boolean pw = false;
@@ -181,10 +181,10 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     /**
-     *
+     * Helper method used to authenticate with the web server.
      */
     private void verifyAuthWithServer() {
-        mRegisterModel.connect(
+        myRegisterModel.connect(
                 myBinding.editText4.getText().toString(),
                 myBinding.editText5.getText().toString(),
                 myBinding.editText.getText().toString(),
@@ -192,9 +192,9 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     /**
-     *
+     * Helper method used to navigate to the sign-in page upon successful registration.
      */
-    private void navigateToLogin() {
+    private void navigateToSignIn() {
         RegistrationFragmentDirections.ActionRegistrationFragmentToSignInFragment directions =
                 RegistrationFragmentDirections.actionRegistrationFragmentToSignInFragment();
 
@@ -209,21 +209,21 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
      * An observer on the HTTP Response from the web server. This observer should be
      * attached to SignInViewModel.
      *
-     * @param response the Response from the server
+     * @param theResponse the Response from the server
      */
-    private void observeResponse(final JSONObject response) {
-        if (response.length() > 0) {
-            if (response.has("code")) {
+    private void observeResponse(final JSONObject theResponse) {
+        if (theResponse.length() > 0) {
+            if (theResponse.has("code")) {
                 try {
                     myBinding.editText.setError(
                             "Error Authenticating: " +
-                                    response.getJSONObject("data").getString("message"));
+                                    theResponse.getJSONObject("data").getString("message"));
 
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
             } else {
-                navigateToLogin();
+                navigateToSignIn();
             }
         } else {
             Log.d("JSON Response", "No Response");

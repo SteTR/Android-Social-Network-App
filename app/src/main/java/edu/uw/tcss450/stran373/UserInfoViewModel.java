@@ -7,86 +7,85 @@ import androidx.lifecycle.ViewModelProvider;
 import com.auth0.android.jwt.JWT;
 
 /**
- *
+ * ViewModel used for storage and management of UI-related data regarding sign-in/registration.
  */
 public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
 
     /**
-     *
+     * The JWT of the current user.
      */
     private static String mJwt;
 
     /**
-     *
+     * The email of the current user.
      */
     private String mEmail;
 
     /**
+     * Private constructor for the ViewModel.
      *
-     *
-     * @param jwt
-     * @param email
+     * @param theJwt is the user's jwt
+     * @param theEmail is the user's email
      */
-    private UserInfoViewModel(String jwt, String email) {
-        mJwt = jwt;
-        mEmail = email;
+    private UserInfoViewModel(String theJwt, String theEmail) {
+        mJwt = theJwt;
+        mEmail = theEmail;
     }
 
     /**
+     * Getter method for the user's current email.
      *
-     *
-     * @return
+     * @return the user's current email
      */
     public String getEmail() {
         return mEmail;
     }
 
     /**
+     * Getter method for the user's current JWT.
      *
-     *
-     * @return
+     * @return the user's current JWT
      */
     public static String getJwt() {
         return mJwt;
     }
 
     /**
-     *
+     * Inner class used to assist saving UI-related data.
      */
     public static class UserInfoViewModelFactory implements ViewModelProvider.Factory {
 
         /**
-         *
+         * The user's current jwt.
          */
         private final String jwt;
 
         /**
-         *
+         * The user's current email.
          */
         private final String email;
 
         /**
+         * Constructor for the inner class itself.
          *
-         *
-         * @param jwt
-         * @param email
+         * @param theJwt is the user's current JWT.
+         * @param theEmail is the user's current email.
          */
-        public UserInfoViewModelFactory(final String jwt, final String email) {
-            this.jwt = jwt;
-            this.email = email;
+        public UserInfoViewModelFactory(final String theJwt, final String theEmail) {
+            this.jwt = theJwt;
+            this.email = theEmail;
         }
 
         /**
+         * Default create method for the ViewModelFactory
          *
-         *
-         * @param modelClass
-         * @param <T>
-         * @return
+         * @param theModelClass is a modelClass that will be checked if it is a UserInfoViewModel.
+         * @return A new UserInfoViewModel
          */
         @NonNull
         @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if (modelClass == UserInfoViewModel.class) {
+        public <T extends ViewModel> T create(@NonNull Class<T> theModelClass) {
+            if (theModelClass == UserInfoViewModel.class) {
                 return (T) new UserInfoViewModel(jwt, email);
             }
 

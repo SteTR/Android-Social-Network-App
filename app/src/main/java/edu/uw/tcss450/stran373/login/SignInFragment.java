@@ -26,55 +26,55 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentSignInBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment that houses the sign-in feature.
  */
 public class SignInFragment extends Fragment implements View.OnClickListener {
 
     /**
-     *
+     * Binding for this fragment.
      */
     private FragmentSignInBinding myBinding;
 
     /**
-     *
+     * ViewModel used to manage UI-related data regarding sign-in.
      */
     private SignInViewModel mSignInModel;
 
     /**
-     *
+     * Collection of special characters used for password verification.
      */
     private char[] mySpecials;
 
     /**
+     * Executed upon creation to create a new ViewModelProvider for log-in.
      *
-     *
-     * @param savedInstanceState
+     * @param theSavedInstanceState is a Bundle object.
      */
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(@Nullable Bundle theSavedInstanceState) {
+        super.onCreate(theSavedInstanceState);
         mySpecials = new char[] {'!', '?', '&', '$', '#'};
         mSignInModel = new ViewModelProvider(getActivity())
                 .get(SignInViewModel.class);
     }
 
     /**
+     * Creates a view hierarchy upon loading.
      *
-     *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param theInflater is a LayoutInflater object.
+     * @param theContainer is a ViewGroup object.
+     * @param theSavedInstanceState is a Bundle object.
+     * @return a View hierarchy
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        myBinding = FragmentSignInBinding.inflate(inflater);
+    public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
+                             Bundle theSavedInstanceState) {
+        myBinding = FragmentSignInBinding.inflate(theInflater);
         return myBinding.getRoot();
     }
 
     /**
-     *
+     * Used to "destroy" the contents of this fragment's view.
      */
     @Override
     public void onDestroyView() {
@@ -82,21 +82,26 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         myBinding = null;
     }
 
+    /**
+     * Called when the user clicks the "Register" button to go to the registration page.
+     *
+     * @param theView is the View to be passed for navigation.
+     */
     @Override
-    public void onClick(View view) {
+    public void onClick(View theView) {
         SignInFragmentDirections.ActionSignInFragmentToRegistrationFragment directions2 =
                 SignInFragmentDirections.actionSignInFragmentToRegistrationFragment(0);
         Navigation.findNavController(getView()).navigate(directions2);
     }
 
     /**
+     * Initializes the sign-in page for the user.
      *
-     *
-     * @param view
-     * @param savedInstanceState
+     * @param theView is the View to be passed for navigation.
+     * @param theSavedInstanceState is a Bundle object.
      */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
         myBinding.registerButton.setOnClickListener(this);
         myBinding.signInButton.setOnClickListener(this::verify);
         mSignInModel.addResponseObserver(
@@ -111,9 +116,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     /**
      * Helper method for verifying both the email and the password.
      *
-     * @param view is the View object used to
+     * @param theView is the View object used to
      */
-    private void verify(View view) {
+    private void verify(View theView) {
         EditText email = myBinding.editText;
         EditText password = myBinding.editText2;
         String emailString = email.getText().toString();
@@ -135,8 +140,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     /**
      * Helper method to verify the email.
      *
-     * @param theEmail
-     * @return
+     * @param theEmail is the email the user types in.
+     * @return true if the user types in an existing email associated with the account, false otherwise.
      */
     private boolean verifyEmail(String theEmail) {
         int i = 0;
@@ -160,8 +165,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     /**
      * Helper method to verify the password.
      *
-     * @param thePW
-     * @return
+     * @param thePW is the password the user types in.
+     * @return true if the user types in an existing password associated with the account, false otherwise.
      */
     private boolean verifyPW(String thePW) {
         boolean pw = false;
@@ -188,7 +193,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     *
+     * Helper method used to authenticate with the web server.
      */
     private void verifyAuthWithServer() {
         mSignInModel.connect(
@@ -199,28 +204,28 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     /**
      * Helper to abstract the navigation to the Activity past Authentication.
      *
-     * @param email users email
-     * @param jwt the JSON Web Token supplied by the server
+     * @param theEmail users email
+     * @param theJwt the JSON Web Token supplied by the server
      */
-    private void navigateToSuccess(final String email, final String jwt) {
+    private void navigateToSuccess(final String theEmail, final String theJwt) {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
-                        .actionSignInFragmentToMainActivity(jwt, email));
+                        .actionSignInFragmentToMainActivity(theJwt, theEmail));
     }
 
     /**
      * An observer on the HTTP Response from the web server. This observer should be
      * attached to SignInViewModel.
      *
-     * @param response the Response from the server
+     * @param theResponse the Response from the server
      */
-    private void observeResponse(final JSONObject response) {
-        if (response.length() > 0) {
-            if (response.has("code")) {
+    private void observeResponse(final JSONObject theResponse) {
+        if (theResponse.length() > 0) {
+            if (theResponse.has("code")) {
                 try {
                     myBinding.editText.setError(
                             "Error Authenticating: " +
-                                    response.getJSONObject("data").getString("message"));
+                                    theResponse.getJSONObject("data").getString("message"));
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
@@ -228,8 +233,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 try {
                     navigateToSuccess(
                             myBinding.editText.getText().toString(),
-                            response.getString("token"));
-                    Log.d("JSON Response", response.getString("token"));
+                            theResponse.getString("token"));
+                    Log.d("JSON Response", theResponse.getString("token"));
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }

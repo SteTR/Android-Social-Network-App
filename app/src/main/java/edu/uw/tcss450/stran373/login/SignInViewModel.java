@@ -26,60 +26,60 @@ import java.util.Objects;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
 /**
- *
+ * ViewModel used to manage and store UI-related data regarding sign-in.
  */
 public class SignInViewModel extends AndroidViewModel {
 
     /**
-     *
+     * Used to keep track of the user's response.
      */
-    private MutableLiveData<JSONObject> mResponse;
+    private MutableLiveData<JSONObject> myResponse;
 
     /**
+     * Constructor for the ViewModel.
      *
-     *
-     * @param application
+     * @param theApplication is the application used to set up the ViewModel.
      */
-    public SignInViewModel(@NonNull Application application) {
-        super(application);
-        mResponse = new MutableLiveData<>();
-        mResponse.setValue(new JSONObject());
+    public SignInViewModel(@NonNull Application theApplication) {
+        super(theApplication);
+        myResponse = new MutableLiveData<>();
+        myResponse.setValue(new JSONObject());
     }
 
     /**
+     * Used for adding a response observer to the ViewModel.
      *
-     *
-     * @param owner
-     * @param observer
+     * @param theOwner is a LifecycleOwner object.
+     * @param theObserver is an Observer object.
      */
-    public void addResponseObserver(@NonNull LifecycleOwner owner,
-                                    @NonNull Observer<? super JSONObject> observer) {
-        mResponse.observe(owner, observer);
+    public void addResponseObserver(@NonNull LifecycleOwner theOwner,
+                                    @NonNull Observer<? super JSONObject> theObserver) {
+        myResponse.observe(theOwner, theObserver);
     }
 
     /**
+     * Helper method to handle errors regarding sign-in.
      *
-     *
-     * @param error
+     * @param theError is a VolleyError object used to check any errors when sending it to a web service.
      */
-    private void handleError(final VolleyError error) {
-        if (Objects.isNull(error.networkResponse)) {
+    private void handleError(final VolleyError theError) {
+        if (Objects.isNull(theError.networkResponse)) {
             try {
-                mResponse.setValue(new JSONObject("{" +
-                        "error:\"" + error.getMessage() +
+                myResponse.setValue(new JSONObject("{" +
+                        "error:\"" + theError.getMessage() +
                         "\"}"));
             } catch (JSONException e) {
                 Log.e("JSON PARSE", "JSON Parse Error in handleError");
             }
         }
         else {
-            String data = new String(error.networkResponse.data, Charset.defaultCharset())
+            String data = new String(theError.networkResponse.data, Charset.defaultCharset())
                     .replace('\"', '\'');
             try {
                 JSONObject response = new JSONObject();
-                response.put("code", error.networkResponse.statusCode);
+                response.put("code", theError.networkResponse.statusCode);
                 response.put("data", new JSONObject(data));
-                mResponse.setValue(response);
+                myResponse.setValue(response);
             } catch (JSONException e) {
                 Log.e("JSON PARSE", "JSON Parse Error in handleError");
             }
@@ -87,24 +87,24 @@ public class SignInViewModel extends AndroidViewModel {
     }
 
     /**
+     * Used to connect to a web service for verification.
      *
-     *
-     * @param email
-     * @param password
+     * @param theEmail is the user's email.
+     * @param thePassword is the user's password.
      */
-    public void connect(final String email, final String password) {
+    public void connect(final String theEmail, final String thePassword) {
         String url = "https://group4-tcss450-project.herokuapp.com/auth";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
                 null,
-                mResponse::setValue,
+                myResponse::setValue,
                 this::handleError) {
 
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                String credentials = email + ":" + password;
+                String credentials = theEmail + ":" + thePassword;
                 String auth = "Basic " + Base64.encodeToString(credentials.getBytes(),
                         Base64.NO_WRAP);
                 headers.put("Authorization", auth);

@@ -26,60 +26,60 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *
+ * ViewModel used to store information regarding registration.
  */
 public class RegistrationViewModel extends AndroidViewModel {
 
     /**
      *
      */
-    private MutableLiveData<JSONObject> mResponse;
+    private MutableLiveData<JSONObject> myResponse;
 
     /**
+     * Constructor used for the ViewModel.
      *
-     *
-     * @param application
+     * @param theApplication is an application who will be referenced.
      */
-    public RegistrationViewModel(@NonNull Application application) {
-        super(application);
-        mResponse = new MutableLiveData<>();
-        mResponse.setValue(new JSONObject());
+    public RegistrationViewModel(@NonNull Application theApplication) {
+        super(theApplication);
+        myResponse = new MutableLiveData<>();
+        myResponse.setValue(new JSONObject());
     }
 
     /**
+     * Used to add a response observer to the application.
      *
-     *
-     * @param owner
-     * @param observer
+     * @param theOwner is a LifecycleOwner object.
+     * @param theObserver is an Observer object.
      */
-    public void addResponseObserver(@NonNull LifecycleOwner owner,
-                                    @NonNull Observer<? super JSONObject> observer) {
-        mResponse.observe(owner, observer);
+    public void addResponseObserver(@NonNull LifecycleOwner theOwner,
+                                    @NonNull Observer<? super JSONObject> theObserver) {
+        myResponse.observe(theOwner, theObserver);
     }
 
     /**
+     * Helper method used to handle any errors when handling registration.
      *
-     *
-     * @param error
+     * @param theError is an error value that is passed to check to see if something went wrong with registration.
      */
-    private void handleError(final VolleyError error) {
-        if (Objects.isNull(error.networkResponse)) {
+    private void handleError(final VolleyError theError) {
+        if (Objects.isNull(theError.networkResponse)) {
             try {
-                mResponse.setValue(new JSONObject("{" +
-                        "error:\"" + error.getMessage() +
+                myResponse.setValue(new JSONObject("{" +
+                        "error:\"" + theError.getMessage() +
                         "\"}"));
             } catch (JSONException e) {
                 Log.e("JSON PARSE", "JSON Parse Error in handleError");
             }
         }
         else {
-            String data = new String(error.networkResponse.data, Charset.defaultCharset())
+            String data = new String(theError.networkResponse.data, Charset.defaultCharset())
                     .replace('\"', '\'');
             try {
                 JSONObject response = new JSONObject();
-                response.put("code", error.networkResponse.statusCode);
+                response.put("code", theError.networkResponse.statusCode);
                 response.put("data", new JSONObject(data));
-                mResponse.setValue(response);
+                myResponse.setValue(response);
             } catch (JSONException e) {
                 Log.e("JSON PARSE", "JSON Parse Error in handleError");
             }
@@ -87,22 +87,22 @@ public class RegistrationViewModel extends AndroidViewModel {
     }
 
     /**
+     * Used to connect the application to a web service.
      *
-     *
-     * @param first
-     * @param last
-     * @param email
-     * @param password
+     * @param theFirst is the user's first name.
+     * @param theLast is the user's last name.
+     * @param theEmail is the user's email.
+     * @param thePassword is the user's password.
      */
-    public void connect(final String first, final String last, final String email, final String password) {
+    public void connect(final String theFirst, final String theLast, final String theEmail, final String thePassword) {
         String url = "https://group4-tcss450-project.herokuapp.com/auth";
         JSONObject body = new JSONObject();
 
         try {
-            body.put("first", first);
-            body.put("last", last);
-            body.put("email", email);
-            body.put("password", password);
+            body.put("first", theFirst);
+            body.put("last", theLast);
+            body.put("email", theEmail);
+            body.put("password", thePassword);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -111,7 +111,7 @@ public class RegistrationViewModel extends AndroidViewModel {
                 Request.Method.POST,
                 url,
                 body,
-                mResponse::setValue,
+                myResponse::setValue,
                 this::handleError);
 
         request.setRetryPolicy(new DefaultRetryPolicy(
