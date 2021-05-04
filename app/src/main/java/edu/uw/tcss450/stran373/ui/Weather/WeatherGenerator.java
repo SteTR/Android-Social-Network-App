@@ -14,7 +14,7 @@ public final class WeatherGenerator {
         CARDS = new WeatherCard[COUNT];
         for (int i = 0; i < COUNT; i++) {
             CARDS[i] = new WeatherCard
-                    .Builder("Seattle, WA")
+                    .Builder("Seattle, WA", "67 F°")
                     .addDay1("Tuesday 27th","70/65 F°")
                     .addDay2("Wednesday 28th", "65/49 F°")
                     .addDay3("Thursday 29th", "66/56 F°")

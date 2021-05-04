@@ -59,11 +59,14 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
         }
 
         private void handleMoreOrLess(final View button) {
+            mExpandedFlags.put(mWeather, !mExpandedFlags.get(mWeather));
             displayPreview();
         }
 
         private void displayPreview() {
-            if (binding.textDate1.getVisibility() == View.GONE) {
+            if (mExpandedFlags.get(mWeather)) {
+                binding.textCurrentTemp.setVisibility(View.GONE);
+                binding.imageCurrent.setVisibility(View.GONE);
                 binding.textDate1.setVisibility(View.VISIBLE);
                 binding.textDate2.setVisibility(View.VISIBLE);
                 binding.textDate3.setVisibility(View.VISIBLE);
@@ -103,12 +106,15 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
                         Icon.createWithResource(
                                 mView.getContext(),
                                 R.drawable.ic_more_grey_24dp));
+                binding.textCurrentTemp.setVisibility(View.VISIBLE);
+                binding.imageCurrent.setVisibility(View.VISIBLE);
             }
         }
 
         void setWeather(final WeatherCard weather) {
             mWeather = weather;
             binding.textLocation.setText(weather.getLocation());
+            binding.textCurrentTemp.setText(weather.getCurrentTemp());
             binding.textDate1.setText(weather.getDate1());
             binding.textDate2.setText(weather.getDate2());
             binding.textDate3.setText(weather.getDate3());

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class WeatherCard implements Serializable {
 
     private final String mLocation;
+    private final String mCurrentTemp;
     private final String mDate1;
     private final String mTemp1;
     private final String mDate2;
@@ -18,6 +19,7 @@ public class WeatherCard implements Serializable {
 
     public static class Builder {
         private final String mLocation;
+        private final String mCurrentTemp;
         private String mDate1;
         private String mTemp1;
         private String mDate2;
@@ -29,8 +31,9 @@ public class WeatherCard implements Serializable {
         private String mDate5;
         private String mTemp5;
 
-        public Builder(final String theLocation) {
+        public Builder(final String theLocation, final String theCurrent) {
             this.mLocation = theLocation;
+            mCurrentTemp = theCurrent;
         }
 
         public Builder addDay1(final String theDate, final String theTemp) {
@@ -69,6 +72,7 @@ public class WeatherCard implements Serializable {
 
     private WeatherCard(final Builder builder) {
         this.mLocation = builder.mLocation;
+        this.mCurrentTemp = builder.mCurrentTemp;
         this.mDate1 = builder.mDate1;
         this.mTemp1 = builder.mTemp1;
         this.mDate2 = builder.mDate2;
@@ -82,6 +86,7 @@ public class WeatherCard implements Serializable {
     }
 
     public String getLocation() { return mLocation; }
+    public String getCurrentTemp() { return mCurrentTemp; }
     public String getDate1() { return mDate1; }
     public String getDate2() { return mDate2; }
     public String getDate3() { return mDate3; }
