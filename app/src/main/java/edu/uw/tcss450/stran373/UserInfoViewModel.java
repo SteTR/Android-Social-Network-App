@@ -11,9 +11,6 @@ import com.auth0.android.jwt.JWT;
  */
 public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
 
-
-//    private final JWT mJwt;
-
     /**
      *
      */
@@ -23,10 +20,6 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
      *
      */
     private String mEmail;
-
-//    private UserInfoViewModel(JWT jwt) {
-//        mJwt = jwt;
-//    }
 
     /**
      *
@@ -39,21 +32,12 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
         mEmail = email;
     }
 
-//    public boolean isExpired() {
-//        return mJwt.isExpired(0);
-//    }
-
     /**
      *
      *
      * @return
      */
     public String getEmail() {
-//        if (!mJwt.isExpired(0)) {
-//            return mJwt.getClaim("email").asString();
-//        } else {
-//            throw new IllegalArgumentException("JWT is expired");
-//        }
         return mEmail;
     }
 
@@ -71,8 +55,6 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
      */
     public static class UserInfoViewModelFactory implements ViewModelProvider.Factory {
 
-//        private final JWT jwt;
-
         /**
          *
          */
@@ -82,10 +64,6 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
          *
          */
         private final String email;
-
-//        public UserInfoViewModelFactory(JWT jwt) {
-//            this.jwt = jwt;
-//        }
 
         /**
          *

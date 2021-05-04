@@ -68,8 +68,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-//        binding = FragmentRegisterBinding.inflate(inflater, container, false);
         myBinding = FragmentRegistrationBinding.inflate(inflater);
         return myBinding.getRoot();
     }
@@ -128,12 +126,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         } else if (emptyLast) {
             last.setError("Invalid Name");
         } else {
-//            String emailStr = email.getText().toString();
-//            Navigation.findNavController(
-//                    getView())
-//                    .navigate(RegisterFragmentDirections
-//                            .actionRegisterFragmentToMainActivity(generateJwt(emailStr)));
-//            getActivity().finish();
             verifyAuthWithServer();
         }
     }
@@ -187,27 +179,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         return pw;
     }
-
-    /**
-     *
-     *
-     * @param email
-     * @return
-     */
-//    private String generateJwt(final String email) {
-//        String token;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
-//                    "production code!!!");
-//            token = JWT.create()
-//                    .withIssuer("auth0")
-//                    .withClaim("email", email)
-//                    .sign(algorithm);
-//        } catch (JWTCreationException exception){
-//            throw new RuntimeException("JWT Failed to Create.");
-//        }
-//        return token;
-//    }
 
     /**
      *

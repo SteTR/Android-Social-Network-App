@@ -15,12 +15,7 @@ import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentSuccessBinding;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link SuccessFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-/**
- * A simple {@link Fragment} subclass.
+ *
  */
 public class SuccessFragment extends Fragment {
 
@@ -40,7 +35,6 @@ public class SuccessFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentSuccessBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -54,11 +48,8 @@ public class SuccessFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SuccessFragmentArgs args = SuccessFragmentArgs.fromBundle(getArguments());
-        binding.textLabel.setText("Hello " + args.getEmail());
-
-//        UserInfoViewModel model = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
-//        binding.textLabel.setText("Hello " + model.getEmail() + "!");
+        UserInfoViewModel model = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
+        binding.textLabel.setText("Hello " + model.getEmail() + "!");
     }
 
     /**

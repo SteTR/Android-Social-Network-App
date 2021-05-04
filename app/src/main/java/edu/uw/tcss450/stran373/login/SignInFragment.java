@@ -69,9 +69,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-//        binding = FragmentSignInBinding.inflate(inflater, container, false);
         myBinding = FragmentSignInBinding.inflate(inflater);
         return myBinding.getRoot();
     }
@@ -130,11 +127,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 password.setError("Invalid Password");
             }
         } else {
-//            Navigation.findNavController(
-//                    getView())
-//                    .navigate(SignInFragmentDirections
-//                            .actionSignInFragmentToSuccessFragment(generateJwt(emailString), emailString));
-//            getActivity().finish();
             verifyAuthWithServer();
         }
 
@@ -195,27 +187,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         return pw;
     }
 
-//    /**
-//     *
-//     *
-//     * @param email
-//     * @return
-//     */
-//    private String generateJwt(final String email) {
-//        String token;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("secret key don't use a string literal in " +
-//                    "production code!!!");
-//            token = JWT.create()
-//                    .withIssuer("auth0")
-//                    .withClaim("email", email)
-//                    .sign(algorithm);
-//        } catch (JWTCreationException exception){
-//            throw new RuntimeException("JWT Failed to Create.");
-//        }
-//        return token;
-//    }
-
+    /**
+     *
+     */
     private void verifyAuthWithServer() {
         mSignInModel.connect(
                 myBinding.editText.getText().toString(),
@@ -231,7 +205,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private void navigateToSuccess(final String email, final String jwt) {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
-                        .actionSignInFragmentToSuccessFragment(jwt, email));
+                        .actionSignInFragmentToMainActivity(jwt, email));
     }
 
     /**
