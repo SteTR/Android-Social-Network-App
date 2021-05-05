@@ -20,9 +20,43 @@
         android:name="edu.uw.tcss450.stran373.ui.Weather.WeatherFragment"
         android:label="fragment_weather"
         tools:layout="@layout/fragment_weather" />
+
     <fragment
         android:id="@+id/navigation_contacts"
-        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactFragment"
-        android:label="fragment_contact"
-        tools:layout="@layout/fragment_contact" />
+        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
+        android:label="@string/title_contacts"
+        tools:layout="@layout/fragment_contact">
+        <action
+            android:id="@+id/action_navigation_contacts_to_inviteFragment"
+            app:destination="@id/inviteFragment" />
+        <action
+            android:id="@+id/action_navigation_contacts_to_requestFragment"
+            app:destination="@id/requestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inviteFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteFragment"
+        android:label="@string/title_invites"
+        tools:layout="@layout/fragment_invite" >
+        <action
+            android:id="@+id/action_inviteFragment_to_navigation_contacts"
+            app:destination="@id/navigation_contacts" />
+        <action
+            android:id="@+id/action_inviteFragment_to_requestFragment"
+            app:destination="@id/requestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestFragment"
+        android:label="@string/title_requests"
+        tools:layout="@layout/fragment_request">
+        <action
+            android:id="@+id/action_requestFragment_to_navigation_contacts"
+            app:destination="@id/navigation_contacts" />
+        <action
+            android:id="@+id/action_requestFragment_to_inviteFragment"
+            app:destination="@id/inviteFragment" />
+    </fragment>
+
+
 </navigation>

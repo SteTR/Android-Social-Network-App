@@ -8,8 +8,8 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/contactRecycler"
-        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
+        android:id="@+id/requestRecycler"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestFragment"
         android:layout_width="401dp"
         android:layout_height="596dp"
         android:layout_marginTop="8dp"
@@ -20,8 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
         app:layout_constraintVertical_bias="0.0"
-        tools:context="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
-        tools:listitem="@layout/fragment_contact_card" />
+        tools:context="edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestFragment"
+        tools:listitem="@layout/fragment_request_card" />
 
     <Button
         android:id="@+id/button"
@@ -30,6 +30,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/title_contacts"
+        app:layout_constraintBottom_toTopOf="@+id/requestRecycler"
         app:layout_constraintEnd_toStartOf="@+id/button2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,11 +42,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/title_requests"
-        app:layout_constraintBottom_toTopOf="@+id/contactRecycler"
+        app:layout_constraintBottom_toTopOf="@+id/requestRecycler"
         app:layout_constraintEnd_toStartOf="@+id/button3"
         app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.435" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button3"
@@ -55,10 +55,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/title_invites"
-        app:layout_constraintBottom_toTopOf="@+id/contactRecycler"
+        app:layout_constraintBottom_toTopOf="@+id/requestRecycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
