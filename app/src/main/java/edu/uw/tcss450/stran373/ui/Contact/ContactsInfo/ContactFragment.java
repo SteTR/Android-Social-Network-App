@@ -5,18 +5,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.tabs.TabLayoutMediator;
-
-import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentContactBinding;
 
 /**
@@ -66,11 +61,11 @@ public class ContactFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //Setting up Listeners
-        binding.button2.setOnClickListener(button ->
+        binding.requestButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         ContactFragmentDirections.actionNavigationContactsToRequestFragment()));
 
-        binding.button3.setOnClickListener(button ->
+        binding.inviteButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         ContactFragmentDirections.actionNavigationContactsToInviteFragment()));
     }

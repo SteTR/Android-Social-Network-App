@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
-import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.Request;
 
 /**
  * RecyclerViewAdapter is used to show the various cards

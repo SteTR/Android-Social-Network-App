@@ -15,10 +15,15 @@ import edu.uw.tcss450.stran373.databinding.FragmentInviteBinding;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * The invite fragment that will hold the recycler view
+ * and show the cards
+ * @author Andrew Bennett
  */
 public class InviteFragment extends Fragment {
 
+    /**
+     * The data binding for this fragment
+     */
     FragmentInviteBinding binding;
 
     public InviteFragment() {
@@ -30,6 +35,13 @@ public class InviteFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * When view is created, assign binding, create recyclerview, and attach adapter
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the root view in the data binding
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,16 +53,21 @@ public class InviteFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Set the listeners to move between Connections fragments
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //Setting up Listeners
-        binding.button2.setOnClickListener(button ->
+        binding.requestButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         InviteFragmentDirections.actionInviteFragmentToRequestFragment()));
 
-        binding.button.setOnClickListener(button ->
+        binding.contactButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         InviteFragmentDirections.actionInviteFragmentToNavigationContacts()));
     }

@@ -17,10 +17,12 @@
     <string name="title_home">Home</string>
     <string name="title_weather">Weather</string>
 
-    <string name="title_connections">Connections</string>
-    <string name="title_contacts">Contacts</string>
-    <string name="title_requests">Requests</string>
-    <string name="title_invites">Invites</string>
+    <!--String resources for various connections actions-->
+    <string name="title_contacts_connections">Connections</string>
+    <string name="title_contactinfo_contacts">Contacts</string>
+    <string name="title_requestinfo_requests">Requests</string>
+    <string name="title_inviteinfo_invites">Invites</string>
+
     <string name="title_chats">Chats</string>
 
 

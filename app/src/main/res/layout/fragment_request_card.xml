@@ -70,7 +70,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:clickable="true"
-            android:src="@drawable/ic_requests_black_24dp"
+            android:src="@drawable/ic_requests_reject_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

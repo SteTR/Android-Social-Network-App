@@ -59,10 +59,10 @@ public class RequestFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //Setting up Listeners
-        binding.button3.setOnClickListener(button -> Navigation.findNavController(getView()).navigate(
+        binding.inviteButton.setOnClickListener(button -> Navigation.findNavController(getView()).navigate(
                 RequestFragmentDirections.actionRequestFragmentToInviteFragment()));
 
-        binding.button.setOnClickListener(button ->
+        binding.contactButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         RequestFragmentDirections.actionRequestFragmentToNavigationContacts()));
     }

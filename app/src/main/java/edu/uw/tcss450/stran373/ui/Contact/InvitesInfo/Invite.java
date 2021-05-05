@@ -59,7 +59,7 @@ public class Invite implements Serializable {
         }
 
         /**
-         * Set the contact id of the invite card
+         * Set the contact id of the invitee
          *
          * @param theContactID contact id of the request
          */
@@ -68,15 +68,15 @@ public class Invite implements Serializable {
         }
 
         /**
-         * Set the email of the request card
+         * Set the email of the invitee
          * @author Andrew Bennett
          * @param theEmail is the email to be set in the request
          */
         public void setEmail(final String theEmail) { this.mEmail = theEmail; }
 
         /**
-         * Builds the contact card
-         * @return Contact
+         * Builds the invite card
+         * @return Invite with info on the invitee
          */
         public Invite build()
         {
@@ -85,7 +85,7 @@ public class Invite implements Serializable {
     }
 
     /**
-     * Builds the Request card
+     * Builds the Invite card
      * @param builder builder that has same attributes as Invite
      */
     private Invite(final Builder builder)
@@ -98,7 +98,7 @@ public class Invite implements Serializable {
     }
 
     /**
-     * Returns the contact id
+     * Returns the invitee contact id
      * @return mContactID
      */
     public int getContactID()

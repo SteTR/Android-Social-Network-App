@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
+ * View model to hold the contact cards, observer will be used to
+ * navigate to specific contacts in next sprint
+ * @author Andrew Bennett
  */
 public class ContactListViewModel extends AndroidViewModel {
 
@@ -56,7 +58,7 @@ public class ContactListViewModel extends AndroidViewModel {
     /**
      * Handle an error when we actually pull from our contacts endpoint
      *
-     * @param error
+     * @param error that may occur during a request from the endpoint
      */
     private void handleError(final VolleyError error) {
         //We will need to improve this error handler

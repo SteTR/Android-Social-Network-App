@@ -1,7 +1,5 @@
 package edu.uw.tcss450.stran373.ui.Contact.ContactsInfo;
 
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,14 +9,14 @@ import java.util.List;
  */
 public final class ContactGenerator {
 
-    private static final Contact[] CARDS;
+    private static final Contact[] SCARDS;
     public static final int COUNT = 30;
 
 
     static {
-        CARDS = new Contact[COUNT];
-        for (int i = 0; i < CARDS.length; i++) {
-            CARDS[i] = (new Contact
+        SCARDS = new Contact[COUNT];
+        for (int i = 0; i < SCARDS.length; i++) {
+            SCARDS[i] = (new Contact
                     .Builder("First"+ Integer.toString(i), "Last" + Integer.toString(i), i, "dummy@email.com")
                     .build());
         }
@@ -29,7 +27,7 @@ public final class ContactGenerator {
      * @return list of contact cards
      */
     public static List<Contact> getCARDS() {
-        return Arrays.asList(CARDS);
+        return Arrays.asList(SCARDS);
     }
 
     private ContactGenerator() { }

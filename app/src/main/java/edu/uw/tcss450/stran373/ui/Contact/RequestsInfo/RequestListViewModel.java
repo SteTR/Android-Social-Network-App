@@ -27,13 +27,21 @@ public class RequestListViewModel extends AndroidViewModel {
      */
     private MutableLiveData<List<Request>> mRequestCards;
 
+    /**
+     * Contructor that uses dummy values just to get some requests. Will need to be updated.
+     * @param application
+     */
     public RequestListViewModel(@NonNull Application application) {
         super(application);
         mRequestCards = new MutableLiveData<>();
         List<Request> cards = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
             cards.add(new Request
-                    .Builder("First", "Last", i, "dummy@email.com", "05/02/2021")
+                    .Builder(
+                            "First",
+                            "Last", i,
+                            "dummy@email.com",
+                            "05/02/2021")
                     .build());
         }
         mRequestCards.setValue(cards);
