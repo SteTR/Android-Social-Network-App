@@ -5,6 +5,9 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Builds fake weather data.
+ */
 public final class WeatherGenerator {
 
     private static final WeatherCard[] CARDS;
@@ -23,6 +26,10 @@ public final class WeatherGenerator {
         }
     }
 
+    /**
+     * Returns fake weather data list.
+     * @return A list of WeatherCards with fake data
+     */
     public static List<WeatherCard> getWeatherList() {
         return Arrays.asList(CARDS);
     }

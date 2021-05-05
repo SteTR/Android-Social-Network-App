@@ -20,7 +20,7 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
  * A simple {@link Fragment} subclass.
  */
 public class WeatherFragment extends Fragment {
-
+    /**Binding used to access resources for view.*/
     FragmentWeatherBinding binding;
 
     @Override

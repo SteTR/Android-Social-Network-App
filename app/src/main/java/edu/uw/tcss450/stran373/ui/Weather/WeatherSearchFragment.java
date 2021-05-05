@@ -12,6 +12,7 @@ import edu.uw.tcss450.stran373.R;
 
 /**
  * A simple {@link Fragment} subclass.
+ * A Blank fragment with nothing in it.
  */
 public class WeatherSearchFragment extends Fragment {
 

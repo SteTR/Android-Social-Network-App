@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentWeatherCardBinding;
 
+/**
+ * Adapter used to hold Weather cards to the Weather Fragment.
+ */
 public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecyclerViewAdapter.WeatherViewHolder>{
 
     private final List<WeatherCard> mWeathers;
@@ -52,19 +55,19 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
         public FragmentWeatherCardBinding binding;
         private WeatherCard mWeather;
 
-        public WeatherViewHolder(View view) {
-            super(view);
-            mView = view;
-            binding = FragmentWeatherCardBinding.bind(view);
+        public WeatherViewHolder(View theView) {
+            super(theView);
+            mView = theView;
+            binding = FragmentWeatherCardBinding.bind(theView);
             binding.buttonMore.setOnClickListener(this::handleMoreOrLess);
             final RecyclerView rv = binding.hourlyRecyler;
             rv.setLayoutManager(
-                    new LinearLayoutManager(view.getContext(),
+                    new LinearLayoutManager(theView.getContext(),
                             LinearLayoutManager.HORIZONTAL, false));
             rv.setAdapter(new HourlyRecyclerViewAdapter(HourlyGenerator.getHourlyList()));
         }
 
-        private void handleMoreOrLess(final View button) {
+        private void handleMoreOrLess(final View theButton) {
             mExpandedFlags.put(mWeather, !mExpandedFlags.get(mWeather));
             displayPreview();
         }
@@ -119,20 +122,20 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             }
         }
 
-        void setWeather(final WeatherCard weather) {
-            mWeather = weather;
-            binding.textLocation.setText(weather.getLocation());
-            binding.textCurrentTemp.setText(weather.getCurrentTemp());
-            binding.textDate1.setText(weather.getDate1());
-            binding.textDate2.setText(weather.getDate2());
-            binding.textDate3.setText(weather.getDate3());
-            binding.textDate4.setText(weather.getDate4());
-            binding.textDate5.setText(weather.getDate5());
-            binding.textTemperature1.setText(weather.getTemp1());
-            binding.textTemperature2.setText(weather.getTemp2());
-            binding.textTemperature3.setText(weather.getTemp3());
-            binding.textTemperature4.setText(weather.getTemp4());
-            binding.textTemperature5.setText(weather.getTemp5());
+        void setWeather(final WeatherCard theWeather) {
+            mWeather = theWeather;
+            binding.textLocation.setText(theWeather.getLocation());
+            binding.textCurrentTemp.setText(theWeather.getCurrentTemp());
+            binding.textDate1.setText(theWeather.getDate1());
+            binding.textDate2.setText(theWeather.getDate2());
+            binding.textDate3.setText(theWeather.getDate3());
+            binding.textDate4.setText(theWeather.getDate4());
+            binding.textDate5.setText(theWeather.getDate5());
+            binding.textTemperature1.setText(theWeather.getTemp1());
+            binding.textTemperature2.setText(theWeather.getTemp2());
+            binding.textTemperature3.setText(theWeather.getTemp3());
+            binding.textTemperature4.setText(theWeather.getTemp4());
+            binding.textTemperature5.setText(theWeather.getTemp5());
             displayPreview();
         }
     }

@@ -16,11 +16,20 @@ import java.util.stream.Collectors;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentHourlyCardBinding;
 
+/**
+ * Adapter used to bind and change HourlyCards.
+ */
 public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecyclerViewAdapter.HourlyViewHolder>{
 
+    /*
+    List of all the hourly cards.
+     */
     private final List<HourlyCard> mHourlys;
 
-
+    /**
+     * Constructor.
+     * @param items HourlyCards being put into the view
+     */
     public HourlyRecyclerViewAdapter(List<HourlyCard> items) {
         this.mHourlys = items;
     }
@@ -43,6 +52,9 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
         return mHourlys.size();
     }
 
+    /**
+     * Inner class used to interact with individual Cards.
+     */
     public class HourlyViewHolder extends RecyclerView.ViewHolder{
         public final View mView;
         public FragmentHourlyCardBinding binding;
@@ -54,11 +66,14 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
             binding = FragmentHourlyCardBinding.bind(view);
         }
 
-
-        void setHourly(final HourlyCard hourly) {
-            mHourly = hourly;
-            binding.textTime.setText(hourly.getTime());
-            binding.textTemp.setText(hourly.getTemp());
+        /**
+         * Used to set base text.
+         * @param theHourly HourlyCard that is used to reference
+         */
+        void setHourly(final HourlyCard theHourly) {
+            mHourly = theHourly;
+            binding.textTime.setText(theHourly.getTime());
+            binding.textTemp.setText(theHourly.getTemp());
         }
     }
 }

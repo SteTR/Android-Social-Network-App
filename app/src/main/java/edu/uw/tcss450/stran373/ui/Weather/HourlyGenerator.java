@@ -3,6 +3,10 @@ package edu.uw.tcss450.stran373.ui.Weather;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is used to generate fake information
+ * for the HourlyRecycler.
+ */
 public class HourlyGenerator {
 
     private static final HourlyCard[] HOURLYS;
@@ -17,9 +21,16 @@ public class HourlyGenerator {
         }
     }
 
+    /**
+     * Returns a list of generated cards.
+     * @return A List of generated cards
+     */
     public static List<HourlyCard> getHourlyList() {
         return Arrays.asList(HOURLYS);
     }
 
+    /**
+     * Private constructor not used.
+     */
     private HourlyGenerator() {}
 }
