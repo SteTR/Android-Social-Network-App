@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import edu.uw.tcss450.stran373.databinding.FragmentContactBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * The contact fragment that will contain the recyclerview and
+ * show the cards
+ * @author Andrew Bennett
  */
 public class ContactFragment extends Fragment {
 

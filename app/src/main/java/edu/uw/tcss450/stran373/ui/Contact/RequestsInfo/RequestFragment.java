@@ -14,7 +14,9 @@ import edu.uw.tcss450.stran373.databinding.FragmentRequestBinding;
 import edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteFragmentDirections;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A request fragment that will contain the recyclerview and the
+ * cards for now. Will need to be switched to a list view
+ * @author Andrew Bennett
  */
 public class RequestFragment extends Fragment {
 
