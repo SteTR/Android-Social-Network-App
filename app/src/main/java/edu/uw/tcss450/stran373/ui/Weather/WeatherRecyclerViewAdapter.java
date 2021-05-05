@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -56,6 +57,11 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             mView = view;
             binding = FragmentWeatherCardBinding.bind(view);
             binding.buttonMore.setOnClickListener(this::handleMoreOrLess);
+            final RecyclerView rv = binding.hourlyRecyler;
+            rv.setLayoutManager(
+                    new LinearLayoutManager(view.getContext(),
+                            LinearLayoutManager.HORIZONTAL, false));
+            rv.setAdapter(new HourlyRecyclerViewAdapter(HourlyGenerator.getHourlyList()));
         }
 
         private void handleMoreOrLess(final View button) {
@@ -67,6 +73,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             if (mExpandedFlags.get(mWeather)) {
                 binding.textCurrentTemp.setVisibility(View.GONE);
                 binding.imageCurrent.setVisibility(View.GONE);
+                binding.hourlyRecyler.setVisibility(View.VISIBLE);
                 binding.textDate1.setVisibility(View.VISIBLE);
                 binding.textDate2.setVisibility(View.VISIBLE);
                 binding.textDate3.setVisibility(View.VISIBLE);
@@ -87,6 +94,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
                                 mView.getContext(),
                                 R.drawable.ic_less_grey_24dp));
             } else {
+                binding.hourlyRecyler.setVisibility(View.GONE);
                 binding.textDate1.setVisibility(View.GONE);
                 binding.textDate2.setVisibility(View.GONE);
                 binding.textDate3.setVisibility(View.GONE);
