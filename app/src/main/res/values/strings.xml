@@ -16,7 +16,13 @@
     <string name="text_home_recent">Recent Chats</string>
     <string name="title_home">Home</string>
     <string name="title_weather">Weather</string>
-    <string name="title_contacts">Contacts</string>
+
+    <!--String resources for various connections actions-->
+    <string name="title_contacts_connections">Connections</string>
+    <string name="title_contactinfo_contacts">Contacts</string>
+    <string name="title_requestinfo_requests">Requests</string>
+    <string name="title_inviteinfo_invites">Invites</string>
+
     <string name="title_chats">Chats</string>
     <string name="text_weather_search">Search...</string>
     <string name="button_weather_search">Go</string>
