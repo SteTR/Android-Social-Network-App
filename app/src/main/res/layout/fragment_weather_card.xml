@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/text_date1"
+        app:layout_constraintTop_toTopOf="@+id/text_date1">
+
+        <TextView
+            android:id="@+id/text_Location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:text="Seattle, Wa"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_date1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="Tuesday 27th"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hourlyRecyler"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_date3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="Thursday 29th"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_date2"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_date4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="Friday 30th"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_date3"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_date5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="Saturday 30th"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_date4"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/image_day2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_temperature2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_temperature2"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_weather_black_24dp"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/image_day3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_temperature3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_temperature3"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_weather_black_24dp"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/image_day4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_temperature4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_temperature4"
+            app:layout_constraintVertical_bias="0.666"
+            app:srcCompat="@drawable/ic_weather_black_24dp"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/image_day5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_temperature5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_temperature5"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_weather_black_24dp"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_temperature2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="66/48 F°"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/text_date2"
+            app:layout_constraintEnd_toStartOf="@+id/image_day2"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_temperature3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="66/48 F°"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/text_date3"
+            app:layout_constraintEnd_toStartOf="@+id/image_day3"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_temperature4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="66/48 F°"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/text_date4"
+            app:layout_constraintEnd_toStartOf="@+id/image_day4"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_temperature5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="66/48 F°"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/text_date5"
+            app:layout_constraintEnd_toStartOf="@+id/image_day5"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/image_day1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_temperature1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_temperature1"
+            app:layout_constraintVertical_bias="0.666"
+            app:srcCompat="@drawable/ic_weather_black_24dp"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_temperature1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="66/48 F°"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/text_date1"
+            app:layout_constraintEnd_toStartOf="@+id/image_day1"
+            tools:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hourlyRecyler"
+            android:layout_width="0dp"
+            android:layout_height="106dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.509"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_Location"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_date2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:text="Wednesday 28th"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_date1"
+            tools:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/button_more"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@android:drawable/screen_background_light_transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/text_Location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_Location"
+            app:srcCompat="@drawable/ic_more_grey_24dp" />
+
+        <TextView
+            android:id="@+id/text_currentTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Current Temp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_Location"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/image_current"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_Location"
+            app:srcCompat="@drawable/ic_weather_black_24dp"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
