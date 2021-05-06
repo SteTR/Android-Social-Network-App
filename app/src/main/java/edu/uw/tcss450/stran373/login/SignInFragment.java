@@ -33,7 +33,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     /**
      * Binding for this fragment.
      */
-    private FragmentSignInBinding myBinding;
+    private FragmentSignInBinding mBinding;
 
     /**
      * ViewModel used to manage UI-related data regarding sign-in.
@@ -43,7 +43,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     /**
      * Collection of special characters used for password verification.
      */
-    private char[] mySpecials;
+    private char[] mSpecials;
 
     /**
      * Executed upon creation to create a new ViewModelProvider for log-in.
@@ -53,7 +53,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle theSavedInstanceState) {
         super.onCreate(theSavedInstanceState);
-        mySpecials = new char[] {'!', '?', '&', '$', '#'};
+        mSpecials = new char[] {'!', '?', '&', '$', '#'};
         mSignInModel = new ViewModelProvider(getActivity())
                 .get(SignInViewModel.class);
     }
@@ -69,8 +69,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
                              Bundle theSavedInstanceState) {
-        myBinding = FragmentSignInBinding.inflate(theInflater);
-        return myBinding.getRoot();
+        mBinding = FragmentSignInBinding.inflate(theInflater);
+        return mBinding.getRoot();
     }
 
     /**
@@ -79,7 +79,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        myBinding = null;
+        mBinding = null;
     }
 
     /**
@@ -102,15 +102,15 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
-        myBinding.registerButton.setOnClickListener(this);
-        myBinding.signInButton.setOnClickListener(this::verify);
+        mBinding.registerButton.setOnClickListener(this);
+        mBinding.signInButton.setOnClickListener(this::verify);
         mSignInModel.addResponseObserver(
                 getViewLifecycleOwner(),
                 this::observeResponse);
 
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
-        myBinding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
-        myBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+        mBinding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
+        mBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
     }
 
     /**
@@ -119,8 +119,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      * @param theView is the View object used to
      */
     private void verify(View theView) {
-        EditText email = myBinding.editText;
-        EditText password = myBinding.editText2;
+        EditText email = mBinding.editText;
+        EditText password = mBinding.editText2;
         String emailString = email.getText().toString();
         String pwString = password.getText().toString();
         boolean verifyE = verifyEmail(emailString);
@@ -147,7 +147,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         int i = 0;
         boolean found = false;
         if (theEmail.length() < 8) {
-            myBinding.editText.setError("Email is less than 8 characters.");
+            mBinding.editText.setError("Email is less than 8 characters.");
         } else if (!TextUtils.isEmpty(theEmail)) {
             while (i < theEmail.length() && !found) {
                 if (theEmail.charAt(i) == '@') {
@@ -171,12 +171,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private boolean verifyPW(String thePW) {
         boolean pw = false;
         if (thePW.length() < 8) {
-            myBinding.editText2.setError("Password is less than 8 characters.");
+            mBinding.editText2.setError("Password is less than 8 characters.");
         } else {
             for (int i = 0; i < thePW.length(); i++) {
                 int j = 0;
-                while (j < mySpecials.length && !pw) {
-                    if (thePW.charAt(i) == mySpecials[j]) {
+                while (j < mSpecials.length && !pw) {
+                    if (thePW.charAt(i) == mSpecials[j]) {
                         pw = true;
                     } else {
                         j++;
@@ -186,7 +186,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!pw) {
-            myBinding.editText2.setError("Special character missing");
+            mBinding.editText2.setError("Special character missing");
         }
 
         return pw;
@@ -197,8 +197,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      */
     private void verifyAuthWithServer() {
         mSignInModel.connect(
-                myBinding.editText.getText().toString(),
-                myBinding.editText2.getText().toString());
+                mBinding.editText.getText().toString(),
+                mBinding.editText2.getText().toString());
     }
 
     /**
@@ -208,9 +208,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      * @param theJwt the JSON Web Token supplied by the server
      */
     private void navigateToSuccess(final String theEmail, final String theJwt) {
-        Navigation.findNavController(getView())
-                .navigate(SignInFragmentDirections
-                        .actionSignInFragmentToMainActivity(theJwt, theEmail));
+//        Navigation.findNavController(getView())
+//                .navigate(SignInFragmentDirections
+//                        .actionSignInFragmentToMainActivity(theJwt, theEmail));
     }
 
     /**
@@ -223,7 +223,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         if (theResponse.length() > 0) {
             if (theResponse.has("code")) {
                 try {
-                    myBinding.editText.setError(
+                    mBinding.editText.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
                 } catch (JSONException e) {
@@ -232,7 +232,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             } else {
                 try {
                     navigateToSuccess(
-                            myBinding.editText.getText().toString(),
+                            mBinding.editText.getText().toString(),
                             theResponse.getString("token"));
                     Log.d("JSON Response", theResponse.getString("token"));
                 } catch (JSONException e) {

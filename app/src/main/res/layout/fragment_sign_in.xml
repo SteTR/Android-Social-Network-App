@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/email"
+        android:hint="@string/edittext_sign_in_email"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
         android:layout_marginTop="16dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/password"
+        android:hint="@string/edittext_sign_in_password"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/signin"
+        android:text="@string/button_sign_in_signin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:text="@string/reg"
+        android:text="@string/button_register_registration"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
