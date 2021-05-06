@@ -58,12 +58,12 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
         /**
          * The user's current jwt.
          */
-        private final String aJwt;
+        private final String jwt;
 
         /**
          * The user's current email.
          */
-        private final String aEmail;
+        private final String email;
 
         /**
          * Constructor for the inner class itself.
@@ -72,8 +72,8 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
          * @param theEmail is the user's current email.
          */
         public UserInfoViewModelFactory(final String theJwt, final String theEmail) {
-            aJwt = theJwt;
-            aEmail = theEmail;
+            this.jwt = theJwt;
+            this.email = theEmail;
         }
 
         /**
@@ -86,7 +86,7 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> theModelClass) {
             if (theModelClass == UserInfoViewModel.class) {
-                return (T) new UserInfoViewModel(aJwt, aEmail);
+                return (T) new UserInfoViewModel(jwt, email);
             }
 
             throw new IllegalArgumentException("Argument must be: " + UserInfoViewModel.class);
