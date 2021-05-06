@@ -33,7 +33,7 @@ public class RegistrationViewModel extends AndroidViewModel {
     /**
      *
      */
-    private MutableLiveData<JSONObject> mResponse;
+    private MutableLiveData<JSONObject> myResponse;
 
     /**
      * Constructor used for the ViewModel.
@@ -42,8 +42,8 @@ public class RegistrationViewModel extends AndroidViewModel {
      */
     public RegistrationViewModel(@NonNull Application theApplication) {
         super(theApplication);
-        mResponse = new MutableLiveData<>();
-        mResponse.setValue(new JSONObject());
+        myResponse = new MutableLiveData<>();
+        myResponse.setValue(new JSONObject());
     }
 
     /**
@@ -54,7 +54,7 @@ public class RegistrationViewModel extends AndroidViewModel {
      */
     public void addResponseObserver(@NonNull LifecycleOwner theOwner,
                                     @NonNull Observer<? super JSONObject> theObserver) {
-        mResponse.observe(theOwner, theObserver);
+        myResponse.observe(theOwner, theObserver);
     }
 
     /**
@@ -65,7 +65,7 @@ public class RegistrationViewModel extends AndroidViewModel {
     private void handleError(final VolleyError theError) {
         if (Objects.isNull(theError.networkResponse)) {
             try {
-                mResponse.setValue(new JSONObject("{" +
+                myResponse.setValue(new JSONObject("{" +
                         "error:\"" + theError.getMessage() +
                         "\"}"));
             } catch (JSONException e) {
@@ -79,7 +79,7 @@ public class RegistrationViewModel extends AndroidViewModel {
                 JSONObject response = new JSONObject();
                 response.put("code", theError.networkResponse.statusCode);
                 response.put("data", new JSONObject(data));
-                mResponse.setValue(response);
+                myResponse.setValue(response);
             } catch (JSONException e) {
                 Log.e("JSON PARSE", "JSON Parse Error in handleError");
             }
@@ -111,7 +111,7 @@ public class RegistrationViewModel extends AndroidViewModel {
                 Request.Method.POST,
                 url,
                 body,
-                mResponse::setValue,
+                myResponse::setValue,
                 this::handleError);
 
         request.setRetryPolicy(new DefaultRetryPolicy(
