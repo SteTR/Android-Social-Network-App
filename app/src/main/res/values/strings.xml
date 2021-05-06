@@ -37,12 +37,15 @@
     <string name="base_url">TODO</string>
 
     <!--Charles string resources for signin and registration-->
-    <string name="button_register_registration">Register</string>
-    <string name="edittext_register_first">First Name</string>
-    <string name="edittext_register_last">Last Name</string>
-    <string name="edittext_register_confirm">Confirm Password</string>
-    <string name="edittext_sign_in_password">Password</string>
-    <string name="edittext_sign_in_email">Password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signin">Sign In</string>
+    <string name="reg">Register</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="confirm">Confirm Password</string>
+    <string name="hello">Hello </string>
+    <string name="home">Home</string>
 
     <string name="hint_first">First Name</string>
     <string name="hint_last">Last Name</string>

@@ -1,8 +1,5 @@
 package edu.uw.tcss450.stran373.ui.Register;
 
-import static edu.uw.tcss450.stran373.utils.PasswordValidator.*;
-import static edu.uw.tcss450.stran373.utils.PasswordValidator.checkClientPredicate;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,126 +8,198 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.uw.tcss450.stran373.databinding.FragmentRegisterBinding;
-import edu.uw.tcss450.stran373.utils.PasswordValidator;
-
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment used to house the registration feature.
  */
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends Fragment implements View.OnClickListener {
 
-    private FragmentRegisterBinding binding;
+    /**
+     * Binding for this fragment.
+     */
+    private FragmentRegisterBinding myBinding;
 
-    private RegisterViewModel mRegisterModel;
+    /**
+     * ViewModel used to store information regarding registration.
+     */
+    private RegisterViewModel myRegisterModel;
 
-    private PasswordValidator mNameValidator = checkPwdLength(1);
+    /**
+     * Set of special characters used for password validation.
+     */
+    private char[] mySpecials;
 
-    private PasswordValidator mEmailValidator = checkPwdLength(2)
-            .and(checkExcludeWhiteSpace())
-            .and(checkPwdSpecialChar("@"));
-
-    private PasswordValidator mPassWordValidator =
-            checkClientPredicate(pwd -> pwd.equals(binding.editPassword2.getText().toString()))
-                    .and(checkPwdLength(7))
-                    .and(checkPwdSpecialChar())
-                    .and(checkExcludeWhiteSpace())
-                    .and(checkPwdDigit())
-                    .and(checkPwdLowerCase().or(checkPwdUpperCase()));
-
-    public RegisterFragment() {
-        // Required empty public constructor
-    }
-
+    /**
+     * Initializes the registration page for the user.
+     *
+     * @param theSavedInstanceState is a Bundle object.
+     */
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mRegisterModel = new ViewModelProvider(getActivity())
+    public void onCreate(@Nullable Bundle theSavedInstanceState) {
+        super.onCreate(theSavedInstanceState);
+        mySpecials = new char[] {'!', '?', '&', '$', '#'};
+        myRegisterModel = new ViewModelProvider(getActivity())
                 .get(RegisterViewModel.class);
     }
 
+    /**
+     * Creates a view hierarchy for the user.
+     *
+     * @param theInflater is a LayoutInflater object.
+     * @param theContainer is a ViewGroup object.
+     * @param theSavedInstanceState is a Bundle object.
+     * @return the application's view hierarchy
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentRegisterBinding.inflate(inflater);
-        return binding.getRoot();
+    public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
+                             Bundle theSavedInstanceState) {
+        myBinding = FragmentRegisterBinding.inflate(theInflater);
+        return myBinding.getRoot();
     }
 
+    /**
+     * Initializes the buttons and functionalities of the registration page.
+     *
+     * @param theView is a View object.
+     * @param theSavedInstanceState is a Bundle object.
+     */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.buttonRegister.setOnClickListener(this::attemptRegister);
-        mRegisterModel.addResponseObserver(getViewLifecycleOwner(),
+    public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
+        super.onViewCreated(theView, theSavedInstanceState);
+        myBinding.button.setOnClickListener(this);
+        myRegisterModel.addResponseObserver(getViewLifecycleOwner(),
                 this::observeResponse);
     }
 
-    private void attemptRegister(final View button) {
-        validateFirst();
+    /**
+     * Used to clear the contents of the registration page.
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        myBinding = null;
     }
 
-    private void validateFirst() {
-        mNameValidator.processResult(
-                mNameValidator.apply(binding.editFirst.getText().toString().trim()),
-                this::validateLast,
-                result -> binding.editFirst.setError("Please enter a first name."));
+    /**
+     * Called when the user clicks on the "register" button to complete registration.
+     *
+     * @param theView is the current View of the application.
+     */
+    @Override
+    public void onClick(View theView) {
+        EditText email = myBinding.editText;
+        EditText pw1 = myBinding.editText2;
+        EditText pw2 = myBinding.editText3;
+        EditText first = myBinding.editText4;
+        EditText last = myBinding.editText5;
+
+        int match = pw1.getText().toString().compareTo(pw2.getText().toString());
+        boolean validPW1 = verifyPW(pw1.getText().toString());
+        boolean emptyE = TextUtils.isEmpty(email.getText().toString());
+        boolean emptyFirst = TextUtils.isEmpty(first.getText().toString());
+        boolean emptyLast = TextUtils.isEmpty(last.getText().toString());
+        boolean verifyE = verifyEmail(email.getText().toString());
+
+        if (emptyE || !verifyE) {
+            email.setError("Invalid Email");
+        } else if (!validPW1) {
+            pw1.setError("Invalid Password");
+        } else if (match != 0) {
+            pw2.setError("Passwords do not match");
+        } else if (emptyFirst) {
+            first.setError("Invalid Name");
+        } else if (emptyLast) {
+            last.setError("Invalid Name");
+        } else {
+            verifyAuthWithServer();
+        }
     }
 
-    private void validateLast() {
-        mNameValidator.processResult(
-                mNameValidator.apply(binding.editLast.getText().toString().trim()),
-                this::validateEmail,
-                result -> binding.editLast.setError("Please enter a last name."));
+    /**
+     * Helper method used to verify the email.
+     *
+     * @param theEmail is the email the user types in.
+     * @return true if it is valid email, false otherwise.
+     */
+    private boolean verifyEmail(String theEmail) {
+        int i = 0;
+        boolean found = false;
+        while (i < theEmail.length() && !found &&
+                !TextUtils.isEmpty(theEmail)) {
+            if (theEmail.charAt(i) == '@') {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        return found;
     }
 
-    private void validateEmail() {
-        mEmailValidator.processResult(
-                mEmailValidator.apply(binding.editEmail.getText().toString().trim()),
-                this::validatePasswordsMatch,
-                result -> binding.editEmail.setError("Please enter a valid Email address."));
+    /**
+     * Helper method to verify the password.
+     *
+     * @param thePW is the password the user types in.
+     * @return true if it is an acceptable password, false otherwise.
+     */
+    private boolean verifyPW(String thePW) {
+        boolean pw = false;
+        if (thePW.length() < 8) {
+            myBinding.editText2.setError("Password is less than 8 characters.");
+        } else {
+            for (int i = 0; i < thePW.length(); i++) {
+                int j = 0;
+                while (j < mySpecials.length && !pw) {
+                    if (thePW.charAt(i) == mySpecials[j]) {
+                        pw = true;
+                    } else {
+                        j++;
+                    }
+                }
+            }
+        }
+
+        if (!pw) {
+            myBinding.editText2.setError("Special character missing");
+        }
+
+        return pw;
     }
 
-    private void validatePasswordsMatch() {
-        PasswordValidator matchValidator =
-                checkClientPredicate(
-                        pwd -> pwd.equals(binding.editPassword2.getText().toString().trim()));
-
-        mEmailValidator.processResult(
-                matchValidator.apply(binding.editPassword1.getText().toString().trim()),
-                this::validatePassword,
-                result -> binding.editPassword1.setError("Passwords must match."));
-    }
-
-    private void validatePassword() {
-        mPassWordValidator.processResult(
-                mPassWordValidator.apply(binding.editPassword1.getText().toString()),
-                this::verifyAuthWithServer,
-                result -> binding.editPassword1.setError("Please enter a valid Password."));
-    }
-
+    /**
+     * Helper method used to authenticate with the web server.
+     */
     private void verifyAuthWithServer() {
-        mRegisterModel.connect(binding.editFirst.getText().toString(),
-                binding.editLast.getText().toString(),
-                binding.editEmail.getText().toString(),
-                binding.editPassword1.getText().toString());
-        //This is an Asynchronous call. No statements after should rely on the
-        //result of connect().
+        myRegisterModel.connect(
+                myBinding.editText4.getText().toString(),
+                myBinding.editText5.getText().toString(),
+                myBinding.editText.getText().toString(),
+                myBinding.editText2.getText().toString());
     }
 
-    private void navigateToLogin() {
+    /**
+     * Helper method used to navigate to the sign-in page upon successful registration.
+     */
+    private void navigateToSignIn() {
         RegisterFragmentDirections.ActionRegisterFragmentToSignInFragment directions =
                 RegisterFragmentDirections.actionRegisterFragmentToSignInFragment();
 
-        directions.setEmail(binding.editEmail.getText().toString());
-        directions.setPassword(binding.editPassword1.getText().toString());
+        directions.setEmail(myBinding.editText.getText().toString());
+        directions.setPassword(myBinding.editText2.getText().toString());
 
         Navigation.findNavController(getView()).navigate(directions);
 
@@ -140,22 +209,25 @@ public class RegisterFragment extends Fragment {
      * An observer on the HTTP Response from the web server. This observer should be
      * attached to SignInViewModel.
      *
-     * @param response the Response from the server
+     * @param theResponse the Response from the server
      */
-    private void observeResponse(final JSONObject response) {
-        if (response.length() > 0) {
-            if (response.has("code")) {
-                try {binding.editEmail.setError(
-                        "Error Authenticating: " +
-                                response.getJSONObject("data").getString("message"));
+    private void observeResponse(final JSONObject theResponse) {
+        if (theResponse.length() > 0) {
+            if (theResponse.has("code")) {
+                try {
+                    myBinding.editText.setError(
+                            "Error Authenticating: " +
+                                    theResponse.getJSONObject("data").getString("message"));
+
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
             } else {
-                navigateToLogin();
+                navigateToSignIn();
             }
         } else {
             Log.d("JSON Response", "No Response");
         }
     }
+
 }
