@@ -32,17 +32,17 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     /**
      * Binding for this fragment.
      */
-    private FragmentRegistrationBinding myBinding;
+    private FragmentRegistrationBinding mBinding;
 
     /**
      * ViewModel used to store information regarding registration.
      */
-    private RegistrationViewModel myRegisterModel;
+    private RegistrationViewModel mRegisterModel;
 
     /**
      * Set of special characters used for password validation.
      */
-    private char[] mySpecials;
+    private char[] mSpecials;
 
     /**
      * Initializes the registration page for the user.
@@ -52,8 +52,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(@Nullable Bundle theSavedInstanceState) {
         super.onCreate(theSavedInstanceState);
-        mySpecials = new char[] {'!', '?', '&', '$', '#'};
-        myRegisterModel = new ViewModelProvider(getActivity())
+        mSpecials = new char[] {'!', '?', '&', '$', '#'};
+        mRegisterModel = new ViewModelProvider(getActivity())
                 .get(RegistrationViewModel.class);
     }
 
@@ -68,8 +68,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
                              Bundle theSavedInstanceState) {
-        myBinding = FragmentRegistrationBinding.inflate(theInflater);
-        return myBinding.getRoot();
+        mBinding = FragmentRegistrationBinding.inflate(theInflater);
+        return mBinding.getRoot();
     }
 
     /**
@@ -81,8 +81,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
         super.onViewCreated(theView, theSavedInstanceState);
-        myBinding.button.setOnClickListener(this);
-        myRegisterModel.addResponseObserver(getViewLifecycleOwner(),
+        mBinding.button.setOnClickListener(this);
+        mRegisterModel.addResponseObserver(getViewLifecycleOwner(),
                 this::observeResponse);
     }
 
@@ -92,7 +92,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        myBinding = null;
+        mBinding = null;
     }
 
     /**
@@ -102,11 +102,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
      */
     @Override
     public void onClick(View theView) {
-        EditText email = myBinding.editText;
-        EditText pw1 = myBinding.editText2;
-        EditText pw2 = myBinding.editText3;
-        EditText first = myBinding.editText4;
-        EditText last = myBinding.editText5;
+        EditText email = mBinding.editText;
+        EditText pw1 = mBinding.editText2;
+        EditText pw2 = mBinding.editText3;
+        EditText first = mBinding.editText4;
+        EditText last = mBinding.editText5;
 
         int match = pw1.getText().toString().compareTo(pw2.getText().toString());
         boolean validPW1 = verifyPW(pw1.getText().toString());
@@ -159,12 +159,12 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     private boolean verifyPW(String thePW) {
         boolean pw = false;
         if (thePW.length() < 8) {
-            myBinding.editText2.setError("Password is less than 8 characters.");
+            mBinding.editText2.setError("Password is less than 8 characters.");
         } else {
             for (int i = 0; i < thePW.length(); i++) {
                 int j = 0;
-                while (j < mySpecials.length && !pw) {
-                    if (thePW.charAt(i) == mySpecials[j]) {
+                while (j < mSpecials.length && !pw) {
+                    if (thePW.charAt(i) == mSpecials[j]) {
                         pw = true;
                     } else {
                         j++;
@@ -174,7 +174,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         }
 
         if (!pw) {
-            myBinding.editText2.setError("Special character missing");
+            mBinding.editText2.setError("Special character missing");
         }
 
         return pw;
@@ -184,11 +184,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
      * Helper method used to authenticate with the web server.
      */
     private void verifyAuthWithServer() {
-        myRegisterModel.connect(
-                myBinding.editText4.getText().toString(),
-                myBinding.editText5.getText().toString(),
-                myBinding.editText.getText().toString(),
-                myBinding.editText2.getText().toString());
+        mRegisterModel.connect(
+                mBinding.editText4.getText().toString(),
+                mBinding.editText5.getText().toString(),
+                mBinding.editText.getText().toString(),
+                mBinding.editText2.getText().toString());
     }
 
     /**
@@ -198,8 +198,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         RegistrationFragmentDirections.ActionRegistrationFragmentToSignInFragment directions =
                 RegistrationFragmentDirections.actionRegistrationFragmentToSignInFragment();
 
-        directions.setEmail(myBinding.editText.getText().toString());
-        directions.setPassword(myBinding.editText2.getText().toString());
+        directions.setEmail(mBinding.editText.getText().toString());
+        directions.setPassword(mBinding.editText2.getText().toString());
 
         Navigation.findNavController(getView()).navigate(directions);
 
@@ -215,7 +215,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         if (theResponse.length() > 0) {
             if (theResponse.has("code")) {
                 try {
-                    myBinding.editText.setError(
+                    mBinding.editText.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
 

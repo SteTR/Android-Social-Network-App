@@ -1,10 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
-    app:startDestination="@id/successFragment">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/SignInFragment">
     <fragment
-        android:id="@+id/successFragment"
-        android:name="edu.uw.tcss450.stran373.ui.SuccessFragment"
-        android:label="SuccessFragment" />
+        android:id="@+id/SignInFragment"
+        android:name="edu.uw.tcss450.stran373.login.SignInFragment"
+        android:label="SignInFragment" >
+        <action
+            android:id="@+id/action_SignInFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="password"
+            app:argType="string"
+            android:defaultValue="default" />
+        <action
+            android:id="@+id/action_SignInFragment_to_placeholder"
+            app:destination="@id/MainActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="edu.uw.tcss450.stran373.registration.RegistrationFragment"
+        android:label="RegistrationFragment" >
+        <action
+            android:id="@+id/action_registrationFragment_to_SignInFragment"
+            app:destination="@id/SignInFragment" />
+        <argument
+            android:name="navi"
+            app:argType="integer" />
+    </fragment>
+    <fragment android:id="@+id/MainActivity" >
+        <argument
+            android:name="jwt"
+            app:argType="string" />
+        <argument
+            android:name="email"
+            app:argType="string" />
+    </fragment>
 </navigation>
