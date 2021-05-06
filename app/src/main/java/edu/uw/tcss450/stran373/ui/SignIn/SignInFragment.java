@@ -67,7 +67,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      * @return a View hierarchy
      */
     @Override
-    public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
+    public View onCreateView(@NonNull LayoutInflater theInflater, ViewGroup theContainer,
                              Bundle theSavedInstanceState) {
         myBinding = FragmentSignInBinding.inflate(theInflater);
         return myBinding.getRoot();
@@ -211,6 +211,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionSignInFragmentToMainActivity(theJwt, theEmail));
+        getActivity().finish();
     }
 
     /**
