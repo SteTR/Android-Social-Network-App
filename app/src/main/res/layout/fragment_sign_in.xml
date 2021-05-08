@@ -4,7 +4,7 @@
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="login.SignInFragment" >
+    tools:context="ui.SignIn.SignInFragment" >
 
     <EditText
         android:id="@+id/editText"
