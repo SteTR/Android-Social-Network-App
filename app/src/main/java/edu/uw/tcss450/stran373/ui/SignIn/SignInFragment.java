@@ -53,7 +53,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle theSavedInstanceState) {
         super.onCreate(theSavedInstanceState);
-        mySpecials = new char[] {'!', '?', '&', '$', '#'};
         mSignInModel = new ViewModelProvider(getActivity())
                 .get(SignInViewModel.class);
     }
@@ -116,80 +115,23 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     /**
      * Helper method for verifying both the email and the password.
      *
-     * @param theView is the View object used to
+     * @param theView is the View object used for interaction.
      */
     private void verify(View theView) {
         EditText email = myBinding.editText;
         EditText password = myBinding.editText2;
         String emailString = email.getText().toString();
         String pwString = password.getText().toString();
-        boolean verifyE = verifyEmail(emailString);
-        boolean verifyPW = verifyPW(pwString);
-        if (!verifyE || !verifyPW) {
-            if (!verifyE) {
-                email.setError("Invalid Email");
-            } else {
-                password.setError("Invalid Password");
-            }
+        boolean verifyE = !TextUtils.isEmpty(emailString);
+        boolean verifyPW = !TextUtils.isEmpty(pwString);
+        if (!verifyE) {
+            email.setError("Invalid Email");
+        } else if (!verifyPW){
+            password.setError("Invalid Password");
         } else {
             verifyAuthWithServer();
         }
 
-    }
-
-    /**
-     * Helper method to verify the email.
-     *
-     * @param theEmail is the email the user types in.
-     * @return true if the user types in an existing email associated with the account, false otherwise.
-     */
-    private boolean verifyEmail(String theEmail) {
-        int i = 0;
-        boolean found = false;
-        if (theEmail.length() < 8) {
-            myBinding.editText.setError("Email is less than 8 characters.");
-        } else if (!TextUtils.isEmpty(theEmail)) {
-            while (i < theEmail.length() && !found) {
-                if (theEmail.charAt(i) == '@') {
-                    Log.d("MYLABAPP: ", "Valid Email");
-                    found = true;
-                } else {
-                    i++;
-                }
-            }
-        }
-
-        return found;
-    }
-
-    /**
-     * Helper method to verify the password.
-     *
-     * @param thePW is the password the user types in.
-     * @return true if the user types in an existing password associated with the account, false otherwise.
-     */
-    private boolean verifyPW(String thePW) {
-        boolean pw = false;
-        if (thePW.length() < 8) {
-            myBinding.editText2.setError("Password is less than 8 characters.");
-        } else {
-            for (int i = 0; i < thePW.length(); i++) {
-                int j = 0;
-                while (j < mySpecials.length && !pw) {
-                    if (thePW.charAt(i) == mySpecials[j]) {
-                        pw = true;
-                    } else {
-                        j++;
-                    }
-                }
-            }
-        }
-
-        if (!pw) {
-            myBinding.editText2.setError("Special character missing");
-        }
-
-        return pw;
     }
 
     /**
