@@ -2,48 +2,82 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_graph"
-    app:startDestination="@id/SignInFragment">
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
+
     <fragment
-        android:id="@+id/SignInFragment"
-        android:name="edu.uw.tcss450.stran373.login.SignInFragment"
-        android:label="SignInFragment" >
+        android:id="@+id/navigation_home"
+        android:name="edu.uw.tcss450.stran373.ui.Home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/navigation_chats"
+        android:name="edu.uw.tcss450.stran373.ui.Chat.Card.ChatCardListFragment"
+        android:label="@string/title_chats"
+        tools:layout="@layout/fragment_chat_list" >
         <action
-            android:id="@+id/action_SignInFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
-        <argument
-            android:name="email"
-            app:argType="string"
-            android:defaultValue="default" />
-        <argument
-            android:name="password"
-            app:argType="string"
-            android:defaultValue="default" />
-        <action
-            android:id="@+id/action_SignInFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
+            android:id="@+id/action_navigation_chats_to_navigation_single_chat"
+            app:destination="@id/navigation_single_chat" />
     </fragment>
     <fragment
-        android:id="@+id/registrationFragment"
-        android:name="edu.uw.tcss450.stran373.registration.RegistrationFragment"
-        android:label="RegistrationFragment" >
-        <action
-            android:id="@+id/action_registrationFragment_to_SignInFragment"
-            app:destination="@id/SignInFragment" />
+        android:id="@+id/navigation_single_chat"
+        android:name="edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
         <argument
-            android:name="navi"
+            android:name="chatId"
             app:argType="integer" />
     </fragment>
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="edu.uw.tcss450.stran373.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" >
-        <argument
-            android:name="jwt"
-            app:argType="string" />
-        <argument
-            android:name="email"
-            app:argType="string" />
-    </activity>
+    <fragment
+        android:id="@+id/navigation_weather"
+        android:name="edu.uw.tcss450.stran373.ui.Weather.WeatherFragment"
+        android:label="@string/title_weather"
+        tools:layout="@layout/fragment_weather">
+        <action
+            android:id="@+id/action_navigation_weather_to_weatherSearchFragment"
+            app:destination="@id/weatherSearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/weatherSearchFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Weather.WeatherSearchFragment"
+        android:label="@string/title_weather"
+        tools:layout="@layout/fragment_weather_search" />
+    <fragment
+        android:id="@+id/navigation_contacts"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
+        android:label="@string/title_contactinfo_contacts"
+        tools:layout="@layout/fragment_contact">
+        <action
+            android:id="@+id/action_navigation_contacts_to_inviteFragment"
+            app:destination="@id/inviteFragment" />
+        <action
+            android:id="@+id/action_navigation_contacts_to_requestFragment"
+            app:destination="@id/requestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inviteFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteFragment"
+        android:label="@string/title_inviteinfo_invites"
+        tools:layout="@layout/fragment_invite">
+        <action
+            android:id="@+id/action_inviteFragment_to_navigation_contacts"
+            app:destination="@id/navigation_contacts" />
+        <action
+            android:id="@+id/action_inviteFragment_to_requestFragment"
+            app:destination="@id/requestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestFragment"
+        android:label="@string/title_requestinfo_requests"
+        tools:layout="@layout/fragment_request">
+        <action
+            android:id="@+id/action_requestFragment_to_navigation_contacts"
+            app:destination="@id/navigation_contacts" />
+        <action
+            android:id="@+id/action_requestFragment_to_inviteFragment"
+            app:destination="@id/inviteFragment" />
+    </fragment>
+
+
 </navigation>

@@ -11,13 +11,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 public class RequestQueueSingleton {
-
     private static RequestQueueSingleton instance;
-
     private static Context context;
 
     private RequestQueue mRequestQueue;
-
     private ImageLoader mImageLoader;
 
     private RequestQueueSingleton(Context context) {
@@ -65,3 +62,4 @@ public class RequestQueueSingleton {
         return mImageLoader;
     }
 }
+

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.Chat.Card.ChatMessageFragment">
+
+<com.google.android.material.card.MaterialCardView
+android:id="@+id/card_root"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_margin="@dimen/chat_margin"
+app:cardCornerRadius="5dp"
+app:cardElevation="0dp"
+android:layout_gravity="end">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/text_title"
+        app:layout_constraintTop_toTopOf="@+id/text_title">
+
+        <ImageView
+            android:id="@+id/message_profile_pic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/message_text_name"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/message_text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/message_text_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="John Mother F'ing Cena" />
+
+        <TextView
+            android:id="@+id/message_text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="It do be like that huh."
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/message_text_name" />
+
+        <TextView
+            android:id="@+id/message_text_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12:30 AM"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/message_text_content" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+</FrameLayout>
