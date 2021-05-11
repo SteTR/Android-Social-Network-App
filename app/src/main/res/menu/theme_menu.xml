@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+    android:id="@+id/theme_cherry"
+    android:orderInCategory="100"
+    android:title="@string/title_cherry_toolbar"
+    app:showAsAction="never" />
+<item
+    android:id="@+id/theme_orange"
+    android:orderInCategory="100"
+    android:title="@string/title_orange_toolbar"
+    app:showAsAction="never" />
+<item
+    android:id="@+id/theme_pacnw"
+    android:orderInCategory="100"
+    android:title="@string/title_pacnw_toolbar"
+    app:showAsAction="never" />
+
+</menu>

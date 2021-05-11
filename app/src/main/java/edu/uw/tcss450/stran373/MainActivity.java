@@ -10,6 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.ThemeC);
+        Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
 
         MainActivityArgs args = MainActivityArgs.fromBundle(getIntent().getExtras());
@@ -46,8 +47,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(final Menu theMenu) {
-        getMenuInflater().inflate(R.menu.toolbar, theMenu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.theme_menu, menu);
         return true;
     }
 
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.theme_pacnw) {
             Utils.changeToTheme(this, Utils.THEME_PACNW);
+            return true;
         }
 
         return super.onOptionsItemSelected(theItem);

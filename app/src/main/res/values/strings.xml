@@ -25,6 +25,9 @@
     <string name="title_inviteinfo_invites">Invites</string>
 
     <string name="title_themes_toolbar">Themes</string>
+    <string name="title_cherry_toolbar">Cherry</string>
+    <string name="title_orange_toolbar">Orange</string>
+    <string name="title_pacnw_toolbar">PacNW</string>
 
     <string name="title_chats">Chats</string>
     <string name="text_weather_search">Search...</string>
