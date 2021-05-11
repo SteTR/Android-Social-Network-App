@@ -51,9 +51,7 @@ public class WeatherFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
-        MainActivity main = (MainActivity) getActivity();
-        String jwt = main.getTheArgs().getJwt();
-        mModel.connect(jwt);
+        mModel.connect();
     }
 
     /**

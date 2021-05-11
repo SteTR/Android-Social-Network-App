@@ -1,9 +1,11 @@
 package edu.uw.tcss450.stran373.ui.Weather;
 
 import android.app.Application;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
@@ -25,6 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.IntFunction;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+import java.time.YearMonth;
+
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.R;
 
@@ -38,6 +45,8 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private MutableLiveData<List<WeatherCard>> mCardList;
 
+    private int[][] mFutureDays;
+
     /**
      * Constructor for the ViewModel.
      *
@@ -45,6 +54,7 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     public WeatherViewModel(@NonNull Application application) {
         super(application);
+        mFutureDays = new int[5][3];
         mCardList = new MutableLiveData<>();
         mCardList.setValue(new ArrayList<>());
     }
@@ -75,33 +85,29 @@ public class WeatherViewModel extends AndroidViewModel {
      *
      * @param result
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleResult(final JSONObject result) {
-        IntFunction<String> getString = getApplication().getResources()::getString;
         try {
             JSONObject root = result;
-            if (root.has(getString.apply(R.string.keys_json_weather_response))) {
-                JSONObject response =
-                        root.getJSONObject(getString.apply(
-                                R.string.keys_json_weather_response));
-                if (response.has(getString.apply(R.string.keys_json_weather_data))) {
-                    JSONArray data = response.getJSONArray(
-                            getString.apply(R.string.keys_json_weather_data));
-                    JSONObject obj = data.getJSONObject(0);
-                    WeatherCard wc = new WeatherCard
-                            .Builder("Seattle, WA", "67 F°")
-                            .addDay1("Tuesday 27th","70/65 F°")
-                            .addDay2("Wednesday 28th", "65/49 F°")
-                            .addDay3("Thursday 29th", "66/56 F°")
-                            .addDay4("Friday 30th", "73/63 F°")
-                            .addDay5("Saturday 1st", "75/65 F°").build();
-                    if (!mCardList.getValue().contains(wc)) {
-                        mCardList.getValue().add(wc);
-                    }
-                } else {
-                    Log.e("ERROR!", "No data array");
-                }
-            } else {
-                Log.e("ERROR!", "No response");
+            JSONObject main = (JSONObject) root.get("main");
+            Double temperature = (Double) main.get("temp");
+            String cityName = (String) root.get("name");
+            Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+            int currentDay = cal.get(Calendar.DATE);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            YearMonth ymo = YearMonth.of(year, month);
+            int daysInMonth = ymo.lengthOfMonth();
+            mFutureDays = fiveDays(year, month, currentDay, daysInMonth);
+            WeatherCard wc = new WeatherCard
+                    .Builder(cityName + ", WA", temperature + " F°")
+                    .addDay1(String.format("%d/%d/%d", mFutureDays[0][0], mFutureDays[0][1], mFutureDays[0][2]),"70/65 F°")
+                    .addDay2(String.format("%d/%d/%d", mFutureDays[1][0], mFutureDays[1][1], mFutureDays[1][2]), "65/49 F°")
+                    .addDay3(String.format("%d/%d/%d", mFutureDays[2][0], mFutureDays[2][1], mFutureDays[2][2]), "66/56 F°")
+                    .addDay4(String.format("%d/%d/%d", mFutureDays[3][0], mFutureDays[3][1], mFutureDays[3][2]), "73/63 F°")
+                    .addDay5(String.format("%d/%d/%d", mFutureDays[4][0], mFutureDays[4][1], mFutureDays[4][2]), "75/65 F°").build();
+            if (!mCardList.getValue().contains(wc)) {
+                mCardList.getValue().add(wc);
             }
 
         } catch (JSONException e) {
@@ -113,13 +119,37 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     /**
-     * Used to connect to the weather web service.
      *
-     * @param jwt
+     *
+     * @param theYear
+     * @param theMonth
+     * @param theDay
+     * @param theMaxDays
+     * @return
      */
-    public void connect(final String jwt) {
+    private int[][] fiveDays(int theYear, int theMonth, int theDay, int theMaxDays) {
+        int days[][] = new int[5][3];
+        int newMonth = theMonth;
+        int year = theYear % 2000;
+        for (int i = 1; i <= days.length; i++) {
+            int newDay = (theDay + i) % (theMaxDays + 1);
+            if (newDay == 0) {
+                newMonth++;
+                newDay++;
+            }
+            days[i-1][0] = newMonth;
+            days[i-1][1] = newDay;
+            days[i-1][2] = year;
+        }
+        return days;
+    }
+
+    /**
+     * Used to connect to the weather web service.
+     */
+    public void connect() {
         String url = "https://api.openweathermap.org/data/2.5/weather";
-//        url += "?q=Seattle,53,1&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6";
+        url += "?q=Seattle,53,1&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6&units=imperial";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -132,7 +162,7 @@ public class WeatherViewModel extends AndroidViewModel {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("q","Seattle,53,1");
                 headers.put("appid","128e4fc74c1ba9cb7c3c3e7de0e05cd6");
-//                headers.put("mode", "html");
+                headers.put("units", "imperial");
                 return headers;
             }
         };
