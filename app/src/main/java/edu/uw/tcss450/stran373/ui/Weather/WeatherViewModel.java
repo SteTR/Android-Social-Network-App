@@ -105,7 +105,8 @@ public class WeatherViewModel extends AndroidViewModel {
                     .addDay2(String.format("%d/%d/%d", mFutureDays[1][0], mFutureDays[1][1], mFutureDays[1][2]), "65/49 F°")
                     .addDay3(String.format("%d/%d/%d", mFutureDays[2][0], mFutureDays[2][1], mFutureDays[2][2]), "66/56 F°")
                     .addDay4(String.format("%d/%d/%d", mFutureDays[3][0], mFutureDays[3][1], mFutureDays[3][2]), "73/63 F°")
-                    .addDay5(String.format("%d/%d/%d", mFutureDays[4][0], mFutureDays[4][1], mFutureDays[4][2]), "75/65 F°").build();
+                    .addDay5(String.format("%d/%d/%d", mFutureDays[4][0], mFutureDays[4][1], mFutureDays[4][2]), "75/65 F°")
+                    .build();
             if (!mCardList.getValue().contains(wc)) {
                 mCardList.getValue().add(wc);
             }
@@ -119,13 +120,13 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     /**
+     * Helper method to get the next five dates.
      *
-     *
-     * @param theYear
-     * @param theMonth
-     * @param theDay
-     * @param theMaxDays
-     * @return
+     * @param theYear is the current year.
+     * @param theMonth is the current month.
+     * @param theDay is the current day.
+     * @param theMaxDays is the maximum number of days in the current month.
+     * @return the dates for the next five days
      */
     private int[][] fiveDays(int theYear, int theMonth, int theDay, int theMaxDays) {
         int days[][] = new int[5][3];
