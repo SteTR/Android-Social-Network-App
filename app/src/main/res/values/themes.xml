@@ -1,14 +1,45 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Team4TCSS450" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="ThemeB" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#ff9100</item>
+        <item name="colorPrimaryVariant">#c56200</item>
+        <item name="colorOnPrimary">#ffc246</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#757575</item>
+        <item name="colorSecondaryVariant">#494949</item>
+        <item name="colorOnSecondary">#a4a4a4</item>
+        <!-- Text Coloring -->
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="ThemeC" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#212121</item>
         <item name="colorPrimaryVariant">#000000</item>
-        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorOnPrimary">#484848</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#c51162</item>
         <item name="colorSecondaryVariant">#8e0038</item>
-        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnSecondary">#fd558f</item>
+        <!-- Text Coloring -->
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="ThemeE" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#0097a7</item>
+        <item name="colorPrimaryVariant">#006978</item>
+        <item name="colorOnPrimary">#56c8d8</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#1b5e20</item>
+        <item name="colorSecondaryVariant">#003300</item>
+        <item name="colorOnSecondary">#4c8c4a</item>
+        <!-- Text Coloring -->
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

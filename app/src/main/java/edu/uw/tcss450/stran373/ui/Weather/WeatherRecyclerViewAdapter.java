@@ -74,8 +74,6 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
 
         private void displayPreview() {
             if (mExpandedFlags.get(mWeather)) {
-                binding.textCurrentTemp.setVisibility(View.GONE);
-                binding.imageCurrent.setVisibility(View.GONE);
                 binding.hourlyRecyler.setVisibility(View.VISIBLE);
                 binding.textDate1.setVisibility(View.VISIBLE);
                 binding.textDate2.setVisibility(View.VISIBLE);
@@ -117,8 +115,6 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
                         Icon.createWithResource(
                                 mView.getContext(),
                                 R.drawable.ic_more_grey_24dp));
-                binding.textCurrentTemp.setVisibility(View.VISIBLE);
-                binding.imageCurrent.setVisibility(View.VISIBLE);
             }
         }
 

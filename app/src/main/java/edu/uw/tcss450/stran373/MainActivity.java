@@ -1,5 +1,6 @@
 package edu.uw.tcss450.stran373;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -8,8 +9,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import edu.uw.tcss450.stran373.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.ThemeC);
         setContentView(R.layout.activity_main);
 
         MainActivityArgs args = MainActivityArgs.fromBundle(getIntent().getExtras());
@@ -37,6 +43,29 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu theMenu) {
+        getMenuInflater().inflate(R.menu.toolbar, theMenu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull final MenuItem theItem) {
+        int id = theItem.getItemId();
+
+        if (id == R.id.theme_cherry){
+            Utils.changeToTheme(this, Utils.THEME_DEFAULT);
+            return true;
+        } else if (id == R.id.theme_orange) {
+            Utils.changeToTheme(this, Utils.THEME_ORANGE);
+            return true;
+        } else if (id == R.id.theme_pacnw) {
+            Utils.changeToTheme(this, Utils.THEME_PACNW);
+        }
+
+        return super.onOptionsItemSelected(theItem);
     }
 
 

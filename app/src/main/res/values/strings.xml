@@ -24,6 +24,8 @@
     <string name="title_requestinfo_requests">Requests</string>
     <string name="title_inviteinfo_invites">Invites</string>
 
+    <string name="title_themes_toolbar">Themes</string>
+
     <string name="title_chats">Chats</string>
     <string name="text_weather_search">Search...</string>
     <string name="button_weather_search">Go</string>
