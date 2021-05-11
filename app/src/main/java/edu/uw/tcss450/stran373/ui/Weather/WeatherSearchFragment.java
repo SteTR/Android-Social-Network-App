@@ -16,6 +16,14 @@ import edu.uw.tcss450.stran373.R;
  */
 public class WeatherSearchFragment extends Fragment {
 
+    /**
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -33,11 +33,20 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
  * A simple {@link Fragment} subclass.
  */
 public class WeatherFragment extends Fragment {
+
     /**Binding used to access resources for view.*/
     FragmentWeatherBinding mBinding;
 
+    /**
+     *
+     */
     private WeatherViewModel mModel;
 
+    /**
+     *
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,26 +56,40 @@ public class WeatherFragment extends Fragment {
         mModel.connect(jwt);
     }
 
+    /**
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = FragmentWeatherBinding.inflate(inflater);
-
-//        final RecyclerView rv = mBinding.weatherRecyler;
-//        rv.setAdapter(new WeatherRecyclerViewAdapter(WeatherGenerator.getWeatherList()));
-        return mBinding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         mModel.addWeatherCardListObserver(getViewLifecycleOwner(), cardList -> {
             if (!cardList.isEmpty()) {
                 mBinding.weatherRecyler.setAdapter(
                         new WeatherRecyclerViewAdapter(cardList));
             }
         });
+//        final RecyclerView rv = mBinding.weatherRecyler;
+//        rv.setAdapter(new WeatherRecyclerViewAdapter(WeatherGenerator.getWeatherList()));
+        return mBinding.getRoot();
+    }
+
+    /**
+     *
+     *
+     * @param view
+     * @param savedInstanceState
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         //Setting up Listeners
         mBinding.buttonSearch.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(

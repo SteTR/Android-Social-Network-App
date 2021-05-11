@@ -28,26 +28,53 @@ import java.util.function.IntFunction;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.R;
 
+/**
+ * ViewModel used for the WeatherFragment.
+ */
 public class WeatherViewModel extends AndroidViewModel {
 
+    /**
+     * LiveData to hold the list of WeatherCard objects.
+     */
     private MutableLiveData<List<WeatherCard>> mCardList;
 
+    /**
+     * Constructor for the ViewModel.
+     *
+     * @param application
+     */
     public WeatherViewModel(@NonNull Application application) {
         super(application);
         mCardList = new MutableLiveData<>();
         mCardList.setValue(new ArrayList<>());
     }
 
+    /**
+     * Adds an observer to the weather card list.
+     *
+     * @param owner
+     * @param observer
+     */
     public void addWeatherCardListObserver(@NonNull LifecycleOwner owner,
                                             @NonNull Observer<? super List<WeatherCard>> observer) {
         mCardList.observe(owner, observer);
     }
 
+    /**
+     * Error-handling method for the ViewModel.
+     *
+     * @param error
+     */
     private void handleError(final VolleyError error) {
         Log.e("CONNECTION ERROR", error.getLocalizedMessage());
         throw new IllegalStateException(error.getMessage());
     }
 
+    /**
+     * Result-handling method for the ViewModel. Creates the default weather card.
+     *
+     * @param result
+     */
     private void handleResult(final JSONObject result) {
         IntFunction<String> getString = getApplication().getResources()::getString;
         try {
@@ -85,8 +112,13 @@ public class WeatherViewModel extends AndroidViewModel {
         mCardList.setValue(mCardList.getValue());
     }
 
+    /**
+     * Used to connect to the weather web service.
+     *
+     * @param jwt
+     */
     public void connect(final String jwt) {
-        String url = "http://api.openweathermap.org/data/2.5/weather";
+        String url = "https://api.openweathermap.org/data/2.5/weather";
 //        url += "?q=Seattle,53,1&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -98,9 +130,9 @@ public class WeatherViewModel extends AndroidViewModel {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", UserInfoViewModel.getJwt());
                 headers.put("q","Seattle,53,1");
                 headers.put("appid","128e4fc74c1ba9cb7c3c3e7de0e05cd6");
+//                headers.put("mode", "html");
                 return headers;
             }
         };
