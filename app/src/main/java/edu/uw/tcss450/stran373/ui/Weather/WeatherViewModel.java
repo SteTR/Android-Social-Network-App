@@ -87,7 +87,7 @@ public class WeatherViewModel extends AndroidViewModel {
 
     public void connect(final String jwt) {
         String url = "http://api.openweathermap.org/data/2.5/weather";
-        url += "?q=Seattle,53,1&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6";
+//        url += "?q=Seattle,53,1&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -98,7 +98,9 @@ public class WeatherViewModel extends AndroidViewModel {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", UserInfoViewModel.getJwt());
+//                headers.put("Authorization", UserInfoViewModel.getJwt());
+                headers.put("q","Seattle,53,1");
+                headers.put("appid","128e4fc74c1ba9cb7c3c3e7de0e05cd6");
                 return headers;
             }
         };
