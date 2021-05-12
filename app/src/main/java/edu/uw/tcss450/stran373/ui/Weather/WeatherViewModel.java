@@ -90,7 +90,7 @@ public class WeatherViewModel extends AndroidViewModel {
         try {
             JSONObject root = result;
             JSONObject main = (JSONObject) root.get("main");
-            Double temperature = (Double) main.get("temp");
+            double temperature = (double) main.get("temp");
             String cityName = (String) root.get("name");
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
             int currentDay = cal.get(Calendar.DATE);
@@ -101,15 +101,21 @@ public class WeatherViewModel extends AndroidViewModel {
             mFutureDays = fiveDays(year, month, currentDay, daysInMonth);
             WeatherCard wc = new WeatherCard
                     .Builder(cityName + ", WA", temperature + " F°")
-                    .addDay1(String.format("%d/%d/%d", mFutureDays[0][0], mFutureDays[0][1], mFutureDays[0][2]),"70/65 F°")
-                    .addDay2(String.format("%d/%d/%d", mFutureDays[1][0], mFutureDays[1][1], mFutureDays[1][2]), "65/49 F°")
-                    .addDay3(String.format("%d/%d/%d", mFutureDays[2][0], mFutureDays[2][1], mFutureDays[2][2]), "66/56 F°")
-                    .addDay4(String.format("%d/%d/%d", mFutureDays[3][0], mFutureDays[3][1], mFutureDays[3][2]), "73/63 F°")
-                    .addDay5(String.format("%d/%d/%d", mFutureDays[4][0], mFutureDays[4][1], mFutureDays[4][2]), "75/65 F°")
+                    .addDay1(String.format("%d/%d/%d", mFutureDays[0][0], mFutureDays[0][1], mFutureDays[0][2]),
+                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), (double) main.get("temp_max")))
+                    .addDay2(String.format("%d/%d/%d", mFutureDays[1][0], mFutureDays[1][1], mFutureDays[1][2]),
+                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), (double) main.get("temp_max")))
+                    .addDay3(String.format("%d/%d/%d", mFutureDays[2][0], mFutureDays[2][1], mFutureDays[2][2]),
+                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), main.get("temp_max")))
+                    .addDay4(String.format("%d/%d/%d", mFutureDays[3][0], mFutureDays[3][1], mFutureDays[3][2]),
+                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), (double) main.get("temp_max")))
+                    .addDay5(String.format("%d/%d/%d", mFutureDays[4][0], mFutureDays[4][1], mFutureDays[4][2]),
+                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), (double) main.get("temp_max")))
                     .build();
             if (!mCardList.getValue().contains(wc)) {
                 mCardList.getValue().add(wc);
             }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -150,7 +156,7 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     public void connect() {
         String url = "https://api.openweathermap.org/data/2.5/weather";
-        url += "?q=Seattle,53,1&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6&units=imperial";
+        url += "?q=Seattle,53,1&APPID=128e4fc74c1ba9cb7c3c3e7de0e05cd6&cnt=5&units=imperial";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -162,7 +168,8 @@ public class WeatherViewModel extends AndroidViewModel {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("q","Seattle,53,1");
-                headers.put("appid","128e4fc74c1ba9cb7c3c3e7de0e05cd6");
+                headers.put("APPID","128e4fc74c1ba9cb7c3c3e7de0e05cd6");
+                headers.put("cnt", "5");
                 headers.put("units", "imperial");
                 return headers;
             }
