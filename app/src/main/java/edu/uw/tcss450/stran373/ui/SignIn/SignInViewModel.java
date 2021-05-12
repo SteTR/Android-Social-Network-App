@@ -14,6 +14,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -121,4 +122,25 @@ public class SignInViewModel extends AndroidViewModel {
 
     }
 
+    public void resendEmail(final String email, final String password) {
+        String url = "https://production-tcss450-backend.herokuapp.com/auth/verification";
+
+        Request request = new JsonObjectRequest(Request.Method.GET, url,
+                null, mResponse::setValue, this::handleError) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = email + ":" + password;
+                String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(getApplication().getApplicationContext()).addToRequestQueue(request);
+    }
 }

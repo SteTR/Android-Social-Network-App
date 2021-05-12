@@ -55,4 +55,7 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_register_short">Register</string>
 
+    <string name="email_sent">A verification email has been sent</string>
+    <string name="email_not_verified">Email has not been verified</string>
+    <string name="action_resend">Resend Email</string>
 </resources>

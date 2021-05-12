@@ -18,6 +18,7 @@ import android.widget.EditText;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -188,7 +189,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         if (!pw) {
             myBinding.editText2.setError("Special character missing");
         }
-
         return pw;
     }
 
@@ -227,6 +227,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     myBinding.editText.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
+                    if (theResponse.getJSONObject("data").getString("message").contains("verified")) {
+                        Snackbar mSnackbar = Snackbar.make(getView(),
+                                R.string.email_not_verified, Snackbar.LENGTH_INDEFINITE);
+                        mSnackbar.show();
+                        mSnackbar.setAction(R.string.action_resend, onClick -> {
+                            mSignInModel.resendEmail(myBinding.editText.getText().toString(),
+                                    myBinding.editText2.getText().toString());
+                            Snackbar.make(getView(), R.string.email_sent, Snackbar.LENGTH_LONG).show();
+                        });
+                    }
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
