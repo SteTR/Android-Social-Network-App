@@ -101,15 +101,15 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
-        myBinding.registerButton.setOnClickListener(this);
-        myBinding.signInButton.setOnClickListener(this::verify);
+        myBinding.buttonRegister.setOnClickListener(this);
+        myBinding.buttonSignin.setOnClickListener(this::verify);
         mSignInModel.addResponseObserver(
                 getViewLifecycleOwner(),
                 this::observeResponse);
 
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
-        myBinding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
-        myBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+        myBinding.editTextTextPersonName2.setText(args.getEmail().equals("default") ? "" : args.getEmail());
+        myBinding.editTextPassword.setText(args.getPassword().equals("default") ? "" : args.getPassword());
     }
 
     /**
@@ -118,8 +118,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      * @param theView is the View object used for interaction.
      */
     private void verify(View theView) {
-        EditText email = myBinding.editText;
-        EditText password = myBinding.editText2;
+        EditText email = myBinding.editTextTextPersonName2;
+        EditText password = myBinding.editTextPassword;
         String emailString = email.getText().toString();
         String pwString = password.getText().toString();
         boolean verifyE = !TextUtils.isEmpty(emailString);
@@ -139,8 +139,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      */
     private void verifyAuthWithServer() {
         mSignInModel.connect(
-                myBinding.editText.getText().toString(),
-                myBinding.editText2.getText().toString());
+                myBinding.editTextTextPersonName2.getText().toString(),
+                myBinding.editTextPassword.getText().toString());
     }
 
     /**
@@ -166,7 +166,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         if (theResponse.length() > 0) {
             if (theResponse.has("code")) {
                 try {
-                    myBinding.editText.setError(
+                    myBinding.editTextTextPersonName2.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
                 } catch (JSONException e) {
@@ -175,7 +175,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             } else {
                 try {
                     navigateToSuccess(
-                            myBinding.editText.getText().toString(),
+                            myBinding.editTextPassword.getText().toString(),
                             theResponse.getString("token"));
                     Log.d("JSON Response", theResponse.getString("token"));
                 } catch (JSONException e) {
