@@ -26,10 +26,13 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
 
     private final Map<WeatherCard, Boolean> mExpandedFlags;
 
-    public WeatherRecyclerViewAdapter(List<WeatherCard> items) {
+    private WeatherViewModel mWeatherModel;
+
+    public WeatherRecyclerViewAdapter(List<WeatherCard> items, WeatherViewModel theModel) {
         this.mWeathers = items;
         this.mExpandedFlags = mWeathers.stream()
                 .collect(Collectors.toMap(Function.identity(),weather -> false));
+        mWeatherModel = theModel;
     }
 
     @NonNull
@@ -37,7 +40,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
     public WeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new WeatherViewHolder(LayoutInflater
         .from(parent.getContext())
-        .inflate(R.layout.fragment_weather_card, parent, false));
+        .inflate(R.layout.fragment_weather_card, parent, false), mWeatherModel);
     }
 
     @Override
@@ -55,7 +58,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
         public FragmentWeatherCardBinding binding;
         private WeatherCard mWeather;
 
-        public WeatherViewHolder(View theView) {
+        public WeatherViewHolder(View theView, WeatherViewModel theModel) {
             super(theView);
             mView = theView;
             binding = FragmentWeatherCardBinding.bind(theView);
@@ -64,7 +67,8 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             rv.setLayoutManager(
                     new LinearLayoutManager(theView.getContext(),
                             LinearLayoutManager.HORIZONTAL, false));
-            rv.setAdapter(new HourlyRecyclerViewAdapter(HourlyGenerator.getHourlyList()));
+//            rv.setAdapter(new HourlyRecyclerViewAdapter(HourlyGenerator.getHourlyList()));
+            rv.setAdapter(new HourlyRecyclerViewAdapter(theModel.getHours()));
         }
 
         private void handleMoreOrLess(final View theButton) {

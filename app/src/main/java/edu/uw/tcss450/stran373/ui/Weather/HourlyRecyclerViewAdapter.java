@@ -21,7 +21,7 @@ import edu.uw.tcss450.stran373.databinding.FragmentHourlyCardBinding;
  */
 public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecyclerViewAdapter.HourlyViewHolder>{
 
-    /*
+    /**
     List of all the hourly cards.
      */
     private final List<HourlyCard> mHourlys;

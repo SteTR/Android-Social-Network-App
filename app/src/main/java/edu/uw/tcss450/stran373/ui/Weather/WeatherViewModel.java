@@ -45,6 +45,8 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private MutableLiveData<List<WeatherCard>> mCardList;
 
+    private List<HourlyCard> mHours;
+
     private int[][] mFutureDays;
 
     /**
@@ -89,29 +91,16 @@ public class WeatherViewModel extends AndroidViewModel {
     private void handleResult(final JSONObject result) {
         try {
             JSONObject root = result;
-//            JSONObject main = (JSONObject) root.get("main");
-//            double temperature = (double) main.get("temp");
-//            String cityName = (String) root.get("name");
+            List<HourlyCard> list = new ArrayList<HourlyCard>();
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
             int currentDay = cal.get(Calendar.DATE);
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             YearMonth ymo = YearMonth.of(year, month);
             int daysInMonth = ymo.lengthOfMonth();
+
+            // Get the 5-day forecast.
             mFutureDays = fiveDays(year, month, currentDay, daysInMonth);
-//            WeatherCard wc = new WeatherCard
-//                    .Builder(cityName + ", WA", temperature + " F°")
-//                    .addDay1(String.format("%d/%d/%d", mFutureDays[0][0], mFutureDays[0][1], mFutureDays[0][2]),
-//                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), (double) main.get("temp_max")))
-//                    .addDay2(String.format("%d/%d/%d", mFutureDays[1][0], mFutureDays[1][1], mFutureDays[1][2]),
-//                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), (double) main.get("temp_max")))
-//                    .addDay3(String.format("%d/%d/%d", mFutureDays[2][0], mFutureDays[2][1], mFutureDays[2][2]),
-//                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), main.get("temp_max")))
-//                    .addDay4(String.format("%d/%d/%d", mFutureDays[3][0], mFutureDays[3][1], mFutureDays[3][2]),
-//                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), (double) main.get("temp_max")))
-//                    .addDay5(String.format("%d/%d/%d", mFutureDays[4][0], mFutureDays[4][1], mFutureDays[4][2]),
-//                            String.format("%,.1f/%,.1f F°", (double) main.get("temp_min"), (double) main.get("temp_max")))
-//                    .build();
             JSONArray jArr = (JSONArray) root.get("daily");
             JSONObject[] jDays = fiveForeCast(jArr);
             JSONObject current = (JSONObject) root.get("current");
@@ -132,6 +121,24 @@ public class WeatherViewModel extends AndroidViewModel {
             if (!mCardList.getValue().contains(wc) && mCardList.getValue().size() < 1) {
                 mCardList.getValue().add(wc);
             }
+
+            // Get the 24-hour forecast.
+            JSONArray hourArray = (JSONArray) root.get("hourly");
+            int hour = cal.get(Calendar.HOUR) + 1;
+            for (int i = 0; i < 24; i++) {
+                JSONObject hourTemp = (JSONObject) hourArray.getJSONObject(i);
+                Double temp = (Double) hourTemp.get("temp");
+                int nextHour = (hour + i) % 13;
+                if (nextHour == 0) {
+                    nextHour = 1;
+                }
+                HourlyCard hc = new HourlyCard
+                        .Builder(String.format("%d", nextHour),
+                        String.format("%,.1f F°", temp)).build();
+                list.add(hc);
+            }
+
+            mHours = list;
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
@@ -192,8 +199,6 @@ public class WeatherViewModel extends AndroidViewModel {
      * Used to connect to the weather web service.
      */
     public void connect() {
-//        final String url = "https://api.openweathermap.org/data/2.5/weather";
-//        url += "?q=Seattle,53,1&APPID=128e4fc74c1ba9cb7c3c3e7de0e05cd6&cnt=5&units=imperial";
         final String url = "https://api.openweathermap.org/data/2.5/onecall?lat=47.608013&lon=-122.335167&exclude=minutely, " +
                 "alerts&units=imperial&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6";
         Request request = new JsonObjectRequest(
@@ -206,10 +211,6 @@ public class WeatherViewModel extends AndroidViewModel {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-//                headers.put("q","Seattle,53,1");
-//                headers.put("APPID","128e4fc74c1ba9cb7c3c3e7de0e05cd6");
-//                headers.put("cnt", "5");
-//                headers.put("units", "imperial");
                 headers.put("lat", "47.608013");
                 headers.put("lon", "-122.335167");
                 headers.put("exclude", "minutely, alerts");
@@ -227,10 +228,13 @@ public class WeatherViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
 
-//    public String getURL() {
-//        return "https://api.openweathermap.org/data/2.5/onecall?lat=47.608013&lon=-122.335167&exclude=minutely, " +
-//                "alerts&units=imperial&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6";
-//    }
-
+    /**
+     * Getter method for the
+     *
+     * @return
+     */
+    public List<HourlyCard> getHours() {
+        return mHours;
+    }
 
 }

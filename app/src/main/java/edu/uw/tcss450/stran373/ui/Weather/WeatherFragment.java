@@ -70,11 +70,9 @@ public class WeatherFragment extends Fragment {
         mModel.addWeatherCardListObserver(getViewLifecycleOwner(), cardList -> {
             if (!cardList.isEmpty()) {
                 mBinding.weatherRecyler.setAdapter(
-                        new WeatherRecyclerViewAdapter(cardList));
+                        new WeatherRecyclerViewAdapter(cardList, mModel));
             }
         });
-//        final RecyclerView rv = mBinding.weatherRecyler;
-//        rv.setAdapter(new WeatherRecyclerViewAdapter(WeatherGenerator.getWeatherList()));
         return mBinding.getRoot();
     }
 
