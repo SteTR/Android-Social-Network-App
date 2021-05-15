@@ -36,7 +36,8 @@ import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.R;
 
 /**
- * ViewModel used for the WeatherFragment.
+ * ViewModel used for the WeatherFragment. This will be used to handle the main
+ * functionality for displaying the weather.
  */
 public class WeatherViewModel extends AndroidViewModel {
 
@@ -45,52 +46,60 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private MutableLiveData<List<WeatherCard>> mCardList;
 
-    private List<HourlyCard> mHours;
+    /**
+     * LiveData to hold the list of HourlyCard objects.
+     */
+    private MutableLiveData<List<HourlyCard>> mHourCards;
 
+    /**
+     * 2D array to hold the dates for the five days.
+     */
     private int[][] mFutureDays;
 
     /**
      * Constructor for the ViewModel.
      *
-     * @param application
+     * @param theApplication
      */
-    public WeatherViewModel(@NonNull Application application) {
-        super(application);
+    public WeatherViewModel(@NonNull Application theApplication) {
+        super(theApplication);
         mFutureDays = new int[5][3];
         mCardList = new MutableLiveData<>();
         mCardList.setValue(new ArrayList<>());
+        mHourCards = new MutableLiveData<>();
+        mHourCards.setValue(new ArrayList<>());
     }
 
     /**
      * Adds an observer to the weather card list.
      *
-     * @param owner
-     * @param observer
+     * @param theOwner
+     * @param theObserver
      */
-    public void addWeatherCardListObserver(@NonNull LifecycleOwner owner,
-                                            @NonNull Observer<? super List<WeatherCard>> observer) {
-        mCardList.observe(owner, observer);
+    public void addWeatherCardListObserver(@NonNull LifecycleOwner theOwner,
+                                            @NonNull Observer<? super List<WeatherCard>> theObserver) {
+        mCardList.observe(theOwner, theObserver);
     }
 
     /**
      * Error-handling method for the ViewModel.
      *
-     * @param error
+     * @param theError is a VolleyError that is the result of a failed connection.
      */
-    private void handleError(final VolleyError error) {
-        Log.e("CONNECTION ERROR", error.getLocalizedMessage());
-        throw new IllegalStateException(error.getMessage());
+    private void handleError(final VolleyError theError) {
+        Log.e("CONNECTION ERROR", theError.getLocalizedMessage());
+        throw new IllegalStateException(theError.getMessage());
     }
 
     /**
      * Result-handling method for the ViewModel. Creates the default weather card.
      *
-     * @param result
+     * @param theResult is the root JSONObject for retrieving all of the necessary data.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void handleResult(final JSONObject result) {
+    private void handleResult(final JSONObject theResult) {
         try {
-            JSONObject root = result;
+            JSONObject root = theResult;
             List<HourlyCard> list = new ArrayList<HourlyCard>();
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
             int currentDay = cal.get(Calendar.DATE);
@@ -124,34 +133,32 @@ public class WeatherViewModel extends AndroidViewModel {
 
             // Get the 24-hour forecast.
             JSONArray hourArray = (JSONArray) root.get("hourly");
-            int hour = cal.get(Calendar.HOUR) + 1;
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
             for (int i = 0; i < 24; i++) {
                 JSONObject hourTemp = (JSONObject) hourArray.getJSONObject(i);
                 Double temp = (Double) hourTemp.get("temp");
-                int nextHour = (hour + i) % 13;
-                if (nextHour == 0) {
-                    nextHour = 1;
-                }
+                int nextHour = (hour + i) % 24;
                 HourlyCard hc = new HourlyCard
-                        .Builder(String.format("%d", nextHour),
+                        .Builder(String.format("%d:00", nextHour),
                         String.format("%,.1f F°", temp)).build();
                 list.add(hc);
+                mHourCards.getValue().add(hc);
             }
-
-            mHours = list;
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
         }
 
         mCardList.setValue(mCardList.getValue());
+        mHourCards.setValue(mHourCards.getValue());
     }
 
     /**
+     * Helper method for retrieving data for the next five days,
+     * including the current day
      *
-     *
-     * @param theArray
-     * @return
+     * @param theArray a JSONArray for retrieving the necessary data.
+     * @return an array of JSONObjects for the five days
      */
     private JSONObject[] fiveForeCast(JSONArray theArray) {
         try {
@@ -229,12 +236,12 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     /**
-     * Getter method for the
+     * Getter method for the list of HourlyCards for the 24-hour forecast.
      *
-     * @return
+     * @return a list of 24 HourlyCards.
      */
     public List<HourlyCard> getHours() {
-        return mHours;
+        return mHourCards.getValue();
     }
 
 }

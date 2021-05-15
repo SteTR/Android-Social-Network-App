@@ -30,7 +30,7 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * The fragment used for the application's weather feature.
  */
 public class WeatherFragment extends Fragment {
 
@@ -38,14 +38,14 @@ public class WeatherFragment extends Fragment {
     FragmentWeatherBinding mBinding;
 
     /**
-     *
+     * The ViewModel used for displaying functionality.
      */
     private WeatherViewModel mModel;
 
     /**
+     * Instantiates the ViewModel needed for functionality.
      *
-     *
-     * @param savedInstanceState
+     * @param savedInstanceState is a Bundle object that keeps track of the saved instance state.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,12 +55,12 @@ public class WeatherFragment extends Fragment {
     }
 
     /**
+     * Initializes the contents of the ViewModel.
      *
-     *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater is a LayoutInflater object.
+     * @param container is a ViewGroup object.
+     * @param savedInstanceState is a Bundle object that keeps track of the saved instance state.
+     * @return a View used to
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,16 +77,16 @@ public class WeatherFragment extends Fragment {
     }
 
     /**
+     * Enables the searching button for searching up the weather.
      *
-     *
-     * @param view
-     * @param savedInstanceState
+     * @param view is the current View of the application.
+     * @param savedInstanceState is a Bundle object that keeps track of the saved instance state.
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Setting up Listeners
+        // Setting up Listeners
         mBinding.buttonSearch.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                 WeatherFragmentDirections.actionNavigationWeatherToWeatherSearchFragment()));
