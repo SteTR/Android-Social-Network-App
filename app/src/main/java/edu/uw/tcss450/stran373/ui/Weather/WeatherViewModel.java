@@ -73,8 +73,8 @@ public class WeatherViewModel extends AndroidViewModel {
     /**
      * Adds an observer to the weather card list.
      *
-     * @param theOwner
-     * @param theObserver
+     * @param theOwner is a LifecycleOwner object.
+     * @param theObserver is an observer for the
      */
     public void addWeatherCardListObserver(@NonNull LifecycleOwner theOwner,
                                             @NonNull Observer<? super List<WeatherCard>> theObserver) {
@@ -99,7 +99,9 @@ public class WeatherViewModel extends AndroidViewModel {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleResult(final JSONObject theResult) {
         try {
+            Log.d("JSON:", theResult.toString());
             JSONObject root = theResult;
+            Log.d("NULL:", String.valueOf(root == null));
             List<HourlyCard> list = new ArrayList<HourlyCard>();
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
             int currentDay = cal.get(Calendar.DATE);
@@ -205,9 +207,8 @@ public class WeatherViewModel extends AndroidViewModel {
     /**
      * Used to connect to the weather web service.
      */
-    public void connect() {
-        final String url = "https://api.openweathermap.org/data/2.5/onecall?lat=47.608013&lon=-122.335167&exclude=minutely, " +
-                "alerts&units=imperial&appid=128e4fc74c1ba9cb7c3c3e7de0e05cd6";
+    public void connect(String theJWT) {
+        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -218,11 +219,7 @@ public class WeatherViewModel extends AndroidViewModel {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("lat", "47.608013");
-                headers.put("lon", "-122.335167");
-                headers.put("exclude", "minutely, alerts");
-                headers.put("units", "imperial");
-                headers.put("appid", "128e4fc74c1ba9cb7c3c3e7de0e05cd6");
+                headers.put("Authorization", theJWT);
                 return headers;
             }
         };

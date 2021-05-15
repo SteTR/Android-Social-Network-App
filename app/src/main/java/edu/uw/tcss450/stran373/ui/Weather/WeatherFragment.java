@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.auth0.android.jwt.JWT;
 
 import java.text.DecimalFormat;
 
@@ -34,13 +35,17 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
  */
 public class WeatherFragment extends Fragment {
 
-    /**Binding used to access resources for view.*/
+    /**
+     * Binding used to access resources for view.
+     */
     FragmentWeatherBinding mBinding;
 
     /**
      * The ViewModel used for displaying functionality.
      */
     private WeatherViewModel mModel;
+
+    private String mJWT;
 
     /**
      * Instantiates the ViewModel needed for functionality.
@@ -51,7 +56,9 @@ public class WeatherFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
-        mModel.connect();
+        MainActivity main = (MainActivity) getActivity();
+        mJWT = main.getTheArgs().getJwt();
+        mModel.connect(mJWT);
     }
 
     /**
@@ -60,7 +67,7 @@ public class WeatherFragment extends Fragment {
      * @param inflater is a LayoutInflater object.
      * @param container is a ViewGroup object.
      * @param savedInstanceState is a Bundle object that keeps track of the saved instance state.
-     * @return a View used to
+     * @return a View used to reference the current View.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,6 +80,7 @@ public class WeatherFragment extends Fragment {
                         new WeatherRecyclerViewAdapter(cardList, mModel));
             }
         });
+
         return mBinding.getRoot();
     }
 

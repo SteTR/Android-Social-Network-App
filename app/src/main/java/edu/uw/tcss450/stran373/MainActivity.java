@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         mArgs = MainActivityArgs.fromBundle(getIntent().getExtras());
 
         new ViewModelProvider(this,
-                new UserInfoViewModel.UserInfoViewModelFactory(mArgs.getEmail(), mArgs.getJwt())
+                new UserInfoViewModel.UserInfoViewModelFactory(mArgs.getJwt(), mArgs.getEmail())
         ).get(UserInfoViewModel.class);
 
 
