@@ -205,7 +205,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         directions.setPassword(myBinding.editText2.getText().toString());
 
         Navigation.findNavController(getView()).navigate((NavDirections) directions);
-        Snackbar.make(getView(), R.string.email_sent, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getView(), R.string.text_email_sent, Snackbar.LENGTH_LONG).show();
     }
 
     /**

@@ -112,6 +112,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
         myBinding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
         myBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+
+        myBinding.buttonReset.setOnClickListener(button ->
+                Navigation.findNavController(getView()).navigate(
+                        SignInFragmentDirections.actionSignInFragmentToResetPasswordFragment()
+                ));
     }
 
     /**
@@ -229,12 +234,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                     theResponse.getJSONObject("data").getString("message"));
                     if (theResponse.getJSONObject("data").getString("message").contains("verified")) {
                         Snackbar mSnackbar = Snackbar.make(getView(),
-                                R.string.email_not_verified, Snackbar.LENGTH_INDEFINITE);
+                                R.string.text_email_not_verified, Snackbar.LENGTH_INDEFINITE);
                         mSnackbar.show();
-                        mSnackbar.setAction(R.string.action_resend, onClick -> {
+                        mSnackbar.setAction(R.string.button_resend, onClick -> {
                             mSignInModel.resendEmail(myBinding.editText.getText().toString(),
                                     myBinding.editText2.getText().toString());
-                            Snackbar.make(getView(), R.string.email_sent, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(getView(), R.string.text_email_sent, Snackbar.LENGTH_LONG).show();
                         });
                     }
                 } catch (JSONException e) {

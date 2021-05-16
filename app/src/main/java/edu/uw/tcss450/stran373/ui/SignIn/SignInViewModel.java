@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
 /**
@@ -94,7 +95,7 @@ public class SignInViewModel extends AndroidViewModel {
      * @param thePassword is the user's password.
      */
     public void connect(final String theEmail, final String thePassword) {
-        String url = "https://production-tcss450-backend.herokuapp.com/auth";
+        String url = getApplication().getResources().getString(R.string.base_url) + "auth";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -122,9 +123,14 @@ public class SignInViewModel extends AndroidViewModel {
 
     }
 
+    /**
+     * Connects to the web service to resend verification email
+     *
+     * @param email the user's email
+     * @param password the user's password
+     */
     public void resendEmail(final String email, final String password) {
-        String url = "https://production-tcss450-backend.herokuapp.com/auth/verification";
-
+        String url = getApplication().getResources().getString(R.string.base_url) + "auth/verification";
         Request request = new JsonObjectRequest(Request.Method.GET, url,
                 null, mResponse::setValue, this::handleError) {
 

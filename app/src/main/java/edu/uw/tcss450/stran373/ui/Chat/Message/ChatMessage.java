@@ -48,7 +48,7 @@ public class ChatMessage implements Serializable {
     }
 
     public String getTimeStamp() {
-        return mTimeStamp;
+        return mTimeStamp.substring(11,19);
     }
 
     public int getMessageId() {
