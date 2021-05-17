@@ -73,6 +73,11 @@ public class WeatherViewModel extends AndroidViewModel {
         mHourCards.setValue(new ArrayList<>());
     }
 
+    /**
+     * Used to transfer the weather fragment binding to the ViewModel.
+     *
+     * @param theBinding is a binding belonging to the weather fragment.
+     */
     public void setWeatherBinding(FragmentWeatherBinding theBinding) {
         mBinding = theBinding;
     }
