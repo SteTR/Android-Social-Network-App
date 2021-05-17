@@ -76,8 +76,6 @@ public class WeatherFragment extends Fragment {
             }
         });
 
-        mModel.setWeatherBinding(mBinding);
-
         return mBinding.getRoot();
     }
 

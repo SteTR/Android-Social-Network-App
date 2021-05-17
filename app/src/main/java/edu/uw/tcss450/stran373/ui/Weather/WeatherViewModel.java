@@ -57,12 +57,10 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private int[][] mFutureDays;
 
-    private FragmentWeatherBinding mBinding;
-
     /**
      * Constructor for the ViewModel.
      *
-     * @param theApplication
+     * @param theApplication is the current application object.
      */
     public WeatherViewModel(@NonNull Application theApplication) {
         super(theApplication);
@@ -71,15 +69,6 @@ public class WeatherViewModel extends AndroidViewModel {
         mCardList.setValue(new ArrayList<>());
         mHourCards = new MutableLiveData<>();
         mHourCards.setValue(new ArrayList<>());
-    }
-
-    /**
-     * Used to transfer the weather fragment binding to the ViewModel.
-     *
-     * @param theBinding is a binding belonging to the weather fragment.
-     */
-    public void setWeatherBinding(FragmentWeatherBinding theBinding) {
-        mBinding = theBinding;
     }
 
     /**
