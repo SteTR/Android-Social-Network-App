@@ -75,7 +75,7 @@ public class WeatherViewModel extends AndroidViewModel {
      * Adds an observer to the weather card list.
      *
      * @param theOwner is a LifecycleOwner object.
-     * @param theObserver is an observer for the
+     * @param theObserver is an observer for the weather fragment.
      */
     public void addWeatherCardListObserver(@NonNull LifecycleOwner theOwner,
                                             @NonNull Observer<? super List<WeatherCard>> theObserver) {
