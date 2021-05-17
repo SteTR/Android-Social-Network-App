@@ -17,12 +17,12 @@ public final class WeatherGenerator {
         CARDS = new WeatherCard[COUNT];
         for (int i = 0; i < COUNT; i++) {
             CARDS[i] = new WeatherCard
-                    .Builder("Seattle, WA", "67 F°")
-                    .addDay1("Tuesday 27th","70/65 F°")
-                    .addDay2("Wednesday 28th", "65/49 F°")
-                    .addDay3("Thursday 29th", "66/56 F°")
-                    .addDay4("Friday 30th", "73/63 F°")
-                    .addDay5("Saturday 1st", "75/65 F°").build();
+                    .Builder("Seattle, WA", "67 F°", 800)
+                    .addDay1("Tuesday 27th","70/65 F°", 800)
+                    .addDay2("Wednesday 28th", "65/49 F°", 800)
+                    .addDay3("Thursday 29th", "66/56 F°", 800)
+                    .addDay4("Friday 30th", "73/63 F°", 800)
+                    .addDay5("Saturday 1st", "75/65 F°", 800).build();
         }
     }
 

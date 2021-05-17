@@ -74,6 +74,76 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
         private void handleMoreOrLess(final View theButton) {
             mExpandedFlags.put(mWeather, !mExpandedFlags.get(mWeather));
             displayPreview();
+            for (int i = 0; i < mWeathers.size(); i++) {
+                updateWeatherCard(mWeathers.get(i));
+            }
+        }
+
+        private void updateWeatherCard(WeatherCard theCard) {
+            if (theCard.getCond1() <= 232) {
+                binding.imageDay1.setBackgroundResource(R.drawable.ic_thunder);
+            } else if (theCard.getCond1() <= 531 && theCard.getCond1() >= 300) {
+                binding.imageDay1.setBackgroundResource(R.drawable.ic_rainy_24dp);
+            } else if (theCard.getCond1() <= 622 && theCard.getCond1() >= 600) {
+                binding.imageDay1.setBackgroundResource(R.drawable.ic_snowy_24dp);
+            } else if ((theCard.getCond1() <= 781 && theCard.getCond1() >= 701) || theCard.getCond1() > 800) {
+                binding.imageDay1.setBackgroundResource(R.drawable.ic_cloudy);
+            } else if (theCard.getCond1() == 800){
+                binding.imageDay1.setBackgroundResource(R.drawable.ic_day);
+            }
+
+            if (theCard.getCond2() <= 232) {
+                binding.imageDay2.setBackgroundResource(R.drawable.ic_thunder);
+            } else if (theCard.getCond2() <= 531 && theCard.getCond2() >= 300) {
+                binding.imageDay2.setBackgroundResource(R.drawable.ic_rainy_24dp);
+            } else if (theCard.getCond2() <= 622 && theCard.getCond2() >= 600) {
+                binding.imageDay2.setBackgroundResource(R.drawable.ic_snowy_24dp);
+            } else if ((theCard.getCond2() <= 781 && theCard.getCond2() >= 701) || theCard.getCond2() > 800) {
+                binding.imageDay2.setBackgroundResource(R.drawable.ic_cloudy);
+            } else if (theCard.getCond2() == 800){
+                binding.imageDay2.setBackgroundResource(R.drawable.ic_day);
+            }
+
+            if (theCard.getCond_3() <= 232) {
+                binding.imageDay3.setBackgroundResource(R.drawable.ic_thunder);
+            } else if (theCard.getCond_3() <= 531 && theCard.getCond_3() >= 300) {
+                binding.imageDay3.setBackgroundResource(R.drawable.ic_rainy_24dp);
+            } else if (theCard.getCond_3() <= 622 && theCard.getCond_3() >= 600) {
+                binding.imageDay3.setBackgroundResource(R.drawable.ic_snowy_24dp);
+            } else if ((theCard.getCond_3() <= 781 && theCard.getCond_3() >= 701) || theCard.getCond_3() > 800) {
+                binding.imageDay3.setBackgroundResource(R.drawable.ic_cloudy);
+            } else if (theCard.getCond_3() == 800){
+                binding.imageDay3.setBackgroundResource(R.drawable.ic_day);
+            }
+
+            if (theCard.getCond4() <= 232) {
+                binding.imageDay4.setBackgroundResource(R.drawable.ic_thunder);
+            } else if (theCard.getCond4() <= 531 && theCard.getCond4() >= 300) {
+                binding.imageDay4.setBackgroundResource(R.drawable.ic_rainy_24dp);
+            } else if (theCard.getCond4() <= 622 && theCard.getCond4() >= 600) {
+                binding.imageDay4.setBackgroundResource(R.drawable.ic_snowy_24dp);
+            } else if ((theCard.getCond4() <= 781 && theCard.getCond4() >= 701) || theCard.getCond4() > 800) {
+                binding.imageDay4.setBackgroundResource(R.drawable.ic_cloudy);
+            } else if (theCard.getCond4() == 800){
+                binding.imageDay4.setBackgroundResource(R.drawable.ic_day);
+            }
+
+            if (theCard.getCond_5() <= 232) {
+                binding.imageDay5.setBackgroundResource(R.drawable.ic_thunder);
+            } else if (theCard.getCond_5() <= 531 && theCard.getCond_5() >= 300) {
+                binding.imageDay5.setBackgroundResource(R.drawable.ic_rainy_24dp);
+            } else if (theCard.getCond_5() <= 622 && theCard.getCond_5() >= 600) {
+                binding.imageDay5.setBackgroundResource(R.drawable.ic_snowy_24dp);
+            } else if ((theCard.getCond_5() <= 781 && theCard.getCond_5() >= 701) || theCard.getCond_5() > 800) {
+                binding.imageDay5.setBackgroundResource(R.drawable.ic_cloudy);
+            } else if (theCard.getCond_5() == 800){
+                binding.imageDay5.setBackgroundResource(R.drawable.ic_day);
+            }
+
+        }
+
+        private void updateHourlyCard(HourlyCard theCard) {
+
         }
 
         private void displayPreview() {

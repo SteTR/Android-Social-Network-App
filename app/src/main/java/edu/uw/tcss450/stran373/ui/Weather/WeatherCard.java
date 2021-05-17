@@ -43,12 +43,25 @@ public class WeatherCard implements Serializable {
     /**Predicted temperature for fifth date.*/
     private final String mTemp5;
 
+    private int mCond1;
+
+    private int mCond2;
+
+    private int mCond3;
+
+    private int mCond4;
+
+    private int mCond5;
+
     public static class Builder {
         /**Location chosen by user.*/
         private final String mLocation;
 
         /**Current temperature for that location.*/
         private final String mCurrentTemp;
+
+        /**Current condition for that location.*/
+        private final int mCurrentCond;
 
         /**First forecast date.*/
         private String mDate1;
@@ -80,14 +93,26 @@ public class WeatherCard implements Serializable {
         /**Predicted temperature for fifth date.*/
         private String mTemp5;
 
+        private int mCond1;
+
+        private int mCond2;
+
+        private int mCond3;
+
+        private int mCond4;
+
+        private int mCond5;
+
         /**
          * Inner Constructor to build WeatherCard
          * @param theLocation The location for weather
          * @param theCurrent The current temperature for the weather
          */
-        public Builder(final String theLocation, final String theCurrent) {
+        public Builder(final String theLocation, final String theCurrent,
+                       final int theCondition) {
             this.mLocation = theLocation;
             mCurrentTemp = theCurrent;
+            mCurrentCond = theCondition;
         }
 
         /**
@@ -96,9 +121,11 @@ public class WeatherCard implements Serializable {
          * @param theTemp the forecast
          * @return Builder class
          */
-        public Builder addDay1(final String theDate, final String theTemp) {
+        public Builder addDay1(final String theDate, final String theTemp,
+                               final int theCondition) {
             mDate1 = theDate;
             mTemp1 = theTemp;
+            mCond1 = theCondition;
             return this;
         }
 
@@ -108,9 +135,11 @@ public class WeatherCard implements Serializable {
          * @param theTemp the forecast
          * @return Builder class
          */
-        public Builder addDay2(final String theDate, final String theTemp) {
+        public Builder addDay2(final String theDate, final String theTemp,
+                               final int theCondition) {
             mDate2 = theDate;
             mTemp2 = theTemp;
+            mCond2 = theCondition;
             return this;
         }
 
@@ -120,9 +149,11 @@ public class WeatherCard implements Serializable {
          * @param theTemp the forecast
          * @return Builder class
          */
-        public Builder addDay3(final String theDate, final String theTemp) {
+        public Builder addDay3(final String theDate, final String theTemp,
+                               final int theCondition) {
             mDate3 = theDate;
             mTemp3 = theTemp;
+            mCond3 = theCondition;
             return this;
         }
 
@@ -132,9 +163,11 @@ public class WeatherCard implements Serializable {
          * @param theTemp the forecast
          * @return Builder class
          */
-        public Builder addDay4(final String theDate, final String theTemp) {
+        public Builder addDay4(final String theDate, final String theTemp,
+                               final int theCondition) {
             mDate4 = theDate;
             mTemp4 = theTemp;
+            mCond4 = theCondition;
             return this;
         }
 
@@ -144,9 +177,11 @@ public class WeatherCard implements Serializable {
          * @param theTemp the forecast
          * @return Builder class
          */
-        public Builder addDay5(final String theDate, final String theTemp) {
+        public Builder addDay5(final String theDate, final String theTemp,
+                               final int theCondition) {
             mDate5 = theDate;
             mTemp5 = theTemp;
+            mCond5 = theCondition;
             return this;
         }
 
@@ -172,6 +207,11 @@ public class WeatherCard implements Serializable {
         this.mTemp4 = theBuilder.mTemp4;
         this.mDate5 = theBuilder.mDate5;
         this.mTemp5 = theBuilder.mTemp5;
+        this.mCond1 = theBuilder.mCond1;
+        this.mCond2 = theBuilder.mCond2;
+        this.mCond3 = theBuilder.mCond3;
+        this.mCond4 = theBuilder.mCond4;
+        this.mCond5 = theBuilder.mCond5;
     }
 
     /**
@@ -237,5 +277,15 @@ public class WeatherCard implements Serializable {
      * @return Temperature
      */
     public String getTemp5() { return mTemp5; }
+
+    public int getCond1() { return mCond1; }
+
+    public int getCond2() { return mCond2; }
+
+    public int getCond_3() { return mCond3; }
+
+    public int getCond4() { return mCond4; }
+
+    public int getCond_5() { return mCond5; }
 
 }

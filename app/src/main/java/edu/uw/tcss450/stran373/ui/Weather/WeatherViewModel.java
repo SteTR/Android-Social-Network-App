@@ -34,6 +34,7 @@ import java.time.YearMonth;
 
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
 
 /**
  * ViewModel used for the WeatherFragment. This will be used to handle the main
@@ -56,6 +57,8 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private int[][] mFutureDays;
 
+    private FragmentWeatherBinding mBinding;
+
     /**
      * Constructor for the ViewModel.
      *
@@ -68,6 +71,10 @@ public class WeatherViewModel extends AndroidViewModel {
         mCardList.setValue(new ArrayList<>());
         mHourCards = new MutableLiveData<>();
         mHourCards.setValue(new ArrayList<>());
+    }
+
+    public void setWeatherBinding(FragmentWeatherBinding theBinding) {
+        mBinding = theBinding;
     }
 
     /**
@@ -114,20 +121,26 @@ public class WeatherViewModel extends AndroidViewModel {
             mFutureDays = fiveDays(year, month, currentDay, daysInMonth);
             JSONArray jArr = (JSONArray) root.get("daily");
             JSONObject[] jDays = fiveForeCast(jArr);
+
+            int[] jConds = fiveConditions(jArr);
             JSONObject current = (JSONObject) root.get("current");
+            JSONArray currentWeather = (JSONArray) current.get("weather");
+            JSONObject currentCond = (JSONObject) currentWeather.getJSONObject(0);
+            int currentCondition = (int) currentCond.get("id");
             double currentTemp = (double) current.get("temp");
+
             WeatherCard wc = new WeatherCard
-                    .Builder("Seattle, WA", currentTemp + " F°")
+                    .Builder("Seattle, WA", currentTemp + " F°", currentCondition)
                     .addDay1(String.format("%d/%d", mFutureDays[0][0], mFutureDays[0][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[0].get("min"), jDays[0].get("max"))))
+                            (String.format("%,.1f/%,.1f F°", jDays[0].get("min"), jDays[0].get("max"))), jConds[0])
                     .addDay2(String.format("%d/%d", mFutureDays[1][0], mFutureDays[1][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[1].get("min"), jDays[1].get("max"))))
+                            (String.format("%,.1f/%,.1f F°", jDays[1].get("min"), jDays[1].get("max"))), jConds[1])
                     .addDay3(String.format("%d/%d", mFutureDays[2][0], mFutureDays[2][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[2].get("min"), jDays[2].get("max"))))
+                            (String.format("%,.1f/%,.1f F°", jDays[2].get("min"), jDays[2].get("max"))), jConds[2])
                     .addDay4(String.format("%d/%d", mFutureDays[3][0], mFutureDays[3][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[3].get("min"), jDays[3].get("max"))))
+                            (String.format("%,.1f/%,.1f F°", jDays[3].get("min"), jDays[3].get("max"))), jConds[3])
                     .addDay5(String.format("%d/%d", mFutureDays[4][0], mFutureDays[4][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[4].get("min"), jDays[4].get("max"))))
+                            (String.format("%,.1f/%,.1f F°", jDays[4].get("min"), jDays[4].get("max"))), jConds[4])
                     .build();
             if (!mCardList.getValue().contains(wc) && mCardList.getValue().size() < 1) {
                 mCardList.getValue().add(wc);
@@ -153,6 +166,24 @@ public class WeatherViewModel extends AndroidViewModel {
 
         mCardList.setValue(mCardList.getValue());
         mHourCards.setValue(mHourCards.getValue());
+    }
+
+    private int[] fiveConditions(JSONArray theArray) {
+        try {
+            int[] array = new int[5];
+            for (int i = 0; i < array.length; i++) {
+                JSONObject obj = theArray.getJSONObject(i);
+                JSONArray arr = (JSONArray) obj.get("weather");
+                JSONObject condition = (JSONObject) arr.getJSONObject(0);
+                int cond = (int) condition.get("id");
+                array[i] = cond;
+            }
+            return array;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("ERROR!", e.getMessage());
+        }
+        return null;
     }
 
     /**
