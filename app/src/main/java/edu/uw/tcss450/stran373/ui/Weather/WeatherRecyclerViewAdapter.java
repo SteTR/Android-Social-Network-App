@@ -78,6 +78,12 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             }
         }
 
+        /**
+         * Helper method used to update the icons for the 5-day forecast
+         * depending on the condition.
+         *
+         * @param theCard is a weather card.
+         */
         private void updateWeatherCard(WeatherCard theCard) {
             if (theCard.getCond1() <= 232) {
                 binding.imageDay1.setBackgroundResource(R.drawable.ic_thunder);

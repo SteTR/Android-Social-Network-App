@@ -171,6 +171,12 @@ public class WeatherViewModel extends AndroidViewModel {
         mHourCards.setValue(mHourCards.getValue());
     }
 
+    /**
+     * Helper method to get the five conditions for the 5-day forecast.
+     *
+     * @param theArray is an array of JSONObjects representing each day.
+     * @return an array of weather condition codes.
+     */
     private int[] fiveConditions(JSONArray theArray) {
         try {
             int[] array = new int[5];

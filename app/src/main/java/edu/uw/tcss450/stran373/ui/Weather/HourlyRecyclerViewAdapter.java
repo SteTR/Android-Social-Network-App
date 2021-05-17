@@ -66,6 +66,11 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
             binding = FragmentHourlyCardBinding.bind(view);
         }
 
+        /**
+         * Helper method used to update the weather icons for the 24-hour forecast.
+         *
+         * @param theCard
+         */
         private void updateHourlyIcon(HourlyCard theCard) {
             if (theCard.getCond() <= 232) {
                 binding.imageCurrent.setBackgroundResource(R.drawable.ic_thunder);
