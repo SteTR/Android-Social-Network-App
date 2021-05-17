@@ -67,7 +67,6 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             rv.setLayoutManager(
                     new LinearLayoutManager(theView.getContext(),
                             LinearLayoutManager.HORIZONTAL, false));
-//            rv.setAdapter(new HourlyRecyclerViewAdapter(HourlyGenerator.getHourlyList()));
             rv.setAdapter(new HourlyRecyclerViewAdapter(theModel.getHours()));
         }
 
@@ -139,10 +138,6 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             } else if (theCard.getCond_5() == 800){
                 binding.imageDay5.setBackgroundResource(R.drawable.ic_day);
             }
-
-        }
-
-        private void updateHourlyCard(HourlyCard theCard) {
 
         }
 

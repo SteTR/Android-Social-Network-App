@@ -66,6 +66,20 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
             binding = FragmentHourlyCardBinding.bind(view);
         }
 
+        private void updateHourlyIcon(HourlyCard theCard) {
+            if (theCard.getCond() <= 232) {
+                binding.imageCurrent.setBackgroundResource(R.drawable.ic_thunder);
+            } else if (theCard.getCond() <= 531 && theCard.getCond() >= 300) {
+                binding.imageCurrent.setBackgroundResource(R.drawable.ic_rainy_24dp);
+            } else if (theCard.getCond() <= 622 && theCard.getCond() >= 600) {
+                binding.imageCurrent.setBackgroundResource(R.drawable.ic_snowy_24dp);
+            } else if ((theCard.getCond() <= 781 && theCard.getCond() >= 701) || theCard.getCond() > 800) {
+                binding.imageCurrent.setBackgroundResource(R.drawable.ic_cloudy);
+            } else if (theCard.getCond() == 800){
+                binding.imageCurrent.setBackgroundResource(R.drawable.ic_day);
+            }
+        }
+
         /**
          * Used to set base text.
          * @param theHourly HourlyCard that is used to reference
@@ -74,6 +88,9 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
             mHourly = theHourly;
             binding.textTime.setText(theHourly.getTime());
             binding.textTemp.setText(theHourly.getTemp());
+            for (int i = 0; i < mHourlys.size(); i++) {
+                updateHourlyIcon(mHourlys.get(i));
+            }
         }
     }
 }

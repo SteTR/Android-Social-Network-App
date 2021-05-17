@@ -151,11 +151,14 @@ public class WeatherViewModel extends AndroidViewModel {
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             for (int i = 0; i < 24; i++) {
                 JSONObject hourTemp = (JSONObject) hourArray.getJSONObject(i);
+                JSONArray hourWeather = (JSONArray) hourTemp.get("weather");
+                JSONObject hourObj = (JSONObject) hourWeather.getJSONObject(0);
+                int hourCond = (int) hourObj.get("id");
                 Double temp = (Double) hourTemp.get("temp");
                 int nextHour = (hour + i) % 24;
                 HourlyCard hc = new HourlyCard
                         .Builder(String.format("%d:00", nextHour),
-                        String.format("%,.1f F°", temp)).build();
+                        String.format("%,.1f F°", temp), hourCond).build();
                 list.add(hc);
                 mHourCards.getValue().add(hc);
             }
