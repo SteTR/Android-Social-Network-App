@@ -10,7 +10,7 @@ public class ContactCard implements Serializable {
 
     private final String mFirstName;
     private final String mLastName;
-    private final String mContactID;
+    private final String mMemberID;
     private final String mEmail;
     private final String mUserName;
 
@@ -22,7 +22,7 @@ public class ContactCard implements Serializable {
     public static class Builder {
         private String mFirstName;
         private String mLastName;
-        private String mContactID;
+        private String mMemberID;
         private String mEmail;
         private final String mUserName;
 
@@ -30,7 +30,7 @@ public class ContactCard implements Serializable {
         {
             mLastName = "Default";
             mFirstName = "Default";
-            mContactID = "-1";
+            mMemberID = "-1";
             mEmail = "None Entered";
             mUserName = "Default";
         }
@@ -38,7 +38,7 @@ public class ContactCard implements Serializable {
         public Builder(final String theContactID, final String theFirstName, final String theLastName,
                        final String theEmail, final String theUserName)
         {
-            this.mContactID = theContactID;
+            this.mMemberID = theContactID;
             this.mFirstName = theFirstName;
             this.mLastName = theLastName;
             this.mEmail = theEmail;
@@ -68,8 +68,8 @@ public class ContactCard implements Serializable {
          *
          * @param theContactID contactid of this contact
          */
-        public void setContactId(final String theContactID) {
-            this.mContactID = theContactID;
+        public void setMemberId(final String theContactID) {
+            this.mMemberID = theContactID;
         }
 
         /**
@@ -104,31 +104,28 @@ public class ContactCard implements Serializable {
     {
         this.mFirstName = builder.mFirstName;
         this.mLastName = builder.mLastName;
-        this.mContactID = builder.mContactID;
+        this.mMemberID = builder.mMemberID;
         this.mEmail = builder.mEmail;
         this.mUserName = builder.mUserName;
     }
 
     /**
      * Returns the id corresponding to the contact
-     * @author Andrew Bennett
      * @return Integer chat id
      */
-    public String getContactID()
+    public String getMemberID()
     {
-        return mContactID;
+        return mMemberID;
     }
 
     /**
      * Returns the first name of contact
-     * @author Andrew Bennett
      * @return mFirstName
      */
     public String getFirstName(){ return mFirstName;}
 
     /**
      * Returns the last name of contact
-     * @author Andrew bennett
      * @return mLastName
      */
     public String getLastName(){return mLastName;}
