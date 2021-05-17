@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/list_root"
         android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

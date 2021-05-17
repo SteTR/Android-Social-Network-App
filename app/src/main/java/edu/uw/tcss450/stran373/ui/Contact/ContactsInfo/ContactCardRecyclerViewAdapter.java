@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
+import edu.uw.tcss450.stran373.ui.Weather.HourlyGenerator;
+import edu.uw.tcss450.stran373.ui.Weather.HourlyRecyclerViewAdapter;
 
 /**
  * RecyclerViewAdapter is used to show the various cards
@@ -23,43 +26,33 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
 
     /**
      * List of contacts to be displayed
-     * @author Andrew Bennett
      */
-    private final List<Contact> mContacts;
+    private final List<ContactCard> mContacts;
 
-    /**
-     * Flag to show whether the card is expanded or not
-     * @author Andrew Bennett
-     */
-    private final Map<Contact, Boolean> mExpandedFlags;
-
-
-    public ContactCardRecyclerViewAdapter(final List<Contact> theContactCards)
+    public ContactCardRecyclerViewAdapter(final List<ContactCard> theContactCards)
     {
-        mContacts = theContactCards;
-        this.mExpandedFlags = mContacts.stream()
-                .collect(Collectors.toMap(Function.identity(), weather -> false));
+        this.mContacts = theContactCards;
     }
 
     /**
      * When the ViewHolder is created, inflate the contact card layout
-     * @param parent
-     * @param viewType
+     * @param parent is the view group that this child belongs too
+     * @param viewType type of viewgroup
      * @return the ContactCardViewHolder for this contact
      */
     @NonNull
     @Override
     public ContactCardViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        return new ContactCardViewHolder(LayoutInflater.from(parent.getContext())
+        return new ContactCardViewHolder(LayoutInflater.
+                from(parent.getContext())
                 .inflate(R.layout.fragment_contact_card, parent, false));
     }
 
     /**
      * When the binding is created, the holder will set the contact to the
      * current position in the list
-     * @author Andrew Bennett
-     * @param holder
-     * @param position
+     * @param holder assigns the current contact in this position
+     * @param position the current position in the list
      */
     @Override
     public void onBindViewHolder(@NonNull ContactCardViewHolder holder, int position) {
@@ -68,7 +61,6 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
 
     /**
      * Returns the amount of total contacts in list
-     * @author Andrew Bennett
      * @return the amount of contacts
      */
     @Override
@@ -79,13 +71,12 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
     /**
      * Internal class used as a view holder for specific cards in the recycler
      * view
-     * @author Andrew Bennett
      */
     public static class ContactCardViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
         public FragmentContactCardBinding binding;
-        private Contact mContact;
+        private ContactCard mContact;
 
 
         public ContactCardViewHolder(@NonNull final View itemView) {
@@ -99,24 +90,15 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
          *
          * @param theContact a contact card
          */
-        private void setContact(final Contact theContact)
+        private void setContact(final ContactCard theContact)
         {
             mContact = theContact;
 
-            /*// This will need to be build out in sprint 2
-            binding.cardRoot.setOnClickListener(view -> {
-                Navigation.findNavController(mView).navigate(ContactFragmentDirections
-                        .actionNavigationContactsToContactFragment(mContact));
-            });*/
-
-
-            //THIS WILL ALSO NEED TO BE UPDATED IN SPRINT 2.
-            //Currently the other attributes are set to invisible, preview is visible
             binding.textFirstName.setText(theContact.getFirstName());
             binding.textLastName.setText(theContact.getLastName());
-            final String preview = binding.textFirstName.getText().toString()
-                    + " " + binding.textLastName.getText().toString();
-            binding.textPreview.setText(preview);
+            String fullName = binding.textFirstName.getText().toString()
+                    +" " + binding.textLastName.getText().toString();
+            binding.textFirstLast.setText(fullName);
         }
     }
 }
