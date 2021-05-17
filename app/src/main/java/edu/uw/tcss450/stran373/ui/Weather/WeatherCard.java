@@ -13,6 +13,9 @@ public class WeatherCard implements Serializable {
     /**Current temperature for that location.*/
     private final String mCurrentTemp;
 
+    /**Current condition for that location.*/
+    private final int mCurrentCond;
+
     /**First forecast date.*/
     private final String mDate1;
 
@@ -43,14 +46,19 @@ public class WeatherCard implements Serializable {
     /**Predicted temperature for fifth date.*/
     private final String mTemp5;
 
+    /**First forecast condition.*/
     private int mCond1;
 
+    /**Second forecast condition.*/
     private int mCond2;
 
+    /**Third forecast condition.*/
     private int mCond3;
 
+    /**Fourth forecast condition.*/
     private int mCond4;
 
+    /**Fifth forecast condition.*/
     private int mCond5;
 
     public static class Builder {
@@ -93,14 +101,19 @@ public class WeatherCard implements Serializable {
         /**Predicted temperature for fifth date.*/
         private String mTemp5;
 
+        /**First forecast condition.*/
         private int mCond1;
 
+        /**Second forecast condition.*/
         private int mCond2;
 
+        /**Third forecast condition.*/
         private int mCond3;
 
+        /**Fourth forecast condition.*/
         private int mCond4;
 
+        /**Fifth forecast condition.*/
         private int mCond5;
 
         /**
@@ -197,6 +210,7 @@ public class WeatherCard implements Serializable {
     private WeatherCard(final Builder theBuilder) {
         this.mLocation = theBuilder.mLocation;
         this.mCurrentTemp = theBuilder.mCurrentTemp;
+        this.mCurrentCond = theBuilder.mCurrentCond;
         this.mDate1 = theBuilder.mDate1;
         this.mTemp1 = theBuilder.mTemp1;
         this.mDate2 = theBuilder.mDate2;
@@ -225,6 +239,12 @@ public class WeatherCard implements Serializable {
      * @return Location's current temperature.
      */
     public String getCurrentTemp() { return mCurrentTemp; }
+
+    /**
+     * Returns Location's current condition.
+     * @return Location's current condition.
+     */
+    public int getCurrentCond() { return mCurrentCond; }
 
     /**
      * Returns Date1.
@@ -278,14 +298,34 @@ public class WeatherCard implements Serializable {
      */
     public String getTemp5() { return mTemp5; }
 
+    /**
+     * Returns condition for Date 1.
+     * @return
+     */
     public int getCond1() { return mCond1; }
 
+    /**
+     * Returns condition for Date 2.
+     * @return
+     */
     public int getCond2() { return mCond2; }
 
+    /**
+     * Returns condition for Date 3.
+     * @return
+     */
     public int getCond_3() { return mCond3; }
 
+    /**
+     * Returns condition for Date 4.
+     * @return
+     */
     public int getCond4() { return mCond4; }
 
+    /**
+     * Returns condition for Date 5.
+     * @return
+     */
     public int getCond_5() { return mCond5; }
 
 }

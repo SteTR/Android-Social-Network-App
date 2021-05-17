@@ -130,7 +130,7 @@ public class WeatherViewModel extends AndroidViewModel {
             int[] jConds = fiveConditions(jArr);
             JSONObject current = (JSONObject) root.get("current");
             JSONArray currentWeather = (JSONArray) current.get("weather");
-            JSONObject currentCond = (JSONObject) currentWeather.getJSONObject(0);
+            JSONObject currentCond = currentWeather.getJSONObject(0);
             int currentCondition = (int) currentCond.get("id");
             double currentTemp = (double) current.get("temp");
 
@@ -155,10 +155,11 @@ public class WeatherViewModel extends AndroidViewModel {
             JSONArray hourArray = (JSONArray) root.get("hourly");
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             for (int i = 0; i < 24; i++) {
-                JSONObject hourTemp = (JSONObject) hourArray.getJSONObject(i);
+                JSONObject hourTemp = hourArray.getJSONObject(i);
                 JSONArray hourWeather = (JSONArray) hourTemp.get("weather");
-                JSONObject hourObj = (JSONObject) hourWeather.getJSONObject(0);
+                JSONObject hourObj = hourWeather.getJSONObject(0);
                 int hourCond = (int) hourObj.get("id");
+//                Log.d("temp", "" + hourTemp.get("temp").getClass());
                 Double temp = (Double) hourTemp.get("temp");
                 int nextHour = (hour + i) % 24;
                 HourlyCard hc = new HourlyCard
@@ -188,7 +189,7 @@ public class WeatherViewModel extends AndroidViewModel {
             for (int i = 0; i < array.length; i++) {
                 JSONObject obj = theArray.getJSONObject(i);
                 JSONArray arr = (JSONArray) obj.get("weather");
-                JSONObject condition = (JSONObject) arr.getJSONObject(0);
+                JSONObject condition = arr.getJSONObject(0);
                 int cond = (int) condition.get("id");
                 array[i] = cond;
             }

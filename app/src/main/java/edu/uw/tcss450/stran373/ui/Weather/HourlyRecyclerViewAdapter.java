@@ -73,15 +73,15 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
          */
         private void updateHourlyIcon(HourlyCard theCard) {
             if (theCard.getCond() <= 232) {
-                binding.imageCurrent.setBackgroundResource(R.drawable.ic_thunder);
+                binding.imageCurrent.setImageResource(R.drawable.ic_thunder);
             } else if (theCard.getCond() <= 531 && theCard.getCond() >= 300) {
-                binding.imageCurrent.setBackgroundResource(R.drawable.ic_rainy_24dp);
+                binding.imageCurrent.setImageResource(R.drawable.ic_rainy_24dp);
             } else if (theCard.getCond() <= 622 && theCard.getCond() >= 600) {
-                binding.imageCurrent.setBackgroundResource(R.drawable.ic_snowy_24dp);
+                binding.imageCurrent.setImageResource(R.drawable.ic_snowy_24dp);
             } else if ((theCard.getCond() <= 781 && theCard.getCond() >= 701) || theCard.getCond() > 800) {
-                binding.imageCurrent.setBackgroundResource(R.drawable.ic_cloudy);
+                binding.imageCurrent.setImageResource(R.drawable.ic_cloudy);
             } else if (theCard.getCond() == 800){
-                binding.imageCurrent.setBackgroundResource(R.drawable.ic_day);
+                binding.imageCurrent.setImageResource(R.drawable.ic_day);
             }
         }
 
