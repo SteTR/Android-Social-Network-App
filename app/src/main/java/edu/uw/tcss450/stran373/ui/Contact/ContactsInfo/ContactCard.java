@@ -14,6 +14,7 @@ public class ContactCard implements Serializable {
     private final String mEmail;
     private final String mUserName;
 
+
     /**
      * Necessary builder function to build the contact card
      * @author Andrew Bennett

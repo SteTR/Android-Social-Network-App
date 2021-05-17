@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import edu.uw.tcss450.stran373.MainActivityArgs;
 import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
 import edu.uw.tcss450.stran373.databinding.FragmentContactListBinding;
 
 /**
@@ -42,6 +43,7 @@ public class ContactListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FragmentContactListBinding binding = FragmentContactListBinding.bind(getView());
+
         mModel.addContactListObserver(getViewLifecycleOwner(), contactList -> {
             if (!contactList.isEmpty()) {
                 binding.listRoot.setAdapter(
@@ -49,5 +51,6 @@ public class ContactListFragment extends Fragment {
             }
         });
     }
+
 
 }

@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -29,6 +30,7 @@ import java.util.function.IntFunction;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
+
 
 /**
  * View model to hold the contact cards, observer will be used to

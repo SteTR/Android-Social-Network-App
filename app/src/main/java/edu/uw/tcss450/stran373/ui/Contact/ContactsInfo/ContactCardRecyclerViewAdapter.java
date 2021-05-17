@@ -29,6 +29,8 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
      */
     private final List<ContactCard> mContacts;
 
+    protected static boolean mCheckBox;
+
     public ContactCardRecyclerViewAdapter(final List<ContactCard> theContactCards)
     {
         this.mContacts = theContactCards;
@@ -57,6 +59,7 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
     @Override
     public void onBindViewHolder(@NonNull ContactCardViewHolder holder, int position) {
         holder.setContact(mContacts.get(position));
+
     }
 
     /**
@@ -83,6 +86,13 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
             super(itemView);
             mView = itemView;
             binding = FragmentContactCardBinding.bind(itemView);
+            mView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mCheckBox = true;
+                    return true;// returning true instead of false, works for me
+                }
+            });
         }
 
         /**
@@ -93,12 +103,16 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
         private void setContact(final ContactCard theContact)
         {
             mContact = theContact;
-
             binding.textFirstName.setText(theContact.getFirstName());
             binding.textLastName.setText(theContact.getLastName());
             String fullName = binding.textFirstName.getText().toString()
                     +" " + binding.textLastName.getText().toString();
             binding.textFirstLast.setText(fullName);
+            if(mCheckBox) {
+                binding.checkBox.setVisibility(View.INVISIBLE);
+            } else {
+                binding.checkBox.setVisibility(View.VISIBLE);
+            }
         }
     }
 }
