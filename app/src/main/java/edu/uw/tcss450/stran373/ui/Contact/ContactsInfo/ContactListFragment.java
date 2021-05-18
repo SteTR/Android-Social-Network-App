@@ -5,17 +5,38 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import edu.uw.tcss450.stran373.MainActivityArgs;
 import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
 import edu.uw.tcss450.stran373.databinding.FragmentContactListBinding;
+import edu.uw.tcss450.stran373.ui.Weather.WeatherFragmentDirections;
 
 /**
  * This class will be used in the future when we retrieve data from endpoints
@@ -24,7 +45,14 @@ import edu.uw.tcss450.stran373.databinding.FragmentContactListBinding;
  */
 public class ContactListFragment extends Fragment {
 
+    /**
+     * Used to keep track of the user's response.
+     */
+    private MutableLiveData<JSONObject> mResponse;
+
     private ContactListViewModel mModel;
+
+    private List<ContactCard> currentSelectedItems = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,10 +75,22 @@ public class ContactListFragment extends Fragment {
         mModel.addContactListObserver(getViewLifecycleOwner(), contactList -> {
             if (!contactList.isEmpty()) {
                 binding.listRoot.setAdapter(
-                        new ContactCardRecyclerViewAdapter(contactList));
-            }
-        });
+                        new ContactCardRecyclerViewAdapter(contactList,
+                                new ContactCardRecyclerViewAdapter.OnItemCheckListener() {
+                                        @Override
+                                        public void onItemCheck(ContactCard card) {
+                                            currentSelectedItems.add(card);
+                                        }
+                                        @Override
+                                        public void onItemUncheck(ContactCard card) {
+                                            currentSelectedItems.remove(card);
+                                        }
+                                    }
+                                    ));
+                                }
+            });
+
+        binding.buttonAdd.setOnClickListener(button ->
+                mModel.handleChatCreation(currentSelectedItems));
     }
-
-
 }

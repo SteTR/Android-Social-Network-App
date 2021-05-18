@@ -1,13 +1,21 @@
 package edu.uw.tcss450.stran373.ui.Contact.ContactsInfo;
 
+import android.content.ClipData;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -22,18 +30,36 @@ import edu.uw.tcss450.stran373.ui.Weather.HourlyRecyclerViewAdapter;
  * RecyclerViewAdapter is used to show the various cards
  * @author Andrew Bennett
  */
-public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<ContactCardRecyclerViewAdapter.ContactCardViewHolder>{
+public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<ContactCardRecyclerViewAdapter.ContactCardViewHolder> {
 
     /**
      * List of contacts to be displayed
      */
     private final List<ContactCard> mContacts;
 
-    protected static boolean mCheckBox;
+    /**
+     * Selected item list
+     */
+    private final SparseBooleanArray mContactStateArray = new SparseBooleanArray();
 
-    public ContactCardRecyclerViewAdapter(final List<ContactCard> theContactCards)
+    interface OnItemCheckListener {
+        void onItemCheck(ContactCard card);
+        void onItemUncheck(ContactCard card);
+    }
+
+    @NonNull
+    private OnItemCheckListener onItemClick;
+
+
+    /**
+     * Listener to get list of checked boxes
+     */
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
+
+    public ContactCardRecyclerViewAdapter(final List<ContactCard> theContactCards, @NonNull OnItemCheckListener onItemCheckListener)
     {
         this.mContacts = theContactCards;
+        this.onItemClick = onItemCheckListener;
     }
 
     /**
@@ -58,8 +84,18 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
      */
     @Override
     public void onBindViewHolder(@NonNull ContactCardViewHolder holder, int position) {
-        holder.setContact(mContacts.get(position));
+        final ContactCard contact = mContacts.get(position);
+        holder.setContact(contact);
 
+        holder.checkBox.setOnClickListener(view -> {
+            if(holder.checkBox.isChecked()){
+                onItemClick.onItemCheck(contact);
+                contact.setSelected(true);
+            }else{
+                onItemClick.onItemUncheck(contact);
+                contact.setSelected(false);
+            }
+        });
     }
 
     /**
@@ -77,8 +113,24 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
      */
     public static class ContactCardViewHolder extends RecyclerView.ViewHolder {
 
+        /**
+         * View for the card item
+         */
         public final View mView;
+
+        /**
+         * Access to the ContactCard databinding
+         */
         public FragmentContactCardBinding binding;
+
+        /**
+         * Whether the checkbox is checked or not
+         */
+        protected CheckBox checkBox;
+
+        /**
+         * The specific contact card
+         */
         private ContactCard mContact;
 
 
@@ -86,14 +138,9 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
             super(itemView);
             mView = itemView;
             binding = FragmentContactCardBinding.bind(itemView);
-            mView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    mCheckBox = true;
-                    return true;// returning true instead of false, works for me
-                }
-            });
+            checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
         }
+
 
         /**
          * Sets the contact to the holder
@@ -108,11 +155,14 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
             String fullName = binding.textFirstName.getText().toString()
                     +" " + binding.textLastName.getText().toString();
             binding.textFirstLast.setText(fullName);
-            if(mCheckBox) {
-                binding.checkBox.setVisibility(View.INVISIBLE);
-            } else {
-                binding.checkBox.setVisibility(View.VISIBLE);
-            }
+            binding.textEmail.setText(theContact.getEmail());
+            binding.textMemberid.setText(theContact.getMemberID());
+            binding.textUsername.setText(theContact.getUserName());
+            binding.checkBox.setVisibility(View.VISIBLE);
+        }
+
+        public void setOnClickListener(CheckBox.OnClickListener onClickListener) {
+            checkBox.setOnClickListener(onClickListener);
         }
     }
 }

@@ -45,10 +45,14 @@ public class ContactListViewModel extends AndroidViewModel {
      */
     private MutableLiveData<List<ContactCard>> mContactCards;
 
+    private MutableLiveData<JSONObject> mResponse;
+
     public ContactListViewModel(@NonNull Application application) {
         super(application);
         mContactCards = new MutableLiveData<>();
         mContactCards.setValue(new ArrayList<>());
+        mResponse = new MutableLiveData<>();
+        mResponse.setValue(new JSONObject());
     }
 
 
@@ -71,7 +75,7 @@ public class ContactListViewModel extends AndroidViewModel {
      */
     private void handleError(final VolleyError error) {
         //We will need to improve this error handler
-        Log.e("CONNECTION ERROR", "COULD NOT CONNECT");
+        Log.e("CONNECTION ERROR", mResponse.getValue().toString());
         throw new IllegalStateException(error.getMessage());
     }
 
@@ -110,6 +114,7 @@ public class ContactListViewModel extends AndroidViewModel {
     public void connectGet() {
         //Need to add our contact endpoint
         String user_auth = UserInfoViewModel.getJwt();
+        Log.i("The token for testing: ", user_auth);
         String url = "https://production-tcss450-backend.herokuapp.com/contacts";
         try {
             Request request = new JsonObjectRequest(
@@ -137,5 +142,73 @@ public class ContactListViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Handle the creation of chats, calls the chats endpoint to create
+     * a new chat
+     * @param theCards are the users the owner wants to invite
+     */
+    protected void handleChatCreation(List<ContactCard> theCards) {
+
+        //Get the auth token and set url
+        String user_auth = UserInfoViewModel.getJwt();
+        String url = "https://production-tcss450-backend.herokuapp.com/chats";
+
+        //Currently memberids are strings, so get that and convert to int
+        //That may be worth changing in Sprint 2
+        String first_id = theCards.get(0).getMemberID();
+        int id = Integer.parseInt(first_id);
+
+        //Create the array for the body of the POST request and add the first
+        //user
+        JSONArray array = new JSONArray();
+        StringBuilder sb = new StringBuilder();
+        array.put(Integer.parseInt(theCards.get(0).getMemberID()));
+        sb.append(theCards.get(0).getFirstName());
+
+        //Create the group name and build the array for userids
+        if(theCards.size() > 1) {
+            //Add the first name of the user
+            sb.append(theCards.get(0).getFirstName());
+            //Loop through and add the first names of the
+            //chat members and add the member id to the array
+            for(int i = 1; i < theCards.size(); i++) {
+                sb.append(", " + theCards.get(i).getFirstName());
+                array.put(Integer.parseInt(theCards.get(i).getMemberID()));
+            }
+        } else {
+            array.put(Integer.parseInt(theCards.get(0).getMemberID()));
+        }
+        //Create the body for the JSON request
+        JSONObject body = new JSONObject();
+
+        //Use POST to send a request to the chat endpoint
+        try {
+            body.put("groupname", sb.toString());
+            body.put("users", array);
+            Log.i("Body", body.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Request request = new JsonObjectRequest(Request.Method.POST,
+                url,
+                body, mResponse::setValue,
+                this::handleError) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add our new <key,value>
+                headers.put("Authorization", user_auth);
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        //Instantiate the RequestQueue and add the request to the queue
+        Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
 }

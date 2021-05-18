@@ -13,6 +13,12 @@ public class ContactCard implements Serializable {
     private final String mMemberID;
     private final String mEmail;
     private final String mUserName;
+    private boolean isSelected;
+
+    /**
+     * Set whether the contact is selected or not
+     */
+    public void setSelected(boolean theChecked) { this.isSelected = theChecked;}
 
 
     /**
@@ -25,6 +31,7 @@ public class ContactCard implements Serializable {
         private String mMemberID;
         private String mEmail;
         private final String mUserName;
+        private boolean isSelected;
 
         public Builder()
         {
@@ -33,6 +40,7 @@ public class ContactCard implements Serializable {
             mMemberID = "-1";
             mEmail = "None Entered";
             mUserName = "Default";
+            isSelected = false;
         }
 
         public Builder(final String theContactID, final String theFirstName, final String theLastName,
@@ -43,6 +51,7 @@ public class ContactCard implements Serializable {
             this.mLastName = theLastName;
             this.mEmail = theEmail;
             this.mUserName = theUserName;
+            this.isSelected = false;
         }
 
         /**
@@ -135,4 +144,12 @@ public class ContactCard implements Serializable {
      * @return mEmail
      */
     public String getEmail(){return mEmail;}
+
+    /**
+     * Returns the username of contact
+     * @return mUserName
+     */
+    public String getUserName(){return mUserName;}
+
+    public boolean isSelected(){return isSelected;}
 }
