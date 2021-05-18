@@ -37,7 +37,7 @@ public class WeatherFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //Setting up Listeners
-        binding.buttonSearch.setOnClickListener(button ->
+        binding.expandableFabSearch.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                 WeatherFragmentDirections.actionNavigationWeatherToWeatherSearchFragment()));
     }

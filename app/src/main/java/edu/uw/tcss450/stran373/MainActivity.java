@@ -8,6 +8,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,14 +59,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull final MenuItem theItem) {
         int id = theItem.getItemId();
 
-        if (id == R.id.theme_cherry){
-            Utils.changeToTheme(this, Utils.THEME_DEFAULT);
-            return true;
-        } else if (id == R.id.theme_orange) {
-            Utils.changeToTheme(this, Utils.THEME_ORANGE);
-            return true;
-        } else if (id == R.id.theme_pacnw) {
-            Utils.changeToTheme(this, Utils.THEME_PACNW);
+        if (id == R.id.theme_selection){
+            ThemeDialogFragment dialog = new ThemeDialogFragment();
+            dialog.show(getSupportFragmentManager(), "");
             return true;
         }
 
@@ -78,4 +75,5 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }

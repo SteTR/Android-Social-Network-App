@@ -2,6 +2,7 @@ package edu.uw.tcss450.stran373.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 
 import edu.uw.tcss450.stran373.R;
 
@@ -19,7 +20,8 @@ public class Utils {
     public static void changeToTheme(final Activity theActivity, final int theTheme) {
         sTheme = theTheme;
         theActivity.finish();
-        theActivity.startActivity(new Intent(theActivity, theActivity.getClass()));
+        Intent intent = new Intent(theActivity, theActivity.getClass());
+        theActivity.startActivity(intent);
     }
 
     /** Set the theme of the activity, according to the configuration. */
@@ -35,6 +37,19 @@ public class Utils {
             case THEME_PACNW:
                 theActivity.setTheme(R.style.ThemeE);
                 break;
+        }
+    }
+
+    /** Set the theme of the activity, according to the configuration. */
+    public static int getActivitySetTheme() {
+        switch(sTheme) {
+            default:
+            case THEME_DEFAULT:
+                return R.style.ThemeC;
+            case THEME_ORANGE:
+                return R.style.ThemeB;
+            case THEME_PACNW:
+                return R.style.ThemeE;
         }
     }
 }

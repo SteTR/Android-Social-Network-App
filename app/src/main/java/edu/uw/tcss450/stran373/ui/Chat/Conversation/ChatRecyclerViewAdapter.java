@@ -20,6 +20,7 @@ import java.util.List;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentChatMessageBinding;
 import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
+import edu.uw.tcss450.stran373.utils.Utils;
 
 import static edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel.USER_NAME;
 

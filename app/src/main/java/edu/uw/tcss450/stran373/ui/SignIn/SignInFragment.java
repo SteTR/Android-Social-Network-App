@@ -92,6 +92,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionSignInFragmentToRegisterFragment());
+        getActivity().finish();
     }
 
     /**
