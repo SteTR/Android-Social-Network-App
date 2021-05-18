@@ -80,6 +80,10 @@ public class ContactListViewModel extends AndroidViewModel {
     }
 
 
+    /**
+     * Handles a successful get from the
+     * @param theResult
+     */
     private void handleResult(final JSONObject theResult) {
         IntFunction<String> getString = getApplication().getResources()::getString;
         try {
@@ -111,11 +115,15 @@ public class ContactListViewModel extends AndroidViewModel {
     }
 
 
+    /**
+     * Get the contacts from the web service endpoint
+     */
     public void connectGet() {
         //Need to add our contact endpoint
         String user_auth = UserInfoViewModel.getJwt();
-        Log.i("The token for testing: ", user_auth);
-        String url = "https://production-tcss450-backend.herokuapp.com/contacts";
+        String url = getApplication().getResources().getString(R.string.base_url)+"contacts";;
+
+        //Request the contact information and hand in auth token
         try {
             Request request = new JsonObjectRequest(
                     Request.Method.GET,
@@ -131,7 +139,7 @@ public class ContactListViewModel extends AndroidViewModel {
                     return headers;
                 }
             };
-
+            //Retry after certain amount of time.
             request.setRetryPolicy(new
                     DefaultRetryPolicy(
                     10_000,
@@ -153,7 +161,7 @@ public class ContactListViewModel extends AndroidViewModel {
 
         //Get the auth token and set url
         String user_auth = UserInfoViewModel.getJwt();
-        String url = "https://production-tcss450-backend.herokuapp.com/chats";
+        String url = getApplication().getResources().getString(R.string.base_url)+"chats";
 
         //Currently memberids are strings, so get that and convert to int
         //That may be worth changing in Sprint 2
@@ -164,21 +172,16 @@ public class ContactListViewModel extends AndroidViewModel {
         //user
         JSONArray array = new JSONArray();
         StringBuilder sb = new StringBuilder();
-        array.put(Integer.parseInt(theCards.get(0).getMemberID()));
         sb.append(theCards.get(0).getFirstName());
-
+        array.put(first_id);
         //Create the group name and build the array for userids
         if(theCards.size() > 1) {
-            //Add the first name of the user
-            sb.append(theCards.get(0).getFirstName());
             //Loop through and add the first names of the
             //chat members and add the member id to the array
             for(int i = 1; i < theCards.size(); i++) {
                 sb.append(", " + theCards.get(i).getFirstName());
                 array.put(Integer.parseInt(theCards.get(i).getMemberID()));
             }
-        } else {
-            array.put(Integer.parseInt(theCards.get(0).getMemberID()));
         }
         //Create the body for the JSON request
         JSONObject body = new JSONObject();

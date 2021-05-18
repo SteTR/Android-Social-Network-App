@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
 public class RegisterViewModel extends AndroidViewModel {
@@ -70,7 +71,7 @@ public class RegisterViewModel extends AndroidViewModel {
                         final String last,
                         final String email,
                         final String password) {
-        String url = "https://production-tcss450-backend.herokuapp.com/auth";
+        String url = getApplication().getResources().getString(R.string.base_url)+"auth";
         JSONObject body = new JSONObject();
         try {
             body.put("first", first);
