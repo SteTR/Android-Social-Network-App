@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="keys_json_contacts_success">success</string>
+    <string name="keys_json_contacts_response">response</string>
+    <string name="keys_json_contacts_data">data</string>
+    <string name="keys_json_contacts_memberid">memberid</string>
+    <string name="keys_json_contacts_firstname">firstname</string>
+    <string name="keys_json_contacts_lastname">lastname</string>
+    <string name="keys_json_contacts_email">email</string>
+    <string name="keys_json_contacts_username">username</string>
+</resources>

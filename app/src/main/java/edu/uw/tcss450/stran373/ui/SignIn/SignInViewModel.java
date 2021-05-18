@@ -1,6 +1,7 @@
 package edu.uw.tcss450.stran373.ui.SignIn;
 
 import android.app.Application;
+import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
 
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
 /**
@@ -93,7 +95,8 @@ public class SignInViewModel extends AndroidViewModel {
      * @param thePassword is the user's password.
      */
     public void connect(final String theEmail, final String thePassword) {
-        String url = "https://production-tcss450-backend.herokuapp.com/auth";
+        String url = getApplication().getResources().getString(R.string.base_url)+"auth";
+        Log.i("The URL", url);
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,

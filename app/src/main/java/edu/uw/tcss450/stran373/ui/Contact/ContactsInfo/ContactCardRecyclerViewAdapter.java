@@ -1,12 +1,21 @@
 package edu.uw.tcss450.stran373.ui.Contact.ContactsInfo;
 
+import android.content.ClipData;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -14,61 +23,83 @@ import java.util.stream.Collectors;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
+import edu.uw.tcss450.stran373.ui.Weather.HourlyGenerator;
+import edu.uw.tcss450.stran373.ui.Weather.HourlyRecyclerViewAdapter;
 
 /**
  * RecyclerViewAdapter is used to show the various cards
  * @author Andrew Bennett
  */
-public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<ContactCardRecyclerViewAdapter.ContactCardViewHolder>{
+public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<ContactCardRecyclerViewAdapter.ContactCardViewHolder> {
 
     /**
      * List of contacts to be displayed
-     * @author Andrew Bennett
      */
-    private final List<Contact> mContacts;
+    private final List<ContactCard> mContacts;
 
     /**
-     * Flag to show whether the card is expanded or not
-     * @author Andrew Bennett
+     * Selected item list
      */
-    private final Map<Contact, Boolean> mExpandedFlags;
+    private final SparseBooleanArray mContactStateArray = new SparseBooleanArray();
+
+    interface OnItemCheckListener {
+        void onItemCheck(ContactCard card);
+        void onItemUncheck(ContactCard card);
+    }
+
+    @NonNull
+    private OnItemCheckListener onItemClick;
 
 
-    public ContactCardRecyclerViewAdapter(final List<Contact> theContactCards)
+    /**
+     * Listener to get list of checked boxes
+     */
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
+
+    public ContactCardRecyclerViewAdapter(final List<ContactCard> theContactCards, @NonNull OnItemCheckListener onItemCheckListener)
     {
-        mContacts = theContactCards;
-        this.mExpandedFlags = mContacts.stream()
-                .collect(Collectors.toMap(Function.identity(), weather -> false));
+        this.mContacts = theContactCards;
+        this.onItemClick = onItemCheckListener;
     }
 
     /**
      * When the ViewHolder is created, inflate the contact card layout
-     * @param parent
-     * @param viewType
+     * @param parent is the view group that this child belongs too
+     * @param viewType type of viewgroup
      * @return the ContactCardViewHolder for this contact
      */
     @NonNull
     @Override
     public ContactCardViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        return new ContactCardViewHolder(LayoutInflater.from(parent.getContext())
+        return new ContactCardViewHolder(LayoutInflater.
+                from(parent.getContext())
                 .inflate(R.layout.fragment_contact_card, parent, false));
     }
 
     /**
      * When the binding is created, the holder will set the contact to the
      * current position in the list
-     * @author Andrew Bennett
-     * @param holder
-     * @param position
+     * @param holder assigns the current contact in this position
+     * @param position the current position in the list
      */
     @Override
     public void onBindViewHolder(@NonNull ContactCardViewHolder holder, int position) {
-        holder.setContact(mContacts.get(position));
+        final ContactCard contact = mContacts.get(position);
+        holder.setContact(contact);
+
+        holder.checkBox.setOnClickListener(view -> {
+            if(holder.checkBox.isChecked()){
+                onItemClick.onItemCheck(contact);
+                contact.setSelected(true);
+            }else{
+                onItemClick.onItemUncheck(contact);
+                contact.setSelected(false);
+            }
+        });
     }
 
     /**
      * Returns the amount of total contacts in list
-     * @author Andrew Bennett
      * @return the amount of contacts
      */
     @Override
@@ -79,44 +110,59 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
     /**
      * Internal class used as a view holder for specific cards in the recycler
      * view
-     * @author Andrew Bennett
      */
     public static class ContactCardViewHolder extends RecyclerView.ViewHolder {
 
+        /**
+         * View for the card item
+         */
         public final View mView;
+
+        /**
+         * Access to the ContactCard databinding
+         */
         public FragmentContactCardBinding binding;
-        private Contact mContact;
+
+        /**
+         * Whether the checkbox is checked or not
+         */
+        protected CheckBox checkBox;
+
+        /**
+         * The specific contact card
+         */
+        private ContactCard mContact;
 
 
         public ContactCardViewHolder(@NonNull final View itemView) {
             super(itemView);
             mView = itemView;
             binding = FragmentContactCardBinding.bind(itemView);
+            checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
         }
+
 
         /**
          * Sets the contact to the holder
          *
          * @param theContact a contact card
          */
-        private void setContact(final Contact theContact)
+        private void setContact(final ContactCard theContact)
         {
             mContact = theContact;
-
-            /*// This will need to be build out in sprint 2
-            binding.cardRoot.setOnClickListener(view -> {
-                Navigation.findNavController(mView).navigate(ContactFragmentDirections
-                        .actionNavigationContactsToContactFragment(mContact));
-            });*/
-
-
-            //THIS WILL ALSO NEED TO BE UPDATED IN SPRINT 2.
-            //Currently the other attributes are set to invisible, preview is visible
             binding.textFirstName.setText(theContact.getFirstName());
             binding.textLastName.setText(theContact.getLastName());
-            final String preview = binding.textFirstName.getText().toString()
-                    + " " + binding.textLastName.getText().toString();
-            binding.textPreview.setText(preview);
+            String fullName = binding.textFirstName.getText().toString()
+                    +" " + binding.textLastName.getText().toString();
+            binding.textFirstLast.setText(fullName);
+            binding.textEmail.setText(theContact.getEmail());
+            binding.textMemberid.setText(theContact.getMemberID());
+            binding.textUsername.setText(theContact.getUserName());
+            binding.checkBox.setVisibility(View.VISIBLE);
+        }
+
+        public void setOnClickListener(CheckBox.OnClickListener onClickListener) {
+            checkBox.setOnClickListener(onClickListener);
         }
     }
 }

@@ -34,7 +34,7 @@
     <string name="chat_card_last_message">This is a placeholder message. :)</string>
 
     <!--  Database URLS  -->
-    <string name="base_url">TODO</string>
+    <string name="base_url">"https://production-tcss450-backend.herokuapp.com/"</string>
 
     <!--Charles string resources for signin and registration-->
     <string name="email">Email</string>
@@ -54,5 +54,7 @@
     <string name="hint_password_again">Retype Password</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_register_short">Register</string>
+
+    <string name="checkbox_contact_chatinvite">Chat Invite</string>
 
 </resources>
