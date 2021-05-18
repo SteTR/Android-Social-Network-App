@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class HourlyCard implements Serializable {
 
-    private final String mTime;
+    private final int mTime;
     private final String mTemp;
 
     private final int mCond;
@@ -16,7 +16,7 @@ public class HourlyCard implements Serializable {
      * Inner class used to construct card.
      */
     public static class Builder {
-        private final String mTime;
+        private final int mTime;
         private final String mTemp;
         private final int mCond;
 
@@ -25,7 +25,7 @@ public class HourlyCard implements Serializable {
          * @param theTime the hour displayed
          * @param theTemp the temperature for that hour
          */
-        public Builder(final String theTime, final String theTemp,
+        public Builder(final int theTime, final String theTemp,
                        final int theCond) {
             this.mTime = theTime;
             this.mTemp = theTemp;
@@ -54,7 +54,13 @@ public class HourlyCard implements Serializable {
      * Get hour.
      * @return String of the hour
      */
-    public String getTime() { return mTime; }
+    public String getTime() { return String.format("%d:00", mTime); }
+
+    /**
+     * Get the hour number (0-23).
+     * @return the hour as a numerical value
+     */
+    public int getTimeNum() { return mTime; }
 
     /**
      * Get temperature.

@@ -100,10 +100,10 @@ public class WeatherViewModel extends AndroidViewModel {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleResult(final JSONObject theResult) {
         try {
-            Log.d("JSON:", theResult.toString());
             JSONObject root = theResult;
-            Log.d("NULL:", String.valueOf(root == null));
             List<HourlyCard> list = new ArrayList<HourlyCard>();
+
+            // Get the current date information.
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
             int currentDay = cal.get(Calendar.DATE);
             int year = cal.get(Calendar.YEAR);
@@ -114,27 +114,24 @@ public class WeatherViewModel extends AndroidViewModel {
             // Get the 5-day forecast.
             mFutureDays = fiveDays(year, month, currentDay, daysInMonth);
             JSONArray jArr = (JSONArray) root.get("daily");
-            JSONObject[] jDays = fiveForeCast(jArr);
-
+            String[] jDays = fiveForeCast(jArr);
             int[] jConds = fiveConditions(jArr);
+
+            // Get the current weather.
             JSONObject current = (JSONObject) root.get("current");
             JSONArray currentWeather = (JSONArray) current.get("weather");
             JSONObject currentCond = currentWeather.getJSONObject(0);
             int currentCondition = (int) currentCond.get("id");
             double currentTemp = (double) current.get("temp");
 
+            // Weather card for Seattle, Washington
             WeatherCard wc = new WeatherCard
                     .Builder("Seattle, WA", currentTemp + " F°", currentCondition)
-                    .addDay1(String.format("%d/%d", mFutureDays[0][0], mFutureDays[0][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[0].get("min"), jDays[0].get("max"))), jConds[0])
-                    .addDay2(String.format("%d/%d", mFutureDays[1][0], mFutureDays[1][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[1].get("min"), jDays[1].get("max"))), jConds[1])
-                    .addDay3(String.format("%d/%d", mFutureDays[2][0], mFutureDays[2][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[2].get("min"), jDays[2].get("max"))), jConds[2])
-                    .addDay4(String.format("%d/%d", mFutureDays[3][0], mFutureDays[3][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[3].get("min"), jDays[3].get("max"))), jConds[3])
-                    .addDay5(String.format("%d/%d", mFutureDays[4][0], mFutureDays[4][1]),
-                            (String.format("%,.1f/%,.1f F°", jDays[4].get("min"), jDays[4].get("max"))), jConds[4])
+                    .addDay1(String.format("%d/%d", mFutureDays[0][0], mFutureDays[0][1]), (jDays[0]), jConds[0])
+                    .addDay2(String.format("%d/%d", mFutureDays[1][0], mFutureDays[1][1]), (jDays[1]), jConds[1])
+                    .addDay3(String.format("%d/%d", mFutureDays[2][0], mFutureDays[2][1]), (jDays[2]), jConds[2])
+                    .addDay4(String.format("%d/%d", mFutureDays[3][0], mFutureDays[3][1]), (jDays[3]), jConds[3])
+                    .addDay5(String.format("%d/%d", mFutureDays[4][0], mFutureDays[4][1]), (jDays[4]), jConds[4])
                     .build();
             if (!mCardList.getValue().contains(wc) && mCardList.getValue().size() < 1) {
                 mCardList.getValue().add(wc);
@@ -143,17 +140,17 @@ public class WeatherViewModel extends AndroidViewModel {
             // Get the 24-hour forecast.
             JSONArray hourArray = (JSONArray) root.get("hourly");
             int hour = cal.get(Calendar.HOUR_OF_DAY);
+
             for (int i = 0; i < 24; i++) {
                 JSONObject hourTemp = hourArray.getJSONObject(i);
                 JSONArray hourWeather = (JSONArray) hourTemp.get("weather");
                 JSONObject hourObj = hourWeather.getJSONObject(0);
                 int hourCond = (int) hourObj.get("id");
-//                Log.d("temp", "" + hourTemp.get("temp").getClass());
-                Double temp = (Double) hourTemp.get("temp");
                 int nextHour = (hour + i) % 24;
+                Object temp = hourTemp.get("temp");
                 HourlyCard hc = new HourlyCard
-                        .Builder(String.format("%d:00", nextHour),
-                        String.format("%,.1f F°", temp), hourCond).build();
+                        .Builder(nextHour, String.format("%s F°", formatter(temp)), hourCond)
+                        .build();
                 list.add(hc);
                 mHourCards.getValue().add(hc);
             }
@@ -162,8 +159,25 @@ public class WeatherViewModel extends AndroidViewModel {
             Log.e("ERROR!", e.getMessage());
         }
 
+        // Set up the list of weather cards and hourly cards.
         mCardList.setValue(mCardList.getValue());
         mHourCards.setValue(mHourCards.getValue());
+    }
+
+    /**
+     * Helper method to represent numerical values into readable Strings.
+     *
+     * @param theObject is an object that holds the numerical value.
+     * @return a String representing said numerical value
+     */
+    private String formatter(Object theObject) {
+        String result = "";
+        if (theObject instanceof Double) {
+            result = String.format("%,.1f", theObject);
+        } else if (theObject instanceof Integer) {
+            result = String.format("%d", theObject);
+        }
+        return result;
     }
 
     /**
@@ -197,13 +211,16 @@ public class WeatherViewModel extends AndroidViewModel {
      * @param theArray a JSONArray for retrieving the necessary data.
      * @return an array of JSONObjects for the five days
      */
-    private JSONObject[] fiveForeCast(JSONArray theArray) {
+    private String[] fiveForeCast(JSONArray theArray) {
         try {
-            JSONObject[] array = new JSONObject[5];
+            String[] array = new String[5];
             for (int i = 0; i < array.length; i++) {
                 JSONObject obj = theArray.getJSONObject(i);
                 JSONObject obj2 = (JSONObject) obj.get("temp");
-                array[i] = obj2;
+                // Retrieve the minimum and maximum temperatures of that day.
+                Object min = obj2.get("min");
+                Object max = obj2.get("max");
+                array[i] = String.format("%s/%s F°", formatter(min), formatter(max));
             }
             return array;
         } catch (JSONException e) {
@@ -232,6 +249,8 @@ public class WeatherViewModel extends AndroidViewModel {
                 newMonth++;
                 newDay++;
             }
+
+            // month/day/year; e.g. 4/13/21
             days[i][0] = newMonth;
             days[i][1] = newDay;
             days[i][2] = year;

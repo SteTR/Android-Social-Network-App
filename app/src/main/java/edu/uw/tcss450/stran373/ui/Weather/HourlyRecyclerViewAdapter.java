@@ -1,6 +1,7 @@
 package edu.uw.tcss450.stran373.ui.Weather;
 
 import android.graphics.drawable.Icon;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,6 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
     public class HourlyViewHolder extends RecyclerView.ViewHolder{
         public final View mView;
         public FragmentHourlyCardBinding binding;
-        private HourlyCard mHourly;
 
         public HourlyViewHolder(View view) {
             super(view);
@@ -69,9 +69,11 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
         /**
          * Helper method used to update the weather icons for the 24-hour forecast.
          *
-         * @param theCard
+         * @param theCard is an hourly card representing each consecutive hour.
          */
         private void updateHourlyIcon(HourlyCard theCard) {
+            int hour = theCard.getTimeNum();
+            boolean night = (hour > 16 && hour < 24) || (hour > -1 && hour < 4);
             if (theCard.getCond() <= 232) {
                 binding.imageCurrent.setImageResource(R.drawable.ic_thunder);
             } else if (theCard.getCond() <= 531 && theCard.getCond() >= 300) {
@@ -79,9 +81,17 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
             } else if (theCard.getCond() <= 622 && theCard.getCond() >= 600) {
                 binding.imageCurrent.setImageResource(R.drawable.ic_snowy_24dp);
             } else if ((theCard.getCond() <= 781 && theCard.getCond() >= 701) || theCard.getCond() > 800) {
-                binding.imageCurrent.setImageResource(R.drawable.ic_cloudy);
+                if (night) {
+                    binding.imageCurrent.setImageResource(R.drawable.ic_cloudy_night_24dp);
+                } else {
+                    binding.imageCurrent.setImageResource(R.drawable.ic_cloudy);
+                }
             } else if (theCard.getCond() == 800){
-                binding.imageCurrent.setImageResource(R.drawable.ic_day);
+                if (night) {
+                    binding.imageCurrent.setImageResource(R.drawable.ic_night_24dp);
+                } else {
+                    binding.imageCurrent.setImageResource(R.drawable.ic_day);
+                }
             }
         }
 
@@ -89,8 +99,7 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
          * Used to set base text.
          * @param theHourly HourlyCard that is used to reference
          */
-        void setHourly(final HourlyCard theHourly) {
-            mHourly = theHourly;
+        public void setHourly(final HourlyCard theHourly) {
             binding.textTime.setText(theHourly.getTime());
             binding.textTemp.setText(theHourly.getTemp());
             for (int i = 0; i < mHourlys.size(); i++) {

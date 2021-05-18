@@ -15,7 +15,8 @@ public class HourlyGenerator {
     static {
         HOURLYS = new HourlyCard[COUNT];
         for (int i = 1; i < COUNT+1; i++) {
-            String time = i <= 12 ? i%12 + " am" : i%12 + " pm";
+//            String time = i <= 12 ? i%12 + " am" : i%12 + " pm";
+            int time = i;
             HOURLYS[i-1] = new HourlyCard
                     .Builder(time, "67 F°", 800).build();
         }
