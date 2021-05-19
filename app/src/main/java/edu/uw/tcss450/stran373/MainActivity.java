@@ -21,15 +21,28 @@ import java.text.DecimalFormat;
 
 import edu.uw.tcss450.stran373.utils.Utils;
 
+/**
+ * A class used to contain all of the Main Fragments used.
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Configurations for the menu bar
+     */
     private AppBarConfiguration mAppBarConfiguration;
 
+    /**
+     * List of agruments that are passed to main
+     */
     private MainActivityArgs mArgs;
 
+    /**
+     * Method called when the activity is created.
+     * @param theSavedInstanceState Bundle from previous state
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(final Bundle theSavedInstanceState) {
+        super.onCreate(theSavedInstanceState);
         SharedPreferences prefs =
                 this.getSharedPreferences(
                         getString(R.string.keys_shared_prefs),
@@ -61,13 +74,23 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    /**
+     * The method which inflates the menu
+     * @param theMenu which is being created
+     * @return true
+     */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu theMenu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.settings_menu, menu);
+        inflater.inflate(R.menu.settings_menu, theMenu);
         return true;
     }
 
+    /**
+     * An event handler for when an item is selected.
+     * @param theItem The item chosen
+     * @return theItem
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull final MenuItem theItem) {
         int id = theItem.getItemId();
@@ -83,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(theItem);
     }
 
+    /**
+     * Method used to sign a user out/remove their jwt
+     */
     private void signOut() {
         SharedPreferences prefs =
                 getSharedPreferences(
@@ -93,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
         finishAndRemoveTask();
     }
 
+    /**
+     * Method required for use of navigation bar.
+     * @return A boolean as to if the navigation can move up
+     */
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

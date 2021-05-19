@@ -94,7 +94,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionSignInFragmentToRegisterFragment());
-        getActivity().finish();
     }
 
     /**
@@ -116,6 +115,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         myBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
     }
 
+    /**
+     * A method called when the fragment is started.
+     * Primarily this method is used for AUTO-SIGN In
+     */
     @Override
     public void onStart() {
         super.onStart();

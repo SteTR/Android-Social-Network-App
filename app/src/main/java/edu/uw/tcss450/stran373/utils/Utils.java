@@ -8,11 +8,22 @@ import android.content.res.Resources;
 
 import edu.uw.tcss450.stran373.R;
 
+/**
+ * @author Bryce Fujita
+ * A class used to change an applications theme.
+ */
 public class Utils {
 
+    /** Static value used to store the state of which theme is chosen. */
     private static int sTheme;
+
+    /** Static value used to represent the default theme. */
     public final static int THEME_DEFAULT = 0;
+
+    /** Static value used to represent the Orange theme. */
     public final static int THEME_ORANGE = 1;
+
+    /** Static value used to represent the PACNW theme. */
     public final static int THEME_PACNW = 2;
 
     /**
