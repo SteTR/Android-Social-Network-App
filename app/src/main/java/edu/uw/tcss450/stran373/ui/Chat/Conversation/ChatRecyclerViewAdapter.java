@@ -21,8 +21,6 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentChatMessageBinding;
 import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
 
-import static edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel.USER_NAME;
-
 /**
  * A recycle view adapter to keep track of a specific chat's messages and the owner
  * @author Steven Tran

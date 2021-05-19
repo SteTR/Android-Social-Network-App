@@ -10,7 +10,7 @@ import java.util.Date;
 public class ChatCard implements Serializable {
     private final String mName;
     private final String mLastMessage;
-    private final Date mTime;
+    private final String mTime;
     private final int mChatId; // TODO maybe not have the chat card store the chat id but move it to the chat list.
 //    private final _ mPicture;
 
@@ -21,7 +21,7 @@ public class ChatCard implements Serializable {
     public static class Builder {
         private String mName;
         private String mLastMessage;
-        private Date mTime;
+        private String mTime;
         private int mChatId;
 //        private final _ mPicture;
 
@@ -33,7 +33,7 @@ public class ChatCard implements Serializable {
             mChatId = 0;
         }
 
-        public Builder(final String name, final String lastmessage, final Date time, final int chatId) // , final _ picture
+        public Builder(final String name, final String lastmessage, final String time, final int chatId) // , final _ picture
         {
             this.mName = name;
             this.mLastMessage = lastmessage;
@@ -61,7 +61,7 @@ public class ChatCard implements Serializable {
          * Sets the time for the builder of chat card
          * @param theMTime time of last message sent by anyone in the chat of the chat card
          */
-        public void setTime(final Date theMTime) {
+        public void setTime(final String theMTime) {
             mTime = theMTime;
         }
 
@@ -105,4 +105,10 @@ public class ChatCard implements Serializable {
     {
         return mChatId;
     }
+
+    public String getName() { return mName; }
+
+    public String getLastMessage() { return mLastMessage; }
+
+    public String getTime() { return mTime.substring(11,19); }
 }

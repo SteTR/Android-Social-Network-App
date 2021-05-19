@@ -15,9 +15,6 @@ import android.view.ViewGroup;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentChatBinding;
 
-import static edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel.TEST_CHAT_ID;
-import static edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel.USER_NAME;
-
 /**
  * Create a fragment that represents a chat. Contains the list of messages of one chat
  * @author Steven Tran
@@ -30,6 +27,8 @@ public class ChatFragment extends Fragment {
     private UserInfoViewModel mUserViewModel;
     private ChatSendViewModel mSendViewModel;
 
+    private int mChatId;
+
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -37,10 +36,14 @@ public class ChatFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ChatFragmentArgs args = ChatFragmentArgs.fromBundle(getArguments());
+        mChatId = args.getChatId();
+
         ViewModelProvider provider = new ViewModelProvider(getActivity());
         mUserViewModel = provider.get(UserInfoViewModel.class);
         mChatViewModel = provider.get(ChatViewModel.class);
-        mChatViewModel.getFirstMessages(TEST_CHAT_ID, mUserViewModel.getJwt());
+        mChatViewModel.getFirstMessages(mChatId, mUserViewModel.getJwt());
         mSendViewModel = provider.get(ChatSendViewModel.class);
     }
 
@@ -60,21 +63,19 @@ public class ChatFragment extends Fragment {
         binding = FragmentChatBinding.bind(getView());
         binding.swipeContainer.setRefreshing(true);
 
-        // TODO atm, getting only chat id 1, need to update to get other chats with different Ids
         ChatFragmentArgs chatArguments = ChatFragmentArgs.fromBundle(getArguments());
 
         final RecyclerView rv = binding.recyclerMessages;
 
         rv.setAdapter(new ChatRecyclerViewAdapter(
-                mChatViewModel.getMessageListByChatId(TEST_CHAT_ID),
+                mChatViewModel.getMessageListByChatId(mChatId),
                 mUserViewModel.getEmail()));
 
         binding.swipeContainer.setOnRefreshListener(() -> {
-            mChatViewModel.getNextMessages(TEST_CHAT_ID, mUserViewModel.getJwt());
+            mChatViewModel.getNextMessages(mChatId, mUserViewModel.getJwt());
         });
 
-        mChatViewModel.addMessageObserver(TEST_CHAT_ID, getViewLifecycleOwner(), list ->
-        {
+        mChatViewModel.addMessageObserver(mChatId, getViewLifecycleOwner(), list -> {
             rv.getAdapter().notifyDataSetChanged();
             rv.scrollToPosition(rv.getAdapter().getItemCount() - 1);
             binding.swipeContainer.setRefreshing(false);
@@ -82,13 +83,14 @@ public class ChatFragment extends Fragment {
 
         //Send button was clicked. Send the message via the SendViewModel
         binding.buttonSend2.setOnClickListener(button -> {
-            mSendViewModel.sendMessage(TEST_CHAT_ID,
+            mSendViewModel.sendMessage(mChatId,
                     mUserViewModel.getJwt(),
                     binding.editMessage.getText().toString());
         });
 
         //when we get the response back from the server, clear the edittext
-        mSendViewModel.addResponseObserver(getViewLifecycleOwner(), response ->
-                binding.editMessage.setText(""));
+        mSendViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+            binding.editMessage.setText("");
+        });
     }
 }

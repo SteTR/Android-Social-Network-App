@@ -37,8 +37,6 @@ public class ChatViewModel extends AndroidViewModel {
 
     // TODO possibly need to merge the two view models
     public static final int TEST_CHAT_ID = 1;
-    public static final String USER_NAME = "BradPitt@handsomeclub.com";
-    public static final String OTHER_USER = "JohnCena@bigman.com";
 
     /**
      * A Map of Lists of Chat Messages.
@@ -50,23 +48,7 @@ public class ChatViewModel extends AndroidViewModel {
     public ChatViewModel(@NonNull Application application) {
         super(application);
         mMessages = new HashMap<>();
-//        mMessages.put(TEST_CHAT_ID, new MutableLiveData<>());
-//        mMessages.get(TEST_CHAT_ID).setValue(generateSampleText());
     }
-
-//    /**
-//     * Generates a sample chat log for display
-//     * @return a list of chatmessages
-//     */
-//    private static List<ChatMessage> generateSampleText() {
-//        final List<ChatMessage> chatMessages = new ArrayList<>();
-//
-//        chatMessages.add(new ChatMessage(1, "JOHN CENA", USER_NAME, "1:30 AM"));
-//        chatMessages.add(new ChatMessage(2, "Dude, did you see what happened on the news?", USER_NAME, "3:30 AM"));
-//        chatMessages.add(new ChatMessage(3, "STOP MESSAGING ME", OTHER_USER, "8:30 AM"));
-//        chatMessages.add(new ChatMessage(4, "😢", USER_NAME, "8:35 AM"));
-//        return chatMessages;
-//    }
 
     /**
      * Register as an observer to listen to a specific chat room's list of messages.
@@ -187,8 +169,6 @@ public class ChatViewModel extends AndroidViewModel {
         //Instantiate the RequestQueue and add the request to the queue
         RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
                 .addToRequestQueue(request);
-
-        //code here will run
     }
 
     /**
