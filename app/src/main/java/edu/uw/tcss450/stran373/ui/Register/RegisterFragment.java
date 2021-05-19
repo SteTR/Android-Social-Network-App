@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
@@ -18,10 +19,12 @@ import android.widget.EditText;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentRegisterBinding;
 
 /**
@@ -201,8 +204,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         directions.setEmail(myBinding.editText.getText().toString());
         directions.setPassword(myBinding.editText2.getText().toString());
 
-        Navigation.findNavController(getView()).navigate(directions);
+        Navigation.findNavController(getView()).navigate((NavDirections) directions);
 
+        // Shows a pop-up message that informs the user an verification email has been sent
+        Snackbar.make(getView(), R.string.text_email_sent, Snackbar.LENGTH_LONG).show();
     }
 
     /**
@@ -229,5 +234,4 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             Log.d("JSON Response", "No Response");
         }
     }
-
 }

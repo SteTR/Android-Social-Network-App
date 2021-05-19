@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/navigation_single_chat"
         android:name="edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatFragment"
-        android:label="fragment_chat"
+        android:label="@string/chat_card_name"
         tools:layout="@layout/fragment_chat" >
         <argument
             android:name="chatId"

@@ -21,10 +21,9 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentChatMessageBinding;
 import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
 
-import static edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel.USER_NAME;
-
 /**
  * A recycle view adapter to keep track of a specific chat's messages and the owner
+ *
  * @author Steven Tran
  * @author Charles Bryan
  */
@@ -35,7 +34,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
     public ChatRecyclerViewAdapter(List<ChatMessage> messages, String email) {
         this.mMessages = messages;
-        mEmail = USER_NAME;
+        mEmail = email;
     }
 
 
@@ -59,7 +58,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
     class MessageViewHolder extends RecyclerView.ViewHolder {
         private final View mView;
-        private final FragmentChatMessageBinding binding;
+        private FragmentChatMessageBinding binding;
 
         public MessageViewHolder(@NonNull View view) {
             super(view);
@@ -77,9 +76,9 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             binding.messageTextName.setText(message.getSender());
             binding.messageTextContent.setText(message.getMessage());
             binding.messageTextTimestamp.setText(message.getTimeStamp());
-            // TODO need to fix bug with incorrect chat message positions
+
             // Code taken from lab 5
-            if (message.getSender().equals(mEmail)) {
+            if (mEmail.equals(message.getSender())) {
                 ViewGroup.MarginLayoutParams layoutParams =
                         (ViewGroup.MarginLayoutParams) card.getLayoutParams();
                 //Set the left margin
