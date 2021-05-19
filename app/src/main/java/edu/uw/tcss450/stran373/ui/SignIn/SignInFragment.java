@@ -232,6 +232,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     myBinding.editText.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
+
+                    // If user is not verified, show pop-up message with the option to resend verification email
                     if (theResponse.getJSONObject("data").getString("message").contains("verified")) {
                         Snackbar mSnackbar = Snackbar.make(getView(),
                                 R.string.text_email_not_verified, Snackbar.LENGTH_INDEFINITE);

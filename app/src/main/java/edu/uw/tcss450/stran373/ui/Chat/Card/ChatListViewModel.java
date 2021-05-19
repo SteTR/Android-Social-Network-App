@@ -32,18 +32,17 @@ import edu.uw.tcss450.stran373.ui.Chat.Card.ChatCard;
 
 /**
  * A view model to hold all the chat cards as a list
+ *
  * @author Steven Tran
+ * @author Haoying Li
  */
 public class ChatListViewModel extends AndroidViewModel {
-
 
     private final MutableLiveData<List<ChatCard>> mCardList;
 
     public ChatListViewModel(@NonNull final Application application) {
         super(application);
         mCardList = new MutableLiveData<>(new ArrayList<>());
-        // mCardList.setValue(new ArrayList<>());
-        // mCardList.setValue(generateChatCards());
     }
 
     /**
@@ -56,26 +55,21 @@ public class ChatListViewModel extends AndroidViewModel {
         mCardList.observe(owner, observer);
     }
 
+    /**
+     * Returns the value of the chat card list
+     *
+     * @return the card list
+     */
     public List<ChatCard> getCardList()
     {
         return mCardList.getValue();
     }
 
     /**
-     * Temporary method to generate chat cards in random amounts ranging from 1 to 10.
-     * @return a list of chat cards
+     * Connects to the web service to get chats that the user is part of
+     *
+     * @param jwt the user's token
      */
-    private static List<ChatCard> generateChatCards()
-    {
-        final List<ChatCard> chatCards = new ArrayList<>();
-        for (int i = 0; i < Math.random() * 10 + 1; i++)
-        {
-            ChatCard tempCard = new ChatCard.Builder("", "", null, i).build();
-            chatCards.add(tempCard);
-        }
-        return chatCards;
-    }
-
     public void getChats(final String jwt) {
         String url = getApplication().getResources().getString(R.string.base_url) + "chats";
 
@@ -104,6 +98,11 @@ public class ChatListViewModel extends AndroidViewModel {
                 .addToRequestQueue(request);
     }
 
+    /**
+     * Handles successful response and stores the chats into a list
+     *
+     * @param response the response of web service
+     */
     public void handleSuccess(final JSONObject response) {
         List<ChatCard> list = new ArrayList<>();
         try {
@@ -133,6 +132,11 @@ public class ChatListViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Handles unsuccessful response
+     *
+     * @param error the error
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             Log.e("NETWORK ERROR", error.getMessage());

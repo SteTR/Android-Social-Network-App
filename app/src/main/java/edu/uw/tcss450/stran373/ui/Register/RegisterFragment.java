@@ -205,6 +205,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         directions.setPassword(myBinding.editText2.getText().toString());
 
         Navigation.findNavController(getView()).navigate((NavDirections) directions);
+
+        // Shows a pop-up message that informs the user an verification email has been sent
         Snackbar.make(getView(), R.string.text_email_sent, Snackbar.LENGTH_LONG).show();
     }
 
@@ -232,5 +234,4 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             Log.d("JSON Response", "No Response");
         }
     }
-
 }

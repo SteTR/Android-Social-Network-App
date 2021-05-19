@@ -25,7 +25,11 @@ import java.util.Objects;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
-
+/**
+ * A view model that handles message sending functionalities
+ *
+ * @author Haoying Li
+ */
 public class ChatSendViewModel extends AndroidViewModel {
 
     private final MutableLiveData<JSONObject> mResponse;
@@ -41,6 +45,13 @@ public class ChatSendViewModel extends AndroidViewModel {
         mResponse.observe(owner, observer);
     }
 
+    /**
+     * Connects to the web service and sends the message in the chat
+     *
+     * @param chatId the chat Id
+     * @param jwt the user's token
+     * @param message the message
+     */
     public void sendMessage(final int chatId, final String jwt, final String message) {
         String url = getApplication().getResources().getString(R.string.base_url) +
                 "messages";
@@ -78,6 +89,11 @@ public class ChatSendViewModel extends AndroidViewModel {
                 .addToRequestQueue(request);
     }
 
+    /**
+     * Handles unsuccessful response
+     *
+     * @param error the error
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             Log.e("NETWORK ERROR", error.getMessage());

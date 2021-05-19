@@ -1,21 +1,23 @@
 package edu.uw.tcss450.stran373.ui.Chat.Card;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Represents a chat box in the lists of chats to display
+ *
  * @author Steven Tran
+ * @author Haoying Li
  */
 public class ChatCard implements Serializable {
     private final String mName;
     private final String mLastMessage;
     private final String mTime;
-    private final int mChatId; // TODO maybe not have the chat card store the chat id but move it to the chat list.
+    private final int mChatId;
 //    private final _ mPicture;
 
     /**
      * Necessary builder function to build the chat card
+     *
      * @author Steven Tran
      */
     public static class Builder {
@@ -29,7 +31,7 @@ public class ChatCard implements Serializable {
         {
             mName = "";
             mLastMessage = "";
-            mTime = null;
+            mTime = "";
             mChatId = 0;
         }
 
@@ -37,12 +39,13 @@ public class ChatCard implements Serializable {
         {
             this.mName = name;
             this.mLastMessage = lastmessage;
-            this.mTime = time;
             this.mChatId = chatId;
+            this.mTime = time;
         }
 
         /**
          * Sets the name for the builder of chat card
+         *
          * @param theMName name of the chat card
          */
         public void setName(final String theMName) {
@@ -51,6 +54,7 @@ public class ChatCard implements Serializable {
 
         /**
          * Sets the last message for the builder of chat card
+         *
          * @param theMLastMessage last message of the chat card
          */
         public void setLastMessage(final String theMLastMessage) {
@@ -59,6 +63,7 @@ public class ChatCard implements Serializable {
 
         /**
          * Sets the time for the builder of chat card
+         *
          * @param theMTime time of last message sent by anyone in the chat of the chat card
          */
         public void setTime(final String theMTime) {
@@ -76,6 +81,7 @@ public class ChatCard implements Serializable {
 
         /**
          * Builds the chat card (equal to new Chatcard(params))
+         *
          * @return ChatCard
          */
         public ChatCard build()
@@ -86,6 +92,7 @@ public class ChatCard implements Serializable {
 
     /**
      * Builds the Chat Card
+     *
      * @param builder Builder in chat card that carries same param as chat card
      */
     private ChatCard(final Builder builder)
@@ -99,6 +106,7 @@ public class ChatCard implements Serializable {
 
     /**
      * Returns the id corresponding to the chat card
+     *
      * @return Integer chat id
      */
     public int getChatID()
@@ -106,9 +114,39 @@ public class ChatCard implements Serializable {
         return mChatId;
     }
 
-    public String getName() { return mName; }
+    /**
+     * Returns the chat name of the chat card
+     *
+     * @return the chat name
+     */
+    public String getName() {
+        if (mName.length() <= 30)
+            return mName;
+        else
+            return mName.substring(0, 29) + "...";
+    }
 
-    public String getLastMessage() { return mLastMessage; }
+    /**
+     * Returns the last message in the chat
+     *
+     * @return the last message
+     */
+    public String getLastMessage() {
+        if (mLastMessage.length() <= 40)
+            return mLastMessage;
+        else
+            return mLastMessage.substring(0, 39) + "...";
+    }
 
-    public String getTime() { return mTime.substring(11,19); }
+    /**
+     * Returns the timestamp of the last message in the chat
+     *
+     * @return the timestamp
+     */
+    public String getTime() {
+        if (mTime.equals("null"))
+            return "";
+        else
+            return mTime.substring(11,19);
+    }
 }

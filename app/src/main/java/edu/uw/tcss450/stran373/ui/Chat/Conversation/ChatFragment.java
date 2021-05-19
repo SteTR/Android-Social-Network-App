@@ -17,8 +17,9 @@ import edu.uw.tcss450.stran373.databinding.FragmentChatBinding;
 
 /**
  * Create a fragment that represents a chat. Contains the list of messages of one chat
+ *
  * @author Steven Tran
- * TODO currently treating chat card and chat message as two different objects that store the same thing, maybe both will store a chat object that contains both.
+ * @author Haoying Li
  */
 public class ChatFragment extends Fragment {
 
@@ -61,21 +62,27 @@ public class ChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding = FragmentChatBinding.bind(getView());
+
+        //SetRefreshing shows the internal Swiper view progress bar. Show this until messages load
         binding.swipeContainer.setRefreshing(true);
 
         ChatFragmentArgs chatArguments = ChatFragmentArgs.fromBundle(getArguments());
 
         final RecyclerView rv = binding.recyclerMessages;
 
+        //Set the Adapter to hold a reference to the list the chat ID that the ChatViewModel holds.
         rv.setAdapter(new ChatRecyclerViewAdapter(
                 mChatViewModel.getMessageListByChatId(mChatId),
                 mUserViewModel.getEmail()));
 
+        //When the user scrolls to the top of the RV, the swiper list will "refresh"
+        //The user is out of messages, go out to the service and get more
         binding.swipeContainer.setOnRefreshListener(() -> {
             mChatViewModel.getNextMessages(mChatId, mUserViewModel.getJwt());
         });
 
         mChatViewModel.addMessageObserver(mChatId, getViewLifecycleOwner(), list -> {
+            //inform the RV that the underlying list has (possibly) changed
             rv.getAdapter().notifyDataSetChanged();
             rv.scrollToPosition(rv.getAdapter().getItemCount() - 1);
             binding.swipeContainer.setRefreshing(false);

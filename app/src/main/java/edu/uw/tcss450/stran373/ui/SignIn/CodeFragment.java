@@ -20,6 +20,9 @@ import edu.uw.tcss450.stran373.databinding.FragmentCodeBinding;
 
 /**
  * Reset password fragment
+ *
+ * @author Haoying Li
+ * @author Steven Tran
  */
 public class CodeFragment extends Fragment {
 

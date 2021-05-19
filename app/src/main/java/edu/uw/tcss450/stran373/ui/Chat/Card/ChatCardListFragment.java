@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +14,14 @@ import android.view.ViewGroup;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
-import edu.uw.tcss450.stran373.databinding.FragmentChatBinding;
 import edu.uw.tcss450.stran373.databinding.FragmentChatListBinding;
 import edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel;
-import edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatFragment;
 
 /**
  * Create a fragment that lists all the chat cards before entering a chat.
- * Not changed at the moment.
+ *
  * @author Steven Tran
+ * @author Haoying Li
  */
 public class ChatCardListFragment extends Fragment {
 
@@ -61,12 +59,9 @@ public class ChatCardListFragment extends Fragment {
             }
         });
 
-//        final RecyclerView rv = binding.listRecyclerViewChat;
-//        rv.setAdapter(new ChatCardRecycleViewAdapter(mChatListViewModel.getCardList()));
-
         // Navigates to the sample chat message for now
-        binding.listChatAddButton.setOnClickListener(button ->
-                Navigation.findNavController(getView()).navigate(ChatCardListFragmentDirections
-                        .actionNavigationChatsToNavigationSingleChat(ChatViewModel.TEST_CHAT_ID)));
+//        binding.listChatAddButton.setOnClickListener(button ->
+//                Navigation.findNavController(getView()).navigate(ChatCardListFragmentDirections
+//                        .actionNavigationChatsToNavigationSingleChat(ChatViewModel.TEST_CHAT_ID)));
     }
 }

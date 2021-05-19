@@ -23,6 +23,7 @@ import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
 
 /**
  * A recycle view adapter to keep track of a specific chat's messages and the owner
+ *
  * @author Steven Tran
  * @author Charles Bryan
  */

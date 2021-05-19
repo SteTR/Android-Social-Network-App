@@ -31,12 +31,13 @@ import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
 
 /**
  * A view model that keeps track of all the chats by id and their messages
+ *
  * @author Steven Tran
+ * @author Haoying Li
  */
 public class ChatViewModel extends AndroidViewModel {
 
-    // TODO possibly need to merge the two view models
-    public static final int TEST_CHAT_ID = 1;
+//    public static final int TEST_CHAT_ID = 1;
 
     /**
      * A Map of Lists of Chat Messages.
@@ -123,8 +124,6 @@ public class ChatViewModel extends AndroidViewModel {
         //Instantiate the RequestQueue and add the request to the queue
         RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
                 .addToRequestQueue(request);
-
-        //code here will run
     }
 
     /**
@@ -184,6 +183,11 @@ public class ChatViewModel extends AndroidViewModel {
         getOrCreateMapEntry(chatId).setValue(list);
     }
 
+    /**
+     * Handles successful response and stores messages into a list
+     *
+     * @param response the response
+     */
     private void handelSuccess(final JSONObject response) {
         List<ChatMessage> list;
         if (!response.has("chatid")) {
@@ -209,7 +213,6 @@ public class ChatViewModel extends AndroidViewModel {
                     Log.wtf("Chat message already received",
                             "Or duplicate id:" + cMessage.getMessageId());
                 }
-
             }
             //inform observers of the change (setValue)
             getOrCreateMapEntry(response.getInt("chatid")).setValue(list);
@@ -219,6 +222,11 @@ public class ChatViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Handles unsuccessful response
+     *
+     * @param error the error
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             Log.e("NETWORK ERROR", error.getMessage());

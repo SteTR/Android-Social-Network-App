@@ -15,7 +15,9 @@ import edu.uw.tcss450.stran373.databinding.FragmentChatCardBinding;
 
 /**
  * A RecycleView holder to hold the chat cards
+ *
  * @author Steven Tran
+ * @author Haoying Li
  */
 public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRecycleViewAdapter.ChatCardViewHolder> {
 

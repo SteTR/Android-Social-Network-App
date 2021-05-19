@@ -16,6 +16,9 @@ import edu.uw.tcss450.stran373.databinding.FragmentResetPasswordBinding;
 
 /**
  * Reset password fragment
+ *
+ * @author Haoying Li
+ * @author Steven Tran
  */
 public class ResetPasswordFragment extends Fragment {
 
@@ -41,6 +44,6 @@ public class ResetPasswordFragment extends Fragment {
             mResetModel.connectPost(binding.editEmail.getText().toString());
             Navigation.findNavController(getView()).navigate(
                     ResetPasswordFragmentDirections.actionResetPasswordFragmentToCodeFragment(binding.editEmail.getText().toString()));
-                });
+        });
     }
 }
