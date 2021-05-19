@@ -50,16 +50,34 @@ public class ContactListFragment extends Fragment {
      */
     private MutableLiveData<JSONObject> mResponse;
 
+    /**
+     * View model for the contact list
+     */
     private ContactListViewModel mModel;
 
+    /**
+     * Array of contacts that are currently selected
+     */
     private List<ContactCard> currentSelectedItems = new ArrayList<>();
 
+    /**
+     * Inflate the layout
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contact_list, container, false);
     }
 
+    /**
+     * When the fragment is created, call the contact endpoint to get current
+     * contacts
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +85,11 @@ public class ContactListFragment extends Fragment {
        mModel.connectGet();
     }
 
+    /**
+     * Set the adapter with the checks for the checkmarks
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -89,7 +112,9 @@ public class ContactListFragment extends Fragment {
                                     ));
                                 }
             });
-
+        /**
+         * When floating action button pressed, create chat
+         */
         binding.buttonAdd.setOnClickListener(button ->
                 mModel.handleChatCreation(currentSelectedItems));
     }
