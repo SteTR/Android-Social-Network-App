@@ -8,8 +8,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +26,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utils.onActivityCreateSetTheme(this);
+        SharedPreferences prefs =
+                this.getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        if (prefs.contains(getString(R.string.keys_prefs_theme))) {
+            int theme = prefs.getInt(getString(R.string.keys_prefs_theme), 1);
+            Utils.onActivityCreateSetTheme(this, theme);
+        } else {
+            Utils.onActivityCreateSetTheme(this);
+        }
         setContentView(R.layout.activity_main);
 
         MainActivityArgs args = MainActivityArgs.fromBundle(getIntent().getExtras());
@@ -51,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.theme_menu, menu);
+        inflater.inflate(R.menu.settings_menu, menu);
         return true;
     }
 
@@ -63,11 +72,22 @@ public class MainActivity extends AppCompatActivity {
             ThemeDialogFragment dialog = new ThemeDialogFragment();
             dialog.show(getSupportFragmentManager(), "");
             return true;
+        } else if (id == R.id.action_sign_out) {
+            signOut();
         }
 
         return super.onOptionsItemSelected(theItem);
     }
 
+    private void signOut() {
+        SharedPreferences prefs =
+                getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        prefs.edit().remove(getString(R.string.keys_prefs_jwt)).apply();
+        //End the app completely
+        finishAndRemoveTask();
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

@@ -2,7 +2,9 @@ package edu.uw.tcss450.stran373;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -16,13 +18,21 @@ public class ThemeDialogFragment extends DialogFragment {
         builder.setTitle(R.string.title_themes_toolbar)
                 .setItems(R.array.themes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        int var = 0;
                         if (which == 0){
-                            Utils.changeToTheme(getActivity(), Utils.THEME_DEFAULT);
+                            var = Utils.THEME_DEFAULT;
                         } else if (which == 1) {
-                            Utils.changeToTheme(getActivity(), Utils.THEME_ORANGE);
+                            var = Utils.THEME_ORANGE;
                         } else if (which == 2) {
-                            Utils.changeToTheme(getActivity(), Utils.THEME_PACNW);
+                            var = Utils.THEME_PACNW;
                         }
+                        SharedPreferences prefs =
+                                getActivity().getSharedPreferences(
+                                        getString(R.string.keys_shared_prefs),
+                                        Context.MODE_PRIVATE);
+                        prefs.edit().putInt(getString(R.string.keys_prefs_theme),var).apply();
+                        Utils.changeToTheme(getActivity(), var);
+                        dismiss();
                     }
                 });
         return builder.create();

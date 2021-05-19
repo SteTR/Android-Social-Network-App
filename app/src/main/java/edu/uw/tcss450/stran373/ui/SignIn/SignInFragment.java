@@ -1,5 +1,7 @@
 package edu.uw.tcss450.stran373.ui.SignIn;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.auth0.jwt.JWT;
+import com.auth0.android.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
@@ -114,6 +116,27 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         myBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        if (prefs.contains(getString(R.string.keys_prefs_jwt))) {
+            String token = prefs.getString(getString(R.string.keys_prefs_jwt), "");
+            JWT jwt = new JWT(token);
+            // Check to see if the web token is still valid or not. To make a JWT expire after a
+            // longer or shorter time period, change the expiration time when the JWT is
+            // created on the web service.
+            if(!jwt.isExpired(0)) {
+                String email = jwt.getClaim("email").asString();
+                navigateToSuccess(email, token);
+                return;
+            }
+        }
+    }
+
     /**
      * Helper method for verifying both the email and the password.
      *
@@ -209,9 +232,19 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      * @param theJwt the JSON Web Token supplied by the server
      */
     private void navigateToSuccess(final String theEmail, final String theJwt) {
+        if (myBinding.switchSignin.isChecked()) {
+            SharedPreferences prefs =
+                    getActivity().getSharedPreferences(
+                            getString(R.string.keys_shared_prefs),
+                            Context.MODE_PRIVATE);
+            //Store the credentials in SharedPrefs
+            prefs.edit().putString(getString(R.string.keys_prefs_jwt), theJwt).apply();
+        }
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
-                        .actionSignInFragmentToMainActivity(theJwt, theEmail));
+                        .actionSignInFragmentToMainActivity(theEmail, theJwt));
+        //Remove THIS activity from the Task list. Pops off the backstack
+        getActivity().finish();
     }
 
     /**
