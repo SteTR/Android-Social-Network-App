@@ -1,6 +1,7 @@
 package edu.uw.tcss450.stran373.ui.SignIn;
 
 import android.app.Application;
+import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
 
@@ -96,6 +97,7 @@ public class SignInViewModel extends AndroidViewModel {
      */
     public void connect(final String theEmail, final String thePassword) {
         String url = getApplication().getResources().getString(R.string.base_url) + "auth";
+
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,

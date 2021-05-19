@@ -66,4 +66,8 @@
     <string name="text_password_constraint3">* Must contain a lower case letter</string>
     <string name="text_password_constraint4">* Must contain a number</string>
     <string name="text_password_constraint5">* Must contain a special character</string>
+
+    <string name="checkbox_contact_chatinvite">Chat Invite</string>
+
+
 </resources>
