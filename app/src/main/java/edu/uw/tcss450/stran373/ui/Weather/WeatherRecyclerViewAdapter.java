@@ -4,13 +4,16 @@ import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,10 +29,13 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
 
     private final Map<WeatherCard, Boolean> mExpandedFlags;
 
-    public WeatherRecyclerViewAdapter(List<WeatherCard> items) {
+    private WeatherViewModel mWeatherModel;
+
+    public WeatherRecyclerViewAdapter(List<WeatherCard> items, WeatherViewModel theModel) {
         this.mWeathers = items;
         this.mExpandedFlags = mWeathers.stream()
                 .collect(Collectors.toMap(Function.identity(),weather -> false));
+        mWeatherModel = theModel;
     }
 
     @NonNull
@@ -37,7 +43,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
     public WeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new WeatherViewHolder(LayoutInflater
         .from(parent.getContext())
-        .inflate(R.layout.fragment_weather_card, parent, false));
+        .inflate(R.layout.fragment_weather_card, parent, false), mWeatherModel);
     }
 
     @Override
@@ -55,7 +61,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
         public FragmentWeatherCardBinding binding;
         private WeatherCard mWeather;
 
-        public WeatherViewHolder(View theView) {
+        public WeatherViewHolder(View theView, WeatherViewModel theModel) {
             super(theView);
             mView = theView;
             binding = FragmentWeatherCardBinding.bind(theView);
@@ -64,12 +70,71 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             rv.setLayoutManager(
                     new LinearLayoutManager(theView.getContext(),
                             LinearLayoutManager.HORIZONTAL, false));
-            rv.setAdapter(new HourlyRecyclerViewAdapter(HourlyGenerator.getHourlyList()));
+            rv.setAdapter(new HourlyRecyclerViewAdapter(theModel.getHours()));
         }
 
         private void handleMoreOrLess(final View theButton) {
             mExpandedFlags.put(mWeather, !mExpandedFlags.get(mWeather));
             displayPreview();
+            for (int i = 0; i < mWeathers.size(); i++) {
+                updateWeatherCard(mWeathers.get(i));
+            }
+        }
+
+        /**
+         * Helper method used to update the icons for the 5-day forecast
+         * depending on the condition.
+         *
+         * @param theCard is a weather card.
+         */
+        private void updateWeatherCard(WeatherCard theCard) {
+            // First day (today)
+            updateIcon(theCard, binding.imageDay1, false);
+
+            // Second day
+            updateIcon(theCard, binding.imageDay2, false);
+
+            // Third day
+            updateIcon(theCard, binding.imageDay3, false);
+
+            // Fourth day
+            updateIcon(theCard, binding.imageDay4, false);
+
+            // Fifth day
+            updateIcon(theCard, binding.imageDay5, false);
+        }
+
+
+        /**
+         * Helper method used to update the icon of an existing ImageView of a weather card
+         *
+         * @param theCard is the current weather card.
+         * @param theImage is the current image to be altered.
+         * @param theCurrent is a boolean to check if the image is for the current weather or not.
+         */
+        private void updateIcon(WeatherCard theCard, ImageView theImage, boolean theCurrent) {
+            Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            boolean night = (hour > 16 && hour < 24) || (hour > -1 && hour < 4);
+            if (theCard.getCurrentCond() <= 232) {
+                theImage.setImageResource(R.drawable.ic_thunder);
+            } else if (theCard.getCurrentCond() <= 531 && theCard.getCurrentCond() >= 300) {
+                theImage.setImageResource(R.drawable.ic_rainy_24dp);
+            } else if (theCard.getCurrentCond()<= 622 && theCard.getCurrentCond() >= 600) {
+                theImage.setImageResource(R.drawable.ic_snowy_24dp);
+            } else if ((theCard.getCurrentCond() <= 781 && theCard.getCurrentCond() >= 701) || theCard.getCurrentCond()> 800) {
+                if (night && theCurrent) {
+                    theImage.setImageResource(R.drawable.ic_cloudy_night_24dp);
+                } else {
+                    theImage.setImageResource(R.drawable.ic_cloudy);
+                }
+            } else if (theCard.getCurrentCond() == 800) {
+                if (night && theCurrent) {
+                    theImage.setImageResource(R.drawable.ic_night_24dp);
+                } else {
+                    theImage.setImageResource(R.drawable.ic_day);
+                }
+            }
         }
 
         private void displayPreview() {
@@ -132,6 +197,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             binding.textTemperature3.setText(theWeather.getTemp3());
             binding.textTemperature4.setText(theWeather.getTemp4());
             binding.textTemperature5.setText(theWeather.getTemp5());
+            updateIcon(theWeather, binding.imageCurrent, true);
             displayPreview();
         }
     }

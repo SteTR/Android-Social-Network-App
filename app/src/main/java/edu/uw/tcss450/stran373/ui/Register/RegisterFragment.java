@@ -52,7 +52,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle theSavedInstanceState) {
         super.onCreate(theSavedInstanceState);
-        mySpecials = new char[] {'!', '?', '&', '$', '#'};
+        mySpecials = new char[] {'!', '?', '&', '$', '#', '%', '*', '@', '+', '-'};
         myRegisterModel = new ViewModelProvider(getActivity())
                 .get(RegisterViewModel.class);
     }
@@ -122,9 +122,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         } else if (match != 0) {
             pw2.setError("Passwords do not match");
         } else if (emptyFirst) {
-            first.setError("Invalid Name");
+            first.setError("Invalid First Name");
         } else if (emptyLast) {
-            last.setError("Invalid Name");
+            last.setError("Invalid Last Name");
         } else {
             verifyAuthWithServer();
         }
@@ -138,16 +138,37 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
      */
     private boolean verifyEmail(String theEmail) {
         int i = 0;
+        final int n = theEmail.length();
         boolean found = false;
-        while (i < theEmail.length() && !found &&
-                !TextUtils.isEmpty(theEmail)) {
-            if (theEmail.charAt(i) == '@') {
-                found = true;
-            } else {
-                i++;
+        if (theEmail.length() > 4) {
+            if (emailVerify(theEmail.substring(n - 4, n))) {
+                while (i < theEmail.length() && !found &&
+                        !TextUtils.isEmpty(theEmail)) {
+                    if (theEmail.charAt(i) == '@') {
+                        found = true;
+                    } else {
+                        i++;
+                    }
+                }
             }
         }
         return found;
+    }
+
+    /**
+     * Inner helper method for email validation, particularly if the email string
+     * includes a top-level domain name.
+     *
+     * @param theDomain is the top-level domain string of the email.
+     * @return true if it is a valid top-level domain name, false otherwise.
+     */
+    private boolean emailVerify(String theDomain) {
+        return theDomain.compareTo(".com") == 0 ||
+                theDomain.compareTo(".edu") == 0 ||
+                theDomain.compareTo(".org") == 0 ||
+                theDomain.compareTo(".gov") == 0 ||
+                theDomain.compareTo(".mil") == 0 ||
+                theDomain.compareTo(".net") == 0;
     }
 
     /**
@@ -158,26 +179,48 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
      */
     private boolean verifyPW(String thePW) {
         boolean pw = false;
+        boolean upper = false;
+        boolean lower = false;
+        boolean number = false;
         if (thePW.length() < 8) {
             myBinding.editText2.setError("Password is less than 8 characters.");
         } else {
             for (int i = 0; i < thePW.length(); i++) {
                 int j = 0;
-                while (j < mySpecials.length && !pw) {
-                    if (thePW.charAt(i) == mySpecials[j]) {
-                        pw = true;
-                    } else {
-                        j++;
+                char c = thePW.charAt(i);
+                if (c < 58 && c > 47) {
+                    // Number
+                    number = true;
+                } else if (c < 91 && c > 64) {
+                    // Uppercase
+                    upper = true;
+                } else if (c < 123 && c > 96) {
+                    // Lowercase
+                    lower = true;
+                } else {
+                    // Special
+                    while (j < mySpecials.length && !pw) {
+                        if (thePW.charAt(i) == mySpecials[j]) {
+                            pw = true;
+                        } else {
+                            j++;
+                        }
                     }
                 }
             }
         }
 
         if (!pw) {
-            myBinding.editText2.setError("Special character missing");
+            myBinding.editText2.setError("Special character missing (!, ?, %, ...)");
+        } else if (!upper) {
+            myBinding.editText2.setError("Uppercase letter missing (A, B, C, ...)");
+        } else if (!lower) {
+            myBinding.editText2.setError("Lowercase letter missing (a, b, c, ...)");
+        } else if (!number) {
+            myBinding.editText2.setError("Numerical digit missing (1, 2, 3, ...)");
         }
 
-        return pw;
+        return pw && upper && lower && number;
     }
 
     /**

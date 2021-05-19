@@ -69,7 +69,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      * @return a View hierarchy
      */
     @Override
-    public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
+    public View onCreateView(@NonNull LayoutInflater theInflater, ViewGroup theContainer,
                              Bundle theSavedInstanceState) {
         myBinding = FragmentSignInBinding.inflate(theInflater);
         return myBinding.getRoot();
@@ -140,21 +140,19 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     /**
      * Helper method for verifying both the email and the password.
      *
-     * @param theView is the View object used to
+     * @param theView is the View object used for interaction.
      */
     private void verify(View theView) {
         EditText email = myBinding.editText;
         EditText password = myBinding.editText2;
         String emailString = email.getText().toString();
         String pwString = password.getText().toString();
-        boolean verifyE = verifyEmail(emailString);
-        boolean verifyPW = verifyPW(pwString);
-        if (!verifyE || !verifyPW) {
-            if (!verifyE) {
-                email.setError("Invalid Email");
-            } else {
-                password.setError("Invalid Password");
-            }
+        boolean verifyE = !TextUtils.isEmpty(emailString);
+        boolean verifyPW = !TextUtils.isEmpty(pwString);
+        if (!verifyE) {
+            email.setError("Invalid Email");
+        } else if (!verifyPW){
+            password.setError("Invalid Password");
         } else {
             verifyAuthWithServer();
         }
