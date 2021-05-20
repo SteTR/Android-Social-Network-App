@@ -10,6 +10,9 @@ import java.io.Serializable;
 
 /**
  * A class that encapsulates all the necessary information for a chat message
+ *
+ * @author Steven Tran
+ * @author Haoying Li
  */
 public class ChatMessage implements Serializable {
     private final int mMessageId;
@@ -27,6 +30,7 @@ public class ChatMessage implements Serializable {
     /**
      * Static factory method to turn a properly formatted JSON String into a
      * ChatMessage object.
+     *
      * @param cmAsJson the String to be parsed into a ChatMessage Object.
      * @return a ChatMessage Object with the details contained in the JSON String.
      * @throws JSONException when cmAsString cannot be parsed into a ChatMessage.
@@ -39,24 +43,44 @@ public class ChatMessage implements Serializable {
                 msg.getString("timestamp"));
     }
 
+    /**
+     * Returns the content of the message
+     *
+     * @return the message
+     */
     public String getMessage() {
         return mMessage;
     }
 
+    /**
+     * Returns the sender email
+     *
+     * @return the sender email
+     */
     public String getSender() {
         return mSender;
     }
 
+    /**
+     * Returns the timestamp of the message
+     *
+     * @return the timestamp
+     */
     public String getTimeStamp() {
-        return mTimeStamp;
+        return mTimeStamp.substring(11,19);
     }
 
+    /**
+     * Returns the message ID
+     * @return the message ID
+     */
     public int getMessageId() {
         return mMessageId;
     }
 
     /**
      * Provides equality solely based on MessageId.
+     *
      * @param other the other object to check for equality
      * @return true if other message ID matches this message ID, false otherwise
      */

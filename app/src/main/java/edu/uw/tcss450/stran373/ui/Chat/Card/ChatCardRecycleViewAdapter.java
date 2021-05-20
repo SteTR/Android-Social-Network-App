@@ -15,7 +15,9 @@ import edu.uw.tcss450.stran373.databinding.FragmentChatCardBinding;
 
 /**
  * A RecycleView holder to hold the chat cards
+ *
  * @author Steven Tran
+ * @author Haoying Li
  */
 public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRecycleViewAdapter.ChatCardViewHolder> {
 
@@ -48,7 +50,6 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
 
         public final View mView;
         public FragmentChatCardBinding binding;
-        private ChatCard mChat;
 
         public ChatCardViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -63,12 +64,14 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
          */
         private void setChat(final ChatCard chat)
         {
-            mChat = chat;
+            binding.textLastmessage.setText(chat.getLastMessage());
+            binding.textName.setText(chat.getName());
+            binding.textTime.setText(chat.getTime());
 
             // Moves to the chat id in the chatcard
             binding.cardConstraint.setOnClickListener(view ->
                     Navigation.findNavController(mView).navigate(ChatCardListFragmentDirections
-                            .actionNavigationChatsToNavigationSingleChat(mChat.getChatID())));
+                            .actionNavigationChatsToNavigationSingleChat(chat.getChatID())));
         }
     }
 }

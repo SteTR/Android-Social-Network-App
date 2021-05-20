@@ -8,34 +8,110 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.uw.tcss450.stran373.R;
-import edu.uw.tcss450.stran373.databinding.FragmentContactListBinding;
+import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
+import edu.uw.tcss450.stran373.databinding.FragmentInviteCardBinding;
 import edu.uw.tcss450.stran373.databinding.FragmentInviteListBinding;
+import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCard;
+import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCardRecyclerViewAdapter;
+import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactListFragmentDirections;
 
 /**
- * A simple {@link Fragment} subclass.
+ * This fragment holds the recylerview, the view model, and creates
+ * the card through a list observer
+ * @author Andrew Bennett
  */
 public class InviteListFragment extends Fragment {
 
+
+    /**
+     * View model for the contact list
+     */
     private InviteListViewModel mModel;
 
+    /**
+     * Array of contacts that are currently selected
+     */
+    private List<InviteCard> currentSelectedItems = new ArrayList<>();
+
+    /**
+     * Inflate the layout
+     * @param inflater the layout inflater that will expand the list fragment
+     * @param container the viewgroup that holds the fragment
+     * @param savedInstanceState includes all of the stateful data such as args
+     * @return the inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_invite_list, container, false);
     }
 
+    /**
+     * When the fragment is created, call the contact endpoint to get current
+     * contacts
+     * @param savedInstanceState includes all of the stateful data such as args
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mModel = new ViewModelProvider(getActivity()).get(InviteListViewModel.class);
+       mModel = new ViewModelProvider(getActivity()).get(InviteListViewModel.class);
+       mModel.connectGet();
     }
 
+    /**
+     * Set the adapter with the checks for the checkmarks. Also contains the listeners
+     * for the connections nav
+     * @param view The view that is created
+     * @param savedInstanceState includes all of the stateful data such as args
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FragmentInviteListBinding binding = FragmentInviteListBinding.bind(getView());
+
+        //Add an observer and create list. The code that is in there now
+        //is for Sprint 3, it will allow us to build a list of users
+        //to invite all at once
+        mModel.addInviteListObserver(getViewLifecycleOwner(), inviteList -> {
+            if (!inviteList.isEmpty()) {
+                binding.inviteRecycler.setAdapter(
+                        new InviteCardRecyclerViewAdapter(inviteList,
+                                new InviteCardRecyclerViewAdapter.OnItemCheckListener() {
+                                    //The listeners to build the list in Sprint 3
+                                    @Override
+                                    public void onItemCheck(InviteCard card) {
+                                        currentSelectedItems.add(card);
+                                    }
+                                    @Override
+                                    public void onItemUncheck(InviteCard card) {
+                                        currentSelectedItems.remove(card);
+                                    }
+                                }
+                                ));
+            }
+        });
+
+        binding.contactButton.setOnClickListener(button ->
+                Navigation.findNavController(getView()).navigate(
+                        InviteListFragmentDirections.actionInviteListFragmentToNavigationContacts()));
+
+        binding.requestButton.setOnClickListener(button ->
+                Navigation.findNavController(getView()).navigate(
+                        InviteListFragmentDirections.actionInviteListFragmentToRequestListFragment()));
+        //For every item that was added to the list
+        for(int i = 0; i < currentSelectedItems.size(); i++) {
+            mModel.connectPost(currentSelectedItems.get(i).getMemberID());
+        }
+
     }
 }

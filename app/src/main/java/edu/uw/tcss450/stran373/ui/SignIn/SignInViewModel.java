@@ -1,6 +1,7 @@
 package edu.uw.tcss450.stran373.ui.SignIn;
 
 import android.app.Application;
+import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
 /**
@@ -93,7 +96,8 @@ public class SignInViewModel extends AndroidViewModel {
      * @param thePassword is the user's password.
      */
     public void connect(final String theEmail, final String thePassword) {
-        String url = "https://production-tcss450-backend.herokuapp.com/auth";
+        String url = getApplication().getResources().getString(R.string.base_url) + "auth";
+
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -121,4 +125,30 @@ public class SignInViewModel extends AndroidViewModel {
 
     }
 
+    /**
+     * Connects to the web service to resend verification email
+     *
+     * @param email the user's email
+     * @param password the user's password
+     */
+    public void resendEmail(final String email, final String password) {
+        String url = getApplication().getResources().getString(R.string.base_url) + "auth/verification";
+        Request request = new JsonObjectRequest(Request.Method.GET, url,
+                null, mResponse::setValue, this::handleError) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = email + ":" + password;
+                String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(getApplication().getApplicationContext()).addToRequestQueue(request);
+    }
 }

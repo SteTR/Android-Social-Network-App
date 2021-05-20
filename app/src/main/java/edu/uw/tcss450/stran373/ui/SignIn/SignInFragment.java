@@ -20,6 +20,7 @@ import android.widget.EditText;
 import com.auth0.android.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -113,6 +114,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
         myBinding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
         myBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+
+        myBinding.buttonReset.setOnClickListener(button ->
+                Navigation.findNavController(getView()).navigate(
+                        SignInFragmentDirections.actionSignInFragmentToResetPasswordFragment()
+                ));
     }
 
     /**
@@ -213,7 +219,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         if (!pw) {
             myBinding.editText2.setError("Special character missing");
         }
-
         return pw;
     }
 
@@ -261,6 +266,18 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     myBinding.editText.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
+
+                    // If user is not verified, show pop-up message with the option to resend verification email
+                    if (theResponse.getJSONObject("data").getString("message").contains("verified")) {
+                        Snackbar mSnackbar = Snackbar.make(getView(),
+                                R.string.text_email_not_verified, Snackbar.LENGTH_INDEFINITE);
+                        mSnackbar.show();
+                        mSnackbar.setAction(R.string.button_resend, onClick -> {
+                            mSignInModel.resendEmail(myBinding.editText.getText().toString(),
+                                    myBinding.editText2.getText().toString());
+                            Snackbar.make(getView(), R.string.text_email_sent, Snackbar.LENGTH_LONG).show();
+                        });
+                    }
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
