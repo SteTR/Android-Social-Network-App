@@ -8,11 +8,34 @@ import java.io.Serializable;
  */
 public class ContactCard implements Serializable {
 
+    /**
+     * First name of contact
+     */
     private final String mFirstName;
+
+    /**
+     * Last name of contact
+     */
     private final String mLastName;
+
+    /**
+     * The unique memberid of the contact
+     */
     private final String mMemberID;
+
+    /**
+     * The unique email of the contact
+     */
     private final String mEmail;
+
+    /**
+     * The username the contact has chosen
+     */
     private final String mUserName;
+
+    /**
+     * This field is used to build chat lists.
+     */
     private boolean isSelected;
 
     /**
@@ -35,8 +58,8 @@ public class ContactCard implements Serializable {
 
         public Builder()
         {
-            mLastName = "Default";
-            mFirstName = "Default";
+            mLastName = "No";
+            mFirstName = "Contacts";
             mMemberID = "-1";
             mEmail = "None Entered";
             mUserName = "Default";
