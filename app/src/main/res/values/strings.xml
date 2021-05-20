@@ -25,6 +25,11 @@
     <string name="title_inviteinfo_invites">Invites</string>
     <string name="button_inviteinfo_invite">Invite Friend</string>
 
+    <string name="title_themes_toolbar">Choose A Theme</string>
+    <string name="title_cherry_toolbar">Cherry</string>
+    <string name="title_orange_toolbar">Orange</string>
+    <string name="title_pacnw_toolbar">PacNW</string>
+
     <string name="title_chats">Chats</string>
     <string name="text_weather_search">Search...</string>
     <string name="button_weather_search">Go</string>
@@ -56,6 +61,14 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_register_short">Register</string>
 
+
+    <!-- String resources for signin and shared preferences -->
+    <string name="switch_sign_in">Stay Signed in</string>
+    <string name="keys_shared_prefs">My Auth App Shared Prefs</string>
+    <string name="keys_prefs_theme">Shared Prefs Theme</string>
+    <string name="keys_prefs_jwt">Sharded Prefs JWT</string>
+    <string name="action_sign_out">Sign Out</string>
+
     <string name="text_email_sent">A verification email has been sent</string>
     <string name="text_email_not_verified">Email has not been verified</string>
     <string name="button_resend">Resend Email</string>
@@ -73,6 +86,5 @@
     <string name="button_accept">Accept</string>
     <string name="requests_reject">Reject</string>
     <string name="create_chat_descr">Add Contacts to Chat</string>
-
 
 </resources>

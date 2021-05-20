@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="keys_json_weather_response">response</string>
+    <string name="keys_json_weather_data">data</string>
+    <string name="keys_json_weather_location">location</string>
+    <string name="keys_json_weather_temperature">temperature</string>
+
     <string name="keys_json_contacts_success">success</string>
     <string name="keys_json_contacts_response">response</string>
     <string name="keys_json_contacts_data">data</string>

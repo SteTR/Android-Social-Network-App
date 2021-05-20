@@ -46,7 +46,7 @@ public class UserInfoViewModel extends androidx.lifecycle.ViewModel {
      *
      * @return the user's current JWT
      */
-    public static String getJwt() {
+    public String getJwt() {
         return mJwt;
     }
 
