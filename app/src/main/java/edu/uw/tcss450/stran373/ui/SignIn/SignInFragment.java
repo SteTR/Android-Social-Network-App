@@ -267,7 +267,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             } else {
                 try {
                     navigateToSuccess(
-                            myBinding.editPassword.getText().toString(),
+                            myBinding.editEmail.getText().toString(),
                             theResponse.getString("token"));
                     Log.d("JSON Response", theResponse.getString("token"));
                 } catch (JSONException e) {
