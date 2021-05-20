@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -113,9 +115,10 @@ public class ContactListFragment extends Fragment {
 
         String jwt = mUserViewModel.getJwt();
         //When floating action button pressed, create chat
-        binding.buttonAdd.setOnClickListener(button ->
-                mModel.handleChatCreation(currentSelectedItems, jwt)
-        );
+        binding.buttonAdd.setOnClickListener(button -> {
+            mModel.handleChatCreation(currentSelectedItems, jwt);
+            Snackbar.make(getView(), R.string.text_chat_created, Snackbar.LENGTH_LONG).show();
+        });
 
         //Navigate to other connection fragments
         binding.inviteButton.setOnClickListener(button ->
