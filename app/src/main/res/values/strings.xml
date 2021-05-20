@@ -86,5 +86,6 @@
     <string name="button_accept">Accept</string>
     <string name="requests_reject">Reject</string>
     <string name="create_chat_descr">Add Contacts to Chat</string>
+    <string name="friend_has_been_invited">Friend has been invited!</string>
 
 </resources>

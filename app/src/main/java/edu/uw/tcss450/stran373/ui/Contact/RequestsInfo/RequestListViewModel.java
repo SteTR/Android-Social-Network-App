@@ -26,9 +26,6 @@ import java.util.Map;
 import java.util.function.IntFunction;
 
 import edu.uw.tcss450.stran373.R;
-import edu.uw.tcss450.stran373.UserInfoViewModel;
-
-
 
 public class RequestListViewModel extends AndroidViewModel {
     /**
@@ -116,9 +113,9 @@ public class RequestListViewModel extends AndroidViewModel {
     /**
      * Get the contacts from the web service endpoint
      */
-    public void connectGet() {
+    public void connectGet(final String theJWT) {
         //Need to add our contact endpoint
-        String user_auth = UserInfoViewModel.getJwt();
+        String user_auth = theJWT;
         String url = getApplication().getResources().getString(R.string.base_url)+"requests";
 
         //Request the request information and hand in auth token

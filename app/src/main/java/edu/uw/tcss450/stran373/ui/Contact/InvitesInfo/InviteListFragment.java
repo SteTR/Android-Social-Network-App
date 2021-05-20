@@ -8,22 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
+
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.tcss450.stran373.R;
-import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
-import edu.uw.tcss450.stran373.databinding.FragmentInviteCardBinding;
+import edu.uw.tcss450.stran373.UserInfoViewModel;
+
 import edu.uw.tcss450.stran373.databinding.FragmentInviteListBinding;
-import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCard;
-import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCardRecyclerViewAdapter;
-import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactListFragmentDirections;
 
 /**
  * This fragment holds the recylerview, the view model, and creates
@@ -32,6 +27,7 @@ import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactListFragmentDirect
  */
 public class InviteListFragment extends Fragment {
 
+    UserInfoViewModel mUserViewModel;
 
     /**
      * View model for the contact list
@@ -53,6 +49,7 @@ public class InviteListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_invite_list, container, false);
     }
 
@@ -64,8 +61,10 @@ public class InviteListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       mModel = new ViewModelProvider(getActivity()).get(InviteListViewModel.class);
-       mModel.connectGet();
+        mUserViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
+        mModel = new ViewModelProvider(getActivity()).get(InviteListViewModel.class);
+        String jwt = mUserViewModel.getJwt();
+        mModel.connectGet(jwt);
     }
 
     /**
@@ -101,6 +100,9 @@ public class InviteListFragment extends Fragment {
             }
         });
 
+        //Get the JWT from the activity args
+        String jwt = mUserViewModel.getJwt();
+
         binding.contactButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         InviteListFragmentDirections.actionInviteListFragmentToNavigationContacts()));
@@ -108,9 +110,11 @@ public class InviteListFragment extends Fragment {
         binding.requestButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         InviteListFragmentDirections.actionInviteListFragmentToRequestListFragment()));
-        //For every item that was added to the list
+
+        //For every item that was added to the list, call the invite endpoint
+        //with a POST request
         for(int i = 0; i < currentSelectedItems.size(); i++) {
-            mModel.connectPost(currentSelectedItems.get(i).getMemberID());
+            mModel.connectPost(currentSelectedItems.get(i).getMemberID(), jwt);
         }
 
     }
