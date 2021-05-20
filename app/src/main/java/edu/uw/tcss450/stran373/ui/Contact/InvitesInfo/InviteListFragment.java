@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,6 +92,7 @@ public class InviteListFragment extends Fragment {
                                     @Override
                                     public void onItemCheck(InviteCard card) {
                                         currentSelectedItems.add(card);
+                                        Snackbar.make(getView(), R.string.invite_sent, Snackbar.LENGTH_LONG).show();
                                     }
                                     @Override
                                     public void onItemUncheck(InviteCard card) {
