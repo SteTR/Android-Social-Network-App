@@ -3,14 +3,13 @@ package edu.uw.tcss450.stran373.ui.Contact.ContactsInfo;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import android.util.Log;
-import android.view.View;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -29,7 +28,7 @@ import java.util.Map;
 import java.util.function.IntFunction;
 
 import edu.uw.tcss450.stran373.R;
-import edu.uw.tcss450.stran373.UserInfoViewModel;
+
 
 
 /**
@@ -133,11 +132,9 @@ public class ContactListViewModel extends AndroidViewModel {
     /**
      * Get the contacts from the web service endpoint
      */
-    public void connectGet() {
-        //Need to add our contact endpoint
-        String user_auth = UserInfoViewModel.getJwt();
-        String url = getApplication().getResources().getString(R.string.base_url)+"contacts";;
-
+    public void connectGet(final String theJWT) {
+        String url = getApplication().getResources().getString(R.string.base_url)+"contacts";
+        String user_auth = theJWT;
         //Request the contact information and hand in auth token
         try {
             Request request = new JsonObjectRequest(
@@ -172,14 +169,14 @@ public class ContactListViewModel extends AndroidViewModel {
      * a new chat
      * @param theCards are the users the owner wants to invite
      */
-    protected void handleChatCreation(List<ContactCard> theCards) {
+    protected void handleChatCreation(final List<ContactCard> theCards, final String theJWT) {
 
         if(theCards.isEmpty()) {
             return;
         }
 
         //Get the auth token and set url
-        String user_auth = UserInfoViewModel.getJwt();
+        String user_auth = theJWT;
         String url = getApplication().getResources().getString(R.string.base_url)+"chats";
 
         //Currently memberids are strings, so get that and convert to int

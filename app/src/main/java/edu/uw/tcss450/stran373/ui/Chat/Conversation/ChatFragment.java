@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,7 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.uw.tcss450.stran373.MainActivity;
+import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
+import edu.uw.tcss450.stran373.databinding.ActivityMainBinding;
 import edu.uw.tcss450.stran373.databinding.FragmentChatBinding;
 
 /**
@@ -29,6 +35,7 @@ public class ChatFragment extends Fragment {
     private ChatSendViewModel mSendViewModel;
 
     private int mChatId;
+    private String mChatName;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -40,6 +47,10 @@ public class ChatFragment extends Fragment {
 
         ChatFragmentArgs args = ChatFragmentArgs.fromBundle(getArguments());
         mChatId = args.getChatId();
+        mChatName = args.getChatName();
+
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionBar.setTitle(mChatName);
 
         ViewModelProvider provider = new ViewModelProvider(getActivity());
         mUserViewModel = provider.get(UserInfoViewModel.class);
@@ -53,7 +64,6 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentChatBinding.inflate(inflater, container, false);
-        // Inflate the layout for this fragment
         return binding.getRoot();
     }
 

@@ -71,7 +71,7 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
             // Moves to the chat id in the chatcard
             binding.cardConstraint.setOnClickListener(view ->
                     Navigation.findNavController(mView).navigate(ChatCardListFragmentDirections
-                            .actionNavigationChatsToNavigationSingleChat(chat.getChatID())));
+                            .actionNavigationChatsToNavigationSingleChat(chat.getChatID(), chat.getName())));
         }
     }
 }

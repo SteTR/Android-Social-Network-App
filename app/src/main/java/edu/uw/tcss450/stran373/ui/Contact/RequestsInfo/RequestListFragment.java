@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -13,14 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentRequestListBinding;
-import edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteListFragmentDirections;
 
 /**
  * This is the class that contains all of the buttons for navigation,
@@ -28,6 +22,11 @@ import edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteListFragmentDirectio
  * @author Andrew Bennett
  */
 public class RequestListFragment extends Fragment {
+
+    /**
+     * View model to get JWT
+     */
+    UserInfoViewModel mUserViewModel;
 
     /**
      * View model for the contact list
@@ -44,6 +43,7 @@ public class RequestListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_request_list, container, false);
     }
 
@@ -56,7 +56,9 @@ public class RequestListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(RequestListViewModel.class);
-        mModel.connectGet();
+        mUserViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
+        String jwt = mUserViewModel.getJwt();
+        mModel.connectGet(jwt);
     }
 
     /**
@@ -68,6 +70,7 @@ public class RequestListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FragmentRequestListBinding binding = FragmentRequestListBinding.bind(getView());
+
 
         //Next sprint we will need to add listeners here so that they can accept/reject lists
         mModel.addRequestListObserver(getViewLifecycleOwner(), requestList -> {

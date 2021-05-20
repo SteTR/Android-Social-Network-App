@@ -27,6 +27,9 @@
         <argument
             android:name="chatId"
             app:argType="integer" />
+        <argument
+            android:name="chatName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/navigation_weather"

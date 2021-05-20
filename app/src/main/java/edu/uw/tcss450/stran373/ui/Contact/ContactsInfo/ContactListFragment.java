@@ -13,13 +13,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentContactListBinding;
+
 
 
 /**
@@ -28,6 +33,11 @@ import edu.uw.tcss450.stran373.databinding.FragmentContactListBinding;
  * @author Andrew Bennett
  */
 public class ContactListFragment extends Fragment {
+
+    /**
+     * User info view model to get the JWT
+     */
+    UserInfoViewModel mUserViewModel;
 
     /**
      * Used to keep track of the user's response.
@@ -45,6 +55,21 @@ public class ContactListFragment extends Fragment {
     private List<ContactCard> currentSelectedItems = new ArrayList<>();
 
     /**
+     * When the fragment is created, call the contact endpoint to get current
+     * contacts
+     *
+     * @param savedInstanceState is the stateful data for use
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mUserViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
+        mModel = new ViewModelProvider(getActivity()).get(ContactListViewModel.class);
+        String jwt = mUserViewModel.getJwt();
+        mModel.connectGet(jwt);
+    }
+
+    /**
      * Inflate the layout
      * @param inflater is the layout inflater
      * @param container is the container for the fragment
@@ -57,17 +82,6 @@ public class ContactListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_contact_list, container, false);
     }
 
-    /**
-     * When the fragment is created, call the contact endpoint to get current
-     * contacts
-     * @param savedInstanceState is the stateful data for use
-     */
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-       mModel = new ViewModelProvider(getActivity()).get(ContactListViewModel.class);
-       mModel.connectGet();
-    }
 
     /**
      * Set the adapter with the checks for the checkmarks. Then create chats
@@ -98,10 +112,13 @@ public class ContactListFragment extends Fragment {
                                 }
             });
 
+
+        String jwt = mUserViewModel.getJwt();
         //When floating action button pressed, create chat
-        binding.buttonAdd.setOnClickListener(button ->
-                mModel.handleChatCreation(currentSelectedItems)
-        );
+        binding.buttonAdd.setOnClickListener(button -> {
+            mModel.handleChatCreation(currentSelectedItems, jwt);
+            Snackbar.make(getView(), R.string.text_chat_created, Snackbar.LENGTH_LONG).show();
+        });
 
         //Navigate to other connection fragments
         binding.inviteButton.setOnClickListener(button ->

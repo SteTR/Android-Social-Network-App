@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.function.IntFunction;
 
 import edu.uw.tcss450.stran373.R;
-import edu.uw.tcss450.stran373.UserInfoViewModel;
+
 
 /**
  * View model to hold the contact cards, observer will be used to
@@ -120,9 +120,9 @@ public class InviteListViewModel extends AndroidViewModel {
     /**
      * Get the contacts from the web service endpoint
      */
-    public void connectGet() {
+    public void connectGet(final String theJWT) {
         //Need to add our contact endpoint
-        String user_auth = UserInfoViewModel.getJwt();
+        String user_auth = theJWT;
         String url = getApplication().getResources().getString(R.string.base_url)+"invites";
 
         //Request the contact information and hand in auth token
@@ -154,9 +154,9 @@ public class InviteListViewModel extends AndroidViewModel {
         }
     }
 
-    public void connectPost(final String theID) {
+    public void connectPost(final String theID, final String theJWT) {
 
-        String user_auth = UserInfoViewModel.getJwt();
+        String user_auth = theJWT;
         String url = getApplication().getResources().getString(R.string.base_url)+"invites";
         //Create the body for the JSON request
         JSONObject body = new JSONObject();
@@ -164,7 +164,6 @@ public class InviteListViewModel extends AndroidViewModel {
         //Use POST to send a request to the chat endpoint
         try {
             body.put("inviteeid", theID);
-            Log.i("Body", body.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
