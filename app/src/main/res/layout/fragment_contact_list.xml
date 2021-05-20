@@ -6,12 +6,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+
+    <Button
+        android:id="@+id/contactButton"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="27dp"
+        android:text="@string/title_contactinfo_contacts"
+        android:backgroundTint="@color/button_dark_red"
+        app:layout_constraintBottom_toTopOf="@+id/contactRecycler"
+        app:layout_constraintEnd_toStartOf="@+id/requestButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/requestButton"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="27dp"
+        android:text="@string/title_requestinfo_requests"
+        app:layout_constraintBottom_toTopOf="@+id/contactRecycler"
+        app:layout_constraintEnd_toStartOf="@+id/inviteButton"
+        app:layout_constraintStart_toEndOf="@+id/contactButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/inviteButton"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="27dp"
+        android:text="@string/title_inviteinfo_invites"
+        app:layout_constraintBottom_toTopOf="@+id/contactRecycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/requestButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contactRecycler"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
+        android:layout_width="416dp"
+        android:layout_height="493dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
@@ -20,6 +61,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactListFragment"
-        tools:listitem="@layout/fragment_contact_card"/>
+        tools:listitem="@layout/fragment_contact_card" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:clickable="true"
+        android:src="@drawable/ic_contacts_add_chat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="ADD CHAT"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

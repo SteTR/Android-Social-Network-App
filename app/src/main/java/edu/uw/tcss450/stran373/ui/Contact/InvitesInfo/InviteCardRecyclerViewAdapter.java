@@ -3,6 +3,7 @@ package edu.uw.tcss450.stran373.ui.Contact.InvitesInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,53 +14,64 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentInviteCardBinding;
 
 /**
- * Recyvlerview adapter to be used in the invite fragment
+ * RecyclerViewAdapter is used to show the various cards
  * @author Andrew Bennett
  */
-public class InviteCardRecyclerViewAdapter extends RecyclerView.Adapter<
-        InviteCardRecyclerViewAdapter.InviteCardViewHolder>{
-
-    // List of invite cards to be used
-    private final List<Invite> mInvites;
+public class InviteCardRecyclerViewAdapter extends RecyclerView.Adapter<InviteCardRecyclerViewAdapter.InviteCardViewHolder> {
 
     /**
-     * Constructs the adapter with the list of invite cards
-     * @author Andrew Bennett
-     * @param theInviteCards
+     * List of contacts to be displayed
      */
-    public InviteCardRecyclerViewAdapter(final List<Invite> theInviteCards)
+    private final List<InviteCard> mInvites;
+
+    interface OnItemCheckListener {
+        void onItemCheck(InviteCard card);
+        void onItemUncheck(InviteCard card);
+    }
+
+    @NonNull
+    private InviteCardRecyclerViewAdapter.OnItemCheckListener onItemClick;
+
+    public InviteCardRecyclerViewAdapter(final List<InviteCard> theInviteCards, @NonNull InviteCardRecyclerViewAdapter.OnItemCheckListener onItemCheckListener)
     {
-        mInvites = theInviteCards;
+        this.mInvites = theInviteCards;
+        this.onItemClick = onItemCheckListener;
     }
 
     /**
-     * View holder that containts the card layout to be used in
-     * the recyclerview.
-     * @param parent
-     * @param viewType
-     * @return
+     * When the ViewHolder is created, inflate the invite card layout
+     * @param parent is the view group that this child belongs too
+     * @param viewType type of viewgroup
+     * @return the ContactCardViewHolder for this contact
      */
     @NonNull
     @Override
-    public InviteCardViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,
-                                                   final int viewType) {
-        return new InviteCardViewHolder(LayoutInflater.from(parent.getContext())
+    public InviteCardViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+        return new InviteCardViewHolder(LayoutInflater.
+                from(parent.getContext())
                 .inflate(R.layout.fragment_invite_card, parent, false));
     }
 
     /**
-     * Set the invite to the view holder, uses the current position in the list
-     * @param holder
-     * @param position
+     * When the binding is created, the holder will set the contact to the
+     * current position in the list
+     * @param holder assigns the current contact in this position
+     * @param position the current position in the list
      */
     @Override
     public void onBindViewHolder(@NonNull InviteCardViewHolder holder, int position) {
-        holder.setInvite(mInvites.get(position));
+        final InviteCard invite = mInvites.get(position);
+        holder.setInvite(invite);
+        holder.buttonInvite.setOnClickListener(view -> {
+            onItemClick.onItemCheck(invite);
+            invite.setSelected(true);
+        });
     }
 
+
     /**
-     * Returns the amount of invites
-     * @return the total invites
+     * Returns the amount of total invites in list
+     * @return the amount of invites
      */
     @Override
     public int getItemCount() {
@@ -67,42 +79,62 @@ public class InviteCardRecyclerViewAdapter extends RecyclerView.Adapter<
     }
 
     /**
-     * Internal class to use as view holder for the cards
-     * @author Andrew Bennett
+     * Internal class used as a view holder for specific cards in the recycler
+     * view
      */
     public static class InviteCardViewHolder extends RecyclerView.ViewHolder {
 
+        /**
+         * View for the card item
+         */
         public final View mView;
-        public FragmentInviteCardBinding binding;
-        private Invite mInvite;
 
         /**
-         * Constructs the view holder from the current view
-         * and the invite card layout
-         * @param itemView
+         * Access to the ContactCard databinding
          */
+        public FragmentInviteCardBinding binding;
+
+        /**
+         * Whether the checkbox is checked or not
+         */
+        protected Button buttonInvite;
+
+        /**
+         * The specific contact card
+         */
+        private InviteCard mContact;
+
+
         public InviteCardViewHolder(@NonNull final View itemView) {
             super(itemView);
             mView = itemView;
             binding = FragmentInviteCardBinding.bind(itemView);
+            buttonInvite = (Button) itemView.findViewById(R.id.inviteButton);
         }
+
 
         /**
          * Sets the invite to the holder
          *
-         * @param theInvite a invite object
+         * @param theInvite a contact card
          */
-        private void setInvite(final Invite theInvite)
+        private void setInvite(final InviteCard theInvite)
         {
-            mInvite = theInvite;
-
-            //THIS WILL NEED TO BE UPDATED IN SPRINT 2.
-            //Currently the other attributes are set to invisible, preview is visible
+            mContact = theInvite;
             binding.textFirstName.setText(theInvite.getFirstName());
             binding.textLastName.setText(theInvite.getLastName());
-            final String preview = binding.textFirstName.getText().toString()
-                    + " " + binding.textLastName.getText().toString();
-            binding.textPreview.setText(preview);
+            String fullName = binding.textFirstName.getText().toString()
+                    +" " + binding.textLastName.getText().toString();
+            binding.textFirstLast.setText(fullName);
+            binding.textMemberid.setText(theInvite.getMemberID());
+        }
+
+        /**
+         * on click listener that was used for inviting users.
+         * @param onClickListener checks for when the invite button is pressed.
+         */
+        public void setOnClickListener(Button.OnClickListener onClickListener) {
+            buttonInvite.setOnClickListener(onClickListener);
         }
     }
 }

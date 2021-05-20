@@ -22,8 +22,9 @@
     <!--String resources for various connections actions-->
     <string name="title_contacts_connections">Connections</string>
     <string name="title_contactinfo_contacts">Contacts</string>
-    <string name="title_requestinfo_requests">Requests</string>
+    <string name="title_requestinfo_requests">Pending Requests</string>
     <string name="title_inviteinfo_invites">Invites</string>
+    <string name="button_inviteinfo_invite">Invite Friend</string>
 
     <string name="title_themes_toolbar">Choose A Theme</string>
     <string name="title_cherry_toolbar">Cherry</string>
@@ -40,7 +41,7 @@
     <string name="chat_card_last_message">This is a placeholder message. :)</string>
 
     <!--  Database URLS  -->
-    <string name="base_url">TODO</string>
+    <string name="base_url">https://production-tcss450-backend.herokuapp.com/</string>
 
     <!--Charles string resources for signin and registration-->
     <string name="email">Email</string>
@@ -61,11 +62,30 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_register_short">Register</string>
 
+
     <!-- String resources for signin and shared preferences -->
     <string name="switch_sign_in">Stay Signed in</string>
     <string name="keys_shared_prefs">My Auth App Shared Prefs</string>
     <string name="keys_prefs_theme">Shared Prefs Theme</string>
     <string name="keys_prefs_jwt">Sharded Prefs JWT</string>
     <string name="action_sign_out">Sign Out</string>
+
+    <string name="text_email_sent">A verification email has been sent</string>
+    <string name="text_email_not_verified">Email has not been verified</string>
+    <string name="button_resend">Resend Email</string>
+
+    <string name="button_reset_password">Reset Password</string>
+    <string name="hint_code">Verification Code</string>
+    <string name="text_password_constraint1">* Must be at least 8 characters</string>
+    <string name="text_password_constraint2">* Must contain an upper case letter</string>
+    <string name="text_password_constraint3">* Must contain a lower case letter</string>
+    <string name="text_password_constraint4">* Must contain a number</string>
+    <string name="text_password_constraint5">* Must contain a special character</string>
+
+    <string name="checkbox_contact_chatinvite">Chat Invite</string>
+    <string name="invite_sent">Invite Sent!</string>
+    <string name="button_accept">Accept</string>
+    <string name="requests_reject">Reject</string>
+    <string name="create_chat_descr">Add Contacts to Chat</string>
 
 </resources>

@@ -1,63 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/contactRecycler"
-        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
-        android:layout_width="401dp"
-        android:layout_height="596dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contactButton"
-        app:layout_constraintVertical_bias="0.0"
-        tools:context="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactFragment"
-        tools:listitem="@layout/fragment_contact_card" />
-
-    <Button
-        android:id="@+id/contactButton"
-        android:layout_width="120dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/title_contactinfo_contacts"
-        app:layout_constraintBottom_toTopOf="@+id/contactRecycler"
-        app:layout_constraintEnd_toStartOf="@+id/requestButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/requestButton"
-        android:layout_width="120dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/title_requestinfo_requests"
-        app:layout_constraintBottom_toTopOf="@+id/contactRecycler"
-        app:layout_constraintEnd_toStartOf="@+id/inviteButton"
-        app:layout_constraintStart_toEndOf="@+id/contactButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/inviteButton"
-        android:layout_width="120dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/title_inviteinfo_invites"
-        app:layout_constraintBottom_toTopOf="@+id/contactRecycler"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/requestButton"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,12 +6,43 @@ import java.io.Serializable;
  * Contact class contains name, id, and email of a contact
  * @author Andrew Bennett
  */
-public class Contact implements Serializable {
+public class ContactCard implements Serializable {
 
+    /**
+     * First name of contact
+     */
     private final String mFirstName;
+
+    /**
+     * Last name of contact
+     */
     private final String mLastName;
-    private final int mContactID;
+
+    /**
+     * The unique memberid of the contact
+     */
+    private final String mMemberID;
+
+    /**
+     * The unique email of the contact
+     */
     private final String mEmail;
+
+    /**
+     * The username the contact has chosen
+     */
+    private final String mUserName;
+
+    /**
+     * This field is used to build chat lists.
+     */
+    private boolean isSelected;
+
+    /**
+     * Set whether the contact is selected or not
+     */
+    public void setSelected(boolean theChecked) { this.isSelected = theChecked;}
+
 
     /**
      * Necessary builder function to build the contact card
@@ -20,23 +51,30 @@ public class Contact implements Serializable {
     public static class Builder {
         private String mFirstName;
         private String mLastName;
-        private int mContactID;
+        private String mMemberID;
         private String mEmail;
+        private final String mUserName;
+        private boolean isSelected;
 
         public Builder()
         {
-            mLastName = "Default";
-            mFirstName = "Default";
-            mContactID = -1;
+            mLastName = "No";
+            mFirstName = "Contacts";
+            mMemberID = "-1";
             mEmail = "None Entered";
+            mUserName = "Default";
+            isSelected = false;
         }
 
-        public Builder(final String theFirstName, final String theLastName, final int theContactID, final String theEmail)
+        public Builder(final String theContactID, final String theFirstName, final String theLastName,
+                       final String theEmail, final String theUserName)
         {
+            this.mMemberID = theContactID;
             this.mFirstName = theFirstName;
             this.mLastName = theLastName;
-            this.mContactID = theContactID;
             this.mEmail = theEmail;
+            this.mUserName = theUserName;
+            this.isSelected = false;
         }
 
         /**
@@ -62,8 +100,8 @@ public class Contact implements Serializable {
          *
          * @param theContactID contactid of this contact
          */
-        public void setContactId(final int theContactID) {
-            this.mContactID = theContactID;
+        public void setMemberId(final String theContactID) {
+            this.mMemberID = theContactID;
         }
 
         /**
@@ -74,12 +112,19 @@ public class Contact implements Serializable {
         public void setEmail(final String theEmail) { this.mEmail = theEmail; }
 
         /**
+         * Set the username of the contact card
+         * @author Andrew Bennett
+         * @param theUserName is the username to be set in the contact
+         */
+        public void setUserName(final String theUserName) { this.mEmail = theUserName; }
+
+        /**
          * Builds the contact card
          * @return Contact
          */
-        public Contact build()
+        public ContactCard build()
         {
-            return new Contact(this);
+            return new ContactCard(this);
         }
     }
 
@@ -87,34 +132,32 @@ public class Contact implements Serializable {
      * Builds the Contact
      * @param builder Builder in contact card
      */
-    private Contact(final Builder builder)
+    private ContactCard(final Builder builder)
     {
         this.mFirstName = builder.mFirstName;
         this.mLastName = builder.mLastName;
-        this.mContactID = builder.mContactID;
+        this.mMemberID = builder.mMemberID;
         this.mEmail = builder.mEmail;
+        this.mUserName = builder.mUserName;
     }
 
     /**
      * Returns the id corresponding to the contact
-     * @author Andrew Bennett
      * @return Integer chat id
      */
-    public int getContactID()
+    public String getMemberID()
     {
-        return mContactID;
+        return mMemberID;
     }
 
     /**
      * Returns the first name of contact
-     * @author Andrew Bennett
      * @return mFirstName
      */
     public String getFirstName(){ return mFirstName;}
 
     /**
      * Returns the last name of contact
-     * @author Andrew bennett
      * @return mLastName
      */
     public String getLastName(){return mLastName;}
@@ -124,4 +167,12 @@ public class Contact implements Serializable {
      * @return mEmail
      */
     public String getEmail(){return mEmail;}
+
+    /**
+     * Returns the username of contact
+     * @return mUserName
+     */
+    public String getUserName(){return mUserName;}
+
+    public boolean isSelected(){return isSelected;}
 }

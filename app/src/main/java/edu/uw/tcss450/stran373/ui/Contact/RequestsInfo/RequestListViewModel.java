@@ -4,146 +4,149 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.IntFunction;
 
-/**
- * View model containing a list with all of the request cards that are pending
- * @author Andrew Bennett
- */
+import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.UserInfoViewModel;
+
+
+
 public class RequestListViewModel extends AndroidViewModel {
-
     /**
-     * A list of all Request cards. For the moment it will be randomly generated,
+     * A list of all request cards. For the moment it will be randomly generated,
      * next sprint we will need to pull from our endpoint
      */
-    private MutableLiveData<List<Request>> mRequestCards;
+    private MutableLiveData<List<RequestCard>> mRequestCards;
 
-    /**
-     * Contructor that uses dummy values just to get some requests. Will need to be updated.
-     * @param application
-     */
+    private MutableLiveData<JSONObject> mResponse;
+
     public RequestListViewModel(@NonNull Application application) {
         super(application);
         mRequestCards = new MutableLiveData<>();
-        List<Request> cards = new ArrayList<>();
-        for (int i = 0; i < cards.size(); i++) {
-            cards.add(new Request
-                    .Builder(
-                            "First",
-                            "Last", i,
-                            "dummy@email.com",
-                            "05/02/2021")
-                    .build());
-        }
-        mRequestCards.setValue(cards);
+        mRequestCards.setValue(new ArrayList<>());
+        mResponse = new MutableLiveData<>();
+        mResponse.setValue(new JSONObject());
     }
 
 
     /**
-     * Add an observer to the contact cards to check for change of state
+     * Add an observer to the Request cards to check for change of state
      *
-     * @param owner
-     * @param observer
+     * @param owner the lifecycle owner of this observer
+     * @param observer watches for change of state in Request cards
      * @author Andrew Bennett
      */
     public void addRequestListObserver(@NonNull LifecycleOwner owner,
-                                       @NonNull Observer<? super List<Request>> observer) {
+                                       @NonNull Observer<? super List<RequestCard>> observer) {
         mRequestCards.observe(owner, observer);
     }
 
     /**
-     * Handle an error when we actually pull from our contacts endpoint
+     * Handle an error when we actually pull from our Requests endpoint
      *
-     * @param error
+     * @param error that may occur during a request from the endpoint
      */
     private void handleError(final VolleyError error) {
         //We will need to improve this error handler
-        Log.e("CONNECTION ERROR", error.getLocalizedMessage());
+        Log.e("CONNECTION ERROR", mResponse.getValue().toString());
         throw new IllegalStateException(error.getMessage());
     }
 
-    /*Not needed for this sprint, but should basically be plug and play for next sprint
-    private void handleResult(final JSONObject result) {
-        IntFunction<String> getString = getApplication().getResources()::getString;
-        try {
-            JSONObject root = result;
-            if (root.has(getString.apply(R.string.keys_json_contacts_response))) {
-                JSONObject response =
-                        root.getJSONObject(getString.apply(R.string.keys_json_contacts_response));
-                if (response.has(getString.apply(
-                        R.string.keys_json_contacts_data))) {
 
-                    JSONArray data = response.getJSONArray(getString.apply(
-                            R.string.keys_json_contacts_data));
-                    for (int i = 0; i < data.length(); i++) {
-                        JSONObject jsonBlog = data.getJSONObject(i);
-                        Contact contact = new Contact.Builder(
-                                jsonBlog.getString(
-                                        getString.apply(
-                                                R.string.keys_json_contacts_firstname)),
-                                jsonBlog.getString(
-                                        getString.apply(
-                                                R.string.keys_json_contacts_lastname)))
-                                .addTeaser(jsonBlog.getString(
-                                        getString.apply(
-                                                R.string.keys_json_contacts_email)))
-                                .addUrl(jsonBlog.getString(
-                                        getString.apply(
-                                                R.string.keys_json_contacts_nickname)))
-                                .build();
-                        if (!mContactCards.getValue().contains(contact)) {
-                            mContactCards.getValue().add(contact);
-                        }
-                    }
-                } else {
-                    Log.e("ERROR!", "No data array");
+    /**
+     * Handles a successful get from the request endpoint
+     * @param theResult
+     */
+    private void handleResult(final JSONObject theResult) {
+        IntFunction<String> getString = getApplication().getResources()::getString;
+        //Check the result of the call
+        try {
+            JSONObject root = theResult;
+            if(root.get("success").toString().equals("true")) {
+                JSONArray data = root.getJSONArray(getString.apply(
+                        R.string.keys_json_contacts_data));
+                if(data.length() == 0) {
+                    RequestCard request = new RequestCard.Builder("memberid",
+                            "No ",
+                            "Requests").build();
+                    mRequestCards.getValue().add(request);
+                    mRequestCards.setValue(mRequestCards.getValue());
+                    return;
                 }
-            } else {
-                Log.e("ERROR!", "No response");
+                for(int i = 0; i < data.length(); i++) {
+                    JSONObject jsonRequest = data.getJSONObject(i);
+                    RequestCard request = new RequestCard.Builder(
+                            jsonRequest.getString("memberid"),
+                            jsonRequest.getString("firstname"),
+                            jsonRequest.getString("lastname"))
+                            .build();
+                    if (!mRequestCards.getValue().contains(request)
+                            && mRequestCards.getValue().size() < data.length()) {
+                        mRequestCards.getValue().add(request);
+                    }
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
         }
-        mContactCards.setValue(mContactCards.getValue());
-    }*/
+        mRequestCards.setValue(mRequestCards.getValue());
+    }
 
 
-    /* Not needed for this sprint.
+    /**
+     * Get the contacts from the web service endpoint
+     */
     public void connectGet() {
         //Need to add our contact endpoint
-        String url = "";
-        Request request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null, //no body for this get request
-                this::handleResult,
-                this::handleError) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
+        String user_auth = UserInfoViewModel.getJwt();
+        String url = getApplication().getResources().getString(R.string.base_url)+"requests";
 
-                // add our new <key,value>
-                headers.put();
-                return headers;
-            }
-        };
-
-        request.setRetryPolicy(new
-                DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //Instantiate the RequestQueue and add the request to the queue
-        Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
-    }*/
+        //Request the request information and hand in auth token
+        try {
+            Request request = new JsonObjectRequest(
+                    Request.Method.GET,
+                    url,
+                    null, //no body for this get request
+                    this::handleResult,
+                    this::handleError) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    // add our new <key,value>
+                    headers.put("Authorization", user_auth);
+                    return headers;
+                }
+            };
+            //Retry after certain amount of time.
+            request.setRetryPolicy(new
+                    DefaultRetryPolicy(
+                    10_000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            //Instantiate the RequestQueue and add the request to the queue
+            Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
