@@ -36,33 +36,4 @@ public class AuthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth);
     }
 
-    /**
-     * Method called which inflates a menu and its items.
-     * @param theMenu the menu item being inflated
-     * @return true
-     */
-    @Override
-    public boolean onCreateOptionsMenu(final Menu theMenu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.settings_menu, theMenu);
-        return true;
-    }
-
-    /**
-     * An event handler for when an item is selected.
-     * @param theItem The item chosen
-     * @return theItem
-     */
-    @Override
-    public boolean onOptionsItemSelected(@NonNull final MenuItem theItem) {
-        int id = theItem.getItemId();
-
-        if (id == R.id.theme_selection){
-            ThemeDialogFragment dialog = new ThemeDialogFragment();
-            dialog.show(getSupportFragmentManager(), "");
-            return true;
-        }
-
-        return super.onOptionsItemSelected(theItem);
-    }
 }

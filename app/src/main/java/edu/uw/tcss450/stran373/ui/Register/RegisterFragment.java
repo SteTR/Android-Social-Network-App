@@ -84,7 +84,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
         super.onViewCreated(theView, theSavedInstanceState);
-        myBinding.button.setOnClickListener(this);
+        myBinding.buttonRegister.setOnClickListener(this);
         myRegisterModel.addResponseObserver(getViewLifecycleOwner(),
                 this::observeResponse);
     }
@@ -105,11 +105,11 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onClick(View theView) {
-        EditText email = myBinding.editText;
-        EditText pw1 = myBinding.editText2;
-        EditText pw2 = myBinding.editText3;
-        EditText first = myBinding.editText4;
-        EditText last = myBinding.editText5;
+        EditText email = myBinding.editEmail;
+        EditText pw1 = myBinding.editPassword;
+        EditText pw2 = myBinding.editConfirmPassword;
+        EditText first = myBinding.editFirstName;
+        EditText last = myBinding.editLastName;
 
         int match = pw1.getText().toString().compareTo(pw2.getText().toString());
         boolean validPW1 = verifyPW(pw1.getText().toString());
@@ -186,7 +186,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         boolean lower = false;
         boolean number = false;
         if (thePW.length() < 8) {
-            myBinding.editText2.setError("Password is less than 8 characters.");
+            myBinding.editPassword.setError("Password is less than 8 characters.");
         } else {
             for (int i = 0; i < thePW.length(); i++) {
                 int j = 0;
@@ -214,13 +214,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!pw) {
-            myBinding.editText2.setError("Special character missing (!, ?, %, ...)");
+            myBinding.editPassword.setError("Special character missing (!, ?, %, ...)");
         } else if (!upper) {
-            myBinding.editText2.setError("Uppercase letter missing (A, B, C, ...)");
+            myBinding.editPassword.setError("Uppercase letter missing (A, B, C, ...)");
         } else if (!lower) {
-            myBinding.editText2.setError("Lowercase letter missing (a, b, c, ...)");
+            myBinding.editPassword.setError("Lowercase letter missing (a, b, c, ...)");
         } else if (!number) {
-            myBinding.editText2.setError("Numerical digit missing (1, 2, 3, ...)");
+            myBinding.editPassword.setError("Numerical digit missing (1, 2, 3, ...)");
         }
 
         return pw && upper && lower && number;
@@ -231,10 +231,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
      */
     private void verifyAuthWithServer() {
         myRegisterModel.connect(
-                myBinding.editText4.getText().toString(),
-                myBinding.editText5.getText().toString(),
-                myBinding.editText.getText().toString(),
-                myBinding.editText2.getText().toString());
+                myBinding.editFirstName.getText().toString(),
+                myBinding.editLastName.getText().toString(),
+                myBinding.editEmail.getText().toString(),
+                myBinding.editPassword.getText().toString());
     }
 
     /**
@@ -244,8 +244,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         RegisterFragmentDirections.ActionRegisterFragmentToSignInFragment directions =
                 RegisterFragmentDirections.actionRegisterFragmentToSignInFragment();
 
-        directions.setEmail(myBinding.editText.getText().toString());
-        directions.setPassword(myBinding.editText2.getText().toString());
+        directions.setEmail(myBinding.editEmail.getText().toString());
+        directions.setPassword(myBinding.editPassword.getText().toString());
 
         Navigation.findNavController(getView()).navigate((NavDirections) directions);
 
@@ -263,7 +263,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         if (theResponse.length() > 0) {
             if (theResponse.has("code")) {
                 try {
-                    myBinding.editText.setError(
+                    myBinding.editEmail.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
 

@@ -1,14 +1,15 @@
 <resources>
     <string name="app_name">Team4</string>
     <string name="hello_blank_fragment">Blank Fragment</string>
-    <string name="text_signin_title">Welcome!</string>
+    <string name="text_signin_title">Welcome to gibber!</string>
     <string name="text_signin_email">Email: </string>
     <string name="text_signin_password">Password: </string>
-    <string name="edittext_signin_email">Enter Email</string>
-    <string name="edittext_signin_password">Enter Password </string>
+    <string name="edit_signin_email">Enter Email</string>
+    <string name="edit_signin_password">Enter Password </string>
+    <string name="text_register_title">Create an Account!</string>
     <string name="button_signin_signin">Sign In</string>
     <string name="button_signin_register">Create an Account</string>
-    <string name="text_home_welcome">Welcome Back!</string>
+    <string name="text_home_welcome">Welcome Back</string>
     <string name="text_home_name">Name</string>
     <string name="text_home_location">Location</string>
     <string name="text_home_temperature">Temperature</string>

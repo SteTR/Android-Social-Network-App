@@ -20,7 +20,6 @@ import android.widget.EditText;
 import com.auth0.android.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,20 +104,15 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
-        myBinding.registerButton.setOnClickListener(this);
-        myBinding.signInButton.setOnClickListener(this::verify);
+        myBinding.buttonRegister.setOnClickListener(this);
+        myBinding.buttonSignin.setOnClickListener(this::verify);
         mSignInModel.addResponseObserver(
                 getViewLifecycleOwner(),
                 this::observeResponse);
 
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
-        myBinding.editText.setText(args.getEmail().equals("default") ? "" : args.getEmail());
-        myBinding.editText2.setText(args.getPassword().equals("default") ? "" : args.getPassword());
-
-        myBinding.buttonReset.setOnClickListener(button ->
-                Navigation.findNavController(getView()).navigate(
-                        SignInFragmentDirections.actionSignInFragmentToResetPasswordFragment()
-                ));
+        myBinding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
+        myBinding.editPassword.setText(args.getPassword().equals("default") ? "" : args.getPassword());
     }
 
     /**
@@ -152,8 +146,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      * @param theView is the View object used for interaction.
      */
     private void verify(View theView) {
-        EditText email = myBinding.editText;
-        EditText password = myBinding.editText2;
+        EditText email = myBinding.editEmail;
+        EditText password = myBinding.editPassword;
         String emailString = email.getText().toString();
         String pwString = password.getText().toString();
         boolean verifyE = !TextUtils.isEmpty(emailString);
@@ -178,7 +172,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         int i = 0;
         boolean found = false;
         if (theEmail.length() < 8) {
-            myBinding.editText.setError("Email is less than 8 characters.");
+            myBinding.editEmail.setError("Email is less than 8 characters.");
         } else if (!TextUtils.isEmpty(theEmail)) {
             while (i < theEmail.length() && !found) {
                 if (theEmail.charAt(i) == '@') {
@@ -202,7 +196,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private boolean verifyPW(String thePW) {
         boolean pw = false;
         if (thePW.length() < 8) {
-            myBinding.editText2.setError("Password is less than 8 characters.");
+            myBinding.editPassword.setError("Password is less than 8 characters.");
         } else {
             for (int i = 0; i < thePW.length(); i++) {
                 int j = 0;
@@ -217,8 +211,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!pw) {
-            myBinding.editText2.setError("Special character missing");
+            myBinding.editPassword.setError("Special character missing");
         }
+
         return pw;
     }
 
@@ -227,8 +222,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      */
     private void verifyAuthWithServer() {
         mSignInModel.connect(
-                myBinding.editText.getText().toString(),
-                myBinding.editText2.getText().toString());
+                myBinding.editEmail.getText().toString(),
+                myBinding.editPassword.getText().toString());
     }
 
     /**
@@ -263,28 +258,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         if (theResponse.length() > 0) {
             if (theResponse.has("code")) {
                 try {
-                    myBinding.editText.setError(
+                    myBinding.editEmail.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
-
-                    // If user is not verified, show pop-up message with the option to resend verification email
-                    if (theResponse.getJSONObject("data").getString("message").contains("verified")) {
-                        Snackbar mSnackbar = Snackbar.make(getView(),
-                                R.string.text_email_not_verified, Snackbar.LENGTH_INDEFINITE);
-                        mSnackbar.show();
-                        mSnackbar.setAction(R.string.button_resend, onClick -> {
-                            mSignInModel.resendEmail(myBinding.editText.getText().toString(),
-                                    myBinding.editText2.getText().toString());
-                            Snackbar.make(getView(), R.string.text_email_sent, Snackbar.LENGTH_LONG).show();
-                        });
-                    }
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
             } else {
                 try {
                     navigateToSuccess(
-                            myBinding.editText.getText().toString(),
+                            myBinding.editPassword.getText().toString(),
                             theResponse.getString("token"));
                     Log.d("JSON Response", theResponse.getString("token"));
                 } catch (JSONException e) {
