@@ -33,8 +33,8 @@ import edu.uw.tcss450.stran373.ui.Weather.HourlyCard;
 import edu.uw.tcss450.stran373.ui.Weather.WeatherCard;
 
 /**
- * ViewModel used for the HomeFragment. This will be used to handle the main
- * functionality for displaying the weather for the home fragment.
+ * ViewModel used for the WeatherFragment. This will be used to handle the main
+ * functionality for displaying the weather.
  */
 public class HomeViewModel extends AndroidViewModel {
 
