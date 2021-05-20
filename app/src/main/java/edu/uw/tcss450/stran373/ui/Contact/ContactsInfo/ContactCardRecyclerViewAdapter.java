@@ -1,33 +1,22 @@
 package edu.uw.tcss450.stran373.ui.Contact.ContactsInfo;
 
-import android.content.ClipData;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
-import edu.uw.tcss450.stran373.ui.Weather.HourlyGenerator;
-import edu.uw.tcss450.stran373.ui.Weather.HourlyRecyclerViewAdapter;
 
 /**
- * RecyclerViewAdapter is used to show the various cards
+ * RecyclerViewAdapter is used to show the various cards and hold the view model.
+ * The item checks allow us to build a list to launch chats.
  * @author Andrew Bennett
  */
 public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<ContactCardRecyclerViewAdapter.ContactCardViewHolder> {
@@ -36,11 +25,6 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
      * List of contacts to be displayed
      */
     private final List<ContactCard> mContacts;
-
-    /**
-     * Selected item list
-     */
-    private final SparseBooleanArray mContactStateArray = new SparseBooleanArray();
 
     interface OnItemCheckListener {
         void onItemCheck(ContactCard card);

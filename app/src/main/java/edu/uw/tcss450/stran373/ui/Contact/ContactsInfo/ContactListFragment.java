@@ -9,38 +9,22 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
-import edu.uw.tcss450.stran373.MainActivityArgs;
 import edu.uw.tcss450.stran373.R;
-import edu.uw.tcss450.stran373.UserInfoViewModel;
-import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
 import edu.uw.tcss450.stran373.databinding.FragmentContactListBinding;
-import edu.uw.tcss450.stran373.ui.Weather.WeatherFragmentDirections;
+
 
 /**
- * This class will be used in the future when we retrieve data from endpoints
- * It will be used to hold the view model
+ * This class is used to hold all of the contact cards, create and set
+ * the adapter for the recycler view, and add the observer
  * @author Andrew Bennett
  */
 public class ContactListFragment extends Fragment {
@@ -62,9 +46,9 @@ public class ContactListFragment extends Fragment {
 
     /**
      * Inflate the layout
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
+     * @param inflater is the layout inflater
+     * @param container is the container for the fragment
+     * @param savedInstanceState saves the stateful data for use
      * @return the inflated view
      */
     @Override
@@ -76,7 +60,7 @@ public class ContactListFragment extends Fragment {
     /**
      * When the fragment is created, call the contact endpoint to get current
      * contacts
-     * @param savedInstanceState
+     * @param savedInstanceState is the stateful data for use
      */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,9 +70,10 @@ public class ContactListFragment extends Fragment {
     }
 
     /**
-     * Set the adapter with the checks for the checkmarks
-     * @param view
-     * @param savedInstanceState
+     * Set the adapter with the checks for the checkmarks. Then create chats
+     * from all checked cards
+     * @param view is the view that is created
+     * @param savedInstanceState is the data that may be used
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -97,7 +82,7 @@ public class ContactListFragment extends Fragment {
 
         mModel.addContactListObserver(getViewLifecycleOwner(), contactList -> {
             if (!contactList.isEmpty()) {
-                binding.listRoot.setAdapter(
+                binding.contactRecycler.setAdapter(
                         new ContactCardRecyclerViewAdapter(contactList,
                                 new ContactCardRecyclerViewAdapter.OnItemCheckListener() {
                                         @Override
@@ -112,10 +97,19 @@ public class ContactListFragment extends Fragment {
                                     ));
                                 }
             });
-        /**
-         * When floating action button pressed, create chat
-         */
+
+        //When floating action button pressed, create chat
         binding.buttonAdd.setOnClickListener(button ->
-                mModel.handleChatCreation(currentSelectedItems));
+                mModel.handleChatCreation(currentSelectedItems)
+        );
+
+        //Navigate to other connection fragments
+        binding.inviteButton.setOnClickListener(button ->
+                Navigation.findNavController(getView()).navigate(
+                        ContactListFragmentDirections.actionNavigationContactsToInviteListFragment()));
+
+        binding.requestButton.setOnClickListener(button ->
+                Navigation.findNavController(getView()).navigate(
+                        ContactListFragmentDirections.actionNavigationContactsToRequestListFragment()));
     }
 }

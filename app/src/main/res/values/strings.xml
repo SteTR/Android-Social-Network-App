@@ -21,8 +21,9 @@
     <!--String resources for various connections actions-->
     <string name="title_contacts_connections">Connections</string>
     <string name="title_contactinfo_contacts">Contacts</string>
-    <string name="title_requestinfo_requests">Requests</string>
+    <string name="title_requestinfo_requests">Pending Requests</string>
     <string name="title_inviteinfo_invites">Invites</string>
+    <string name="button_inviteinfo_invite">Invite Friend</string>
 
     <string name="title_chats">Chats</string>
     <string name="text_weather_search">Search...</string>
@@ -68,6 +69,10 @@
     <string name="text_password_constraint5">* Must contain a special character</string>
 
     <string name="checkbox_contact_chatinvite">Chat Invite</string>
+    <string name="invite_sent">Invite Sent!</string>
+    <string name="button_accept">Accept</string>
+    <string name="requests_reject">Reject</string>
+    <string name="create_chat_descr">Add Contacts to Chat</string>
 
 
 </resources>

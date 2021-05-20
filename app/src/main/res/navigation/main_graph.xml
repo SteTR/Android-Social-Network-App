@@ -45,7 +45,37 @@
     <fragment
         android:id="@+id/navigation_contacts"
         android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactListFragment"
-        android:label="@string/title_contacts" />
+        android:label="@string/title_contacts" >
+        <action
+            android:id="@+id/action_navigation_contacts_to_inviteListFragment"
+            app:destination="@id/inviteListFragment" />
+        <action
+            android:id="@+id/action_navigation_contacts_to_requestListFragment"
+            app:destination="@id/requestListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inviteListFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteListFragment"
+        android:label="@string/title_inviteinfo_invites" >
+        <action
+            android:id="@+id/action_inviteListFragment_to_navigation_contacts"
+            app:destination="@id/navigation_contacts" />
+        <action
+            android:id="@+id/action_inviteListFragment_to_requestListFragment"
+            app:destination="@id/requestListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestListFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestListFragment"
+        android:label="@string/title_requestinfo_requests" >
+        <action
+            android:id="@+id/action_requestListFragment_to_navigation_contacts"
+            app:destination="@id/navigation_contacts" />
+        <action
+            android:id="@+id/action_requestListFragment_to_inviteListFragment"
+            app:destination="@id/inviteListFragment" />
+    </fragment>
 
 
 </navigation>

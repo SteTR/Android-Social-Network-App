@@ -1,16 +1,13 @@
-package edu.uw.tcss450.stran373.ui.Contact.ContactsInfo;
+package edu.uw.tcss450.stran373.ui.Contact.InvitesInfo;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-
-import android.util.Log;
-import android.view.View;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -31,26 +28,25 @@ import java.util.function.IntFunction;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 
-
 /**
  * View model to hold the contact cards, observer will be used to
  * navigate to specific contacts in next sprint
  * @author Andrew Bennett
  */
-public class ContactListViewModel extends AndroidViewModel {
+public class InviteListViewModel extends AndroidViewModel {
 
     /**
      * A list of all contact cards. For the moment it will be randomly generated,
      * next sprint we will need to pull from our endpoint
      */
-    private MutableLiveData<List<ContactCard>> mContactCards;
+    private MutableLiveData<List<InviteCard>> mInviteCards;
 
     private MutableLiveData<JSONObject> mResponse;
 
-    public ContactListViewModel(@NonNull Application application) {
+    public InviteListViewModel(@NonNull Application application) {
         super(application);
-        mContactCards = new MutableLiveData<>();
-        mContactCards.setValue(new ArrayList<>());
+        mInviteCards = new MutableLiveData<>();
+        mInviteCards.setValue(new ArrayList<>());
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
@@ -63,9 +59,9 @@ public class ContactListViewModel extends AndroidViewModel {
      * @param observer watches for change of state in contact cards
      * @author Andrew Bennett
      */
-    public void addContactListObserver(@NonNull LifecycleOwner owner,
-                                       @NonNull Observer<? super List<ContactCard>> observer) {
-        mContactCards.observe(owner, observer);
+    public void addInviteListObserver(@NonNull LifecycleOwner owner,
+                                       @NonNull Observer<? super List<InviteCard>> observer) {
+        mInviteCards.observe(owner, observer);
     }
 
     /**
@@ -81,44 +77,35 @@ public class ContactListViewModel extends AndroidViewModel {
 
 
     /**
-     * Handles a successful get from the contact endpoint
+     * Handles a successful get from the invite endpoint
      * @param theResult
      */
     private void handleResult(final JSONObject theResult) {
         IntFunction<String> getString = getApplication().getResources()::getString;
         try {
             JSONObject root = theResult;
-
-            //If the request returned success, create all of the cards. If no cards were returned,
-            //create a card that says "No Contacts"
             if(root.get("success").toString().equals("true")) {
                 JSONArray data = root.getJSONArray(getString.apply(
                         R.string.keys_json_contacts_data));
                 if(data.length() == 0) {
-                    ContactCard contact = new ContactCard.Builder("memberid",
+                    InviteCard invite = new InviteCard.Builder("memberid",
                             "No ",
-                            "Contacts",
-                            "default@default.com",
-                            "default").build();
-                    mContactCards.getValue().add(contact);
-                    mContactCards.setValue(mContactCards.getValue());
+                            "Invites").build();
+                    mInviteCards.getValue().add(invite);
+                    mInviteCards.setValue(mInviteCards.getValue());
                     return;
                 }
-
-                //Loop through and build the contact cards
+                Log.i("Data", data.toString());
                 for(int i = 0; i < data.length(); i++) {
-                    JSONObject jsonContact = data.getJSONObject(i);
-                    ContactCard contact = new ContactCard.Builder(
-                            jsonContact.getString("memberid"),
-                            jsonContact.getString("firstname"),
-                            jsonContact.getString("lastname"),
-                            jsonContact.getString("email"),
-                            jsonContact.getString("username")
-                            )
+                    JSONObject jsonInvite = data.getJSONObject(i);
+                    InviteCard contact = new InviteCard.Builder(
+                            jsonInvite.getString("memberid"),
+                            jsonInvite.getString("firstname"),
+                            jsonInvite.getString("lastname"))
                             .build();
-                    if (!mContactCards.getValue().contains(contact)
-                            && mContactCards.getValue().size() < data.length()) {
-                        mContactCards.getValue().add(contact);
+                    if (!mInviteCards.getValue().contains(contact)
+                            && mInviteCards.getValue().size() < data.length()) {
+                        mInviteCards.getValue().add(contact);
                     }
                 }
             }
@@ -126,7 +113,7 @@ public class ContactListViewModel extends AndroidViewModel {
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
         }
-        mContactCards.setValue(mContactCards.getValue());
+        mInviteCards.setValue(mInviteCards.getValue());
     }
 
 
@@ -136,7 +123,7 @@ public class ContactListViewModel extends AndroidViewModel {
     public void connectGet() {
         //Need to add our contact endpoint
         String user_auth = UserInfoViewModel.getJwt();
-        String url = getApplication().getResources().getString(R.string.base_url)+"contacts";;
+        String url = getApplication().getResources().getString(R.string.base_url)+"invites";
 
         //Request the contact information and hand in auth token
         try {
@@ -167,48 +154,17 @@ public class ContactListViewModel extends AndroidViewModel {
         }
     }
 
-    /**
-     * Handle the creation of chats, calls the chats endpoint to create
-     * a new chat
-     * @param theCards are the users the owner wants to invite
-     */
-    protected void handleChatCreation(List<ContactCard> theCards) {
+    public void connectPost(final String theID) {
 
-        if(theCards.isEmpty()) {
-            return;
-        }
-
-        //Get the auth token and set url
         String user_auth = UserInfoViewModel.getJwt();
-        String url = getApplication().getResources().getString(R.string.base_url)+"chats";
-
-        //Currently memberids are strings, so get that and convert to int
-        //That may be worth changing in Sprint 2
-        String first_id = theCards.get(0).getMemberID();
-        int id = Integer.parseInt(first_id);
-
-        //Create the array for the body of the POST request and add the first
-        //user
-        JSONArray array = new JSONArray();
-        StringBuilder sb = new StringBuilder();
-        sb.append(theCards.get(0).getFirstName());
-        array.put(first_id);
-        //Create the group name and build the array for userids
-        if(theCards.size() > 1) {
-            //Loop through and add the first names of the
-            //chat members and add the member id to the array
-            for(int i = 1; i < theCards.size(); i++) {
-                sb.append(", " + theCards.get(i).getFirstName());
-                array.put(Integer.parseInt(theCards.get(i).getMemberID()));
-            }
-        }
+        String url = getApplication().getResources().getString(R.string.base_url)+"invites";
         //Create the body for the JSON request
         JSONObject body = new JSONObject();
 
         //Use POST to send a request to the chat endpoint
         try {
-            body.put("groupname", sb.toString());
-            body.put("users", array);
+            body.put("inviteeid", theID);
+            Log.i("Body", body.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
