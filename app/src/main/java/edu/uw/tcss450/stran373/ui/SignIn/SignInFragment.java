@@ -113,6 +113,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
         myBinding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
         myBinding.editPassword.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+
+        myBinding.buttonReset.setOnClickListener(button ->
+                Navigation.findNavController(getView()).navigate(
+                        SignInFragmentDirections.actionSignInFragmentToResetPasswordFragment()
+                ));
     }
 
     /**
