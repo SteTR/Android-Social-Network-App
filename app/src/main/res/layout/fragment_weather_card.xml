@@ -247,7 +247,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.509"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_currentTemp"
+            app:layout_constraintTop_toBottomOf="@+id/text_current_temp"
             tools:visibility="gone" />
 
         <TextView
@@ -280,7 +280,7 @@
             app:srcCompat="@drawable/ic_more_grey_24dp" />
 
         <TextView
-            android:id="@+id/text_currentTemp"
+            android:id="@+id/text_current_temp"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
