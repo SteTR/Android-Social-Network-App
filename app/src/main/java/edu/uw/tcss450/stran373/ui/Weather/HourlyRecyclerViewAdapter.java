@@ -73,25 +73,31 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
          */
         private void updateHourlyIcon(HourlyCard theCard) {
             int hour = theCard.getTimeNum();
-            boolean night = (hour > 16 && hour < 24) || (hour > -1 && hour < 4);
-            if (theCard.getCond() <= 232) {
+            if (theCard.getCond() < 233) {
                 binding.imageCurrent.setImageResource(R.drawable.ic_thunder);
-            } else if (theCard.getCond() <= 531 && theCard.getCond() >= 300) {
+            } else if (theCard.getCond() < 532 && theCard.getCond() > 299) {
                 binding.imageCurrent.setImageResource(R.drawable.ic_rainy_24dp);
-            } else if (theCard.getCond() <= 622 && theCard.getCond() >= 600) {
+            } else if (theCard.getCond() < 623 && theCard.getCond() > 599) {
                 binding.imageCurrent.setImageResource(R.drawable.ic_snowy_24dp);
-            } else if ((theCard.getCond() <= 781 && theCard.getCond() >= 701) || theCard.getCond() > 800) {
-                if (night) {
-                    binding.imageCurrent.setImageResource(R.drawable.ic_cloudy_night_24dp);
-                } else {
-                    binding.imageCurrent.setImageResource(R.drawable.ic_cloudy);
-                }
+            } else if ((theCard.getCond() < 782 && theCard.getCond() > 700) || theCard.getCond() > 800) {
+                nightOrDay(hour, new int[] {R.drawable.ic_cloudy_night_24dp, R.drawable.ic_cloudy});
             } else if (theCard.getCond() == 800){
-                if (night) {
-                    binding.imageCurrent.setImageResource(R.drawable.ic_night_24dp);
-                } else {
-                    binding.imageCurrent.setImageResource(R.drawable.ic_day);
-                }
+                nightOrDay(hour, new int[] {R.drawable.ic_night_24dp, R.drawable.ic_day});
+            }
+        }
+
+        /**
+         * Helper method to handle the different day times.
+         *
+         * @param theHour
+         * @param theResources
+         */
+        private void nightOrDay(int theHour, int[] theResources) {
+            boolean night = theHour > 16 || theHour < 4;
+            if (night) {
+                binding.imageCurrent.setImageResource(theResources[0]);
+            } else {
+                binding.imageCurrent.setImageResource(theResources[1]);
             }
         }
 

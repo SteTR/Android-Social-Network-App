@@ -57,6 +57,10 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private int[][] mFutureDays;
 
+    private Double mLat;
+
+    private Double mLon;
+
     /**
      * Constructor for the ViewModel.
      *
@@ -179,6 +183,7 @@ public class WeatherViewModel extends AndroidViewModel {
         }
         return result;
     }
+    
 
     /**
      * Helper method to get the five conditions for the 5-day forecast.
@@ -231,6 +236,57 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     /**
+     * Retrieves the latitude and longitude from the JSON request.
+     *
+     * @param theResult is a JSONObject from said request.
+     */
+    private void handleZip(final JSONObject theResult) {
+        try {
+            Double lat = (Double) theResult.get("lat");
+            Double lon = (Double) theResult.get("lng");
+            mLat = lat;
+            mLon = lon;
+            Log.d("Lat/Long", mLat + "/" + mLon);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("ERROR!", e.getMessage());
+        }
+    }
+
+    /**
+     * Uses the zip code to retrieve the latitude and longitude needed
+     * to retrieve location data.
+     * Connects to another API service for this purpose.
+     *
+     * @param theZip is a postal code (zip code).
+     */
+    public void connectZip(long theZip) {
+        final String url = "https://www.zipcodeapi.com/rest/" +
+                "DemoOnly00ObhFbtTaiQcSYtMBW8HtCrtyCqyXFXkdT89S1wz6wvghf6ZAzbOQN9/info.json/"
+                + theZip + "/degrees";
+        Request request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                this::handleZip,
+                this::handleError) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+    }
+
+    /**
      * Helper method to get the next five dates.
      *
      * @param theYear is the current year.
@@ -262,7 +318,10 @@ public class WeatherViewModel extends AndroidViewModel {
      * Used to connect to the weather web service.
      */
     public void connect(String theJWT) {
-        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
+        connectZip(98467);
+//        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
+        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" +
+                mLat + "&lon=" + mLon;
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,

@@ -41,8 +41,6 @@ public class WeatherFragment extends Fragment {
      */
     private String mJWT;
 
-    // private Icon mCurrentIcon;
-
     /**
      * Instantiates the ViewModel needed for functionality.
      *
@@ -54,6 +52,7 @@ public class WeatherFragment extends Fragment {
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
         MainActivity main = (MainActivity) getActivity();
         mJWT = main.getTheArgs().getJwt();
+//        mModel.connectZip(98467);
         mModel.connect(mJWT);
     }
 
@@ -91,9 +90,10 @@ public class WeatherFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //Setting up Listeners
-        mBinding.expandableFabSearch.setOnClickListener(button ->
-                Navigation.findNavController(getView()).navigate(
-                WeatherFragmentDirections.actionNavigationWeatherToWeatherSearchFragment()));
+
+//        mBinding.expandableFabSearch.setOnClickListener(button ->
+//                Navigation.findNavController(getView()).navigate(
+//                WeatherFragmentDirections.actionNavigationWeatherToWeatherSearchFragment()));
     }
 
 
