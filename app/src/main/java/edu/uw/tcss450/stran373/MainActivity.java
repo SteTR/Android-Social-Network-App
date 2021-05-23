@@ -95,10 +95,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull final MenuItem theItem) {
         int id = theItem.getItemId();
 
-        if (id == R.id.theme_selection){
+        if (id == R.id.theme_selection) {
             ThemeDialogFragment dialog = new ThemeDialogFragment();
             dialog.show(getSupportFragmentManager(), "");
             return true;
+        } else if (id == R.id.changePasswordFragment) {
+            // Navigate to change password
+            Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.changePasswordFragment);
         } else if (id == R.id.action_sign_out) {
             signOut();
         }
