@@ -101,7 +101,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.changePasswordFragment) {
             // Navigate to change password
-            Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.changePasswordFragment);
+            Navigation.findNavController(this, R.id.nav_host_fragment)
+                    .navigate(NavGraphDirections.actionGlobalChangePasswordFragment());
+            return true;
         } else if (id == R.id.action_sign_out) {
             signOut();
         }
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method used to sign a user out/remove their jwt
      */
-    private void signOut() {
+    public void signOut() {
         SharedPreferences prefs =
                 getSharedPreferences(
                         getString(R.string.keys_shared_prefs),

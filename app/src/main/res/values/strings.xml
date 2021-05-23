@@ -90,6 +90,10 @@
     <string name="friend_has_been_invited">Friend has been invited!</string>
     <string name="text_chat_created">A chat room has been successfully created</string>
 
+    <!--  Change Password Fragment Resources  -->
     <string name="action_change_password">Change Password</string>
+    <string name="hint_password_current">Current Password</string>
+    <string name="hint_password_new">New Password</string>
+    <string name="hint_change_password_again">Retype Password</string>
 
 </resources>
