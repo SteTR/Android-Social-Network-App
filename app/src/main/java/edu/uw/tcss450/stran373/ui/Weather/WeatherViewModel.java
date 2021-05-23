@@ -318,7 +318,7 @@ public class WeatherViewModel extends AndroidViewModel {
      * Used to connect to the weather web service.
      */
     public void connect(String theJWT) {
-        connectZip(98467);
+        connectZip(98109);
 //        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
         final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" +
                 mLat + "&lon=" + mLon;
