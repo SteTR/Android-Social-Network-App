@@ -79,6 +79,11 @@
             android:id="@+id/action_requestListFragment_to_inviteListFragment"
             app:destination="@id/inviteListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="edu.uw.tcss450.stran373.ChangePasswordFragment"
+        android:label="@string/fragment_change_password_title"
+        tools:layout="@layout/fragment_change_password" /><action android:id="@+id/action_global_changePasswordFragment" app:destination="@id/changePasswordFragment"/>
 
 
 </navigation>
