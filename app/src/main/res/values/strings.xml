@@ -91,6 +91,7 @@
     <string name="text_chat_created">A chat room has been successfully created</string>
 
     <!--  Change Password Fragment Resources  -->
+    <string name="fragment_change_password_title">Change Password</string>
     <string name="action_change_password">Change Password</string>
     <string name="hint_password_current">Current Password</string>
     <string name="hint_password_new">New Password</string>

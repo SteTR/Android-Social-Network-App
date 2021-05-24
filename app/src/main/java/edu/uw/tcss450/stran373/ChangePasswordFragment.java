@@ -63,7 +63,8 @@ public class ChangePasswordFragment extends Fragment {
             String newpassword = binding.editChangePassword.getText().toString();
 
             //
-            if (!(oldpassword.isEmpty() && newpassword.isEmpty())) {
+            if (!(oldpassword.isEmpty() && newpassword.isEmpty()) &&
+                    binding.editChangePasswordConfirm.getText().toString().equals(newpassword)) {
                 binding.buttonConfirmChangePassword.setEnabled(false);
                 sendChangePasswordRequest(oldpassword, newpassword);
             } else {
