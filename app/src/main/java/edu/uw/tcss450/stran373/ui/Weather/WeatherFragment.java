@@ -91,9 +91,9 @@ public class WeatherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //Setting up Listeners
 
-//        mBinding.expandableFabSearch.setOnClickListener(button ->
-//                Navigation.findNavController(getView()).navigate(
-//                WeatherFragmentDirections.actionNavigationWeatherToWeatherSearchFragment()));
+        mBinding.expandableFabSearch.setOnClickListener(button ->
+                Navigation.findNavController(getView()).navigate(
+                WeatherFragmentDirections.actionNavigationWeatherToWeatherSearchFragment()));
     }
 
 
