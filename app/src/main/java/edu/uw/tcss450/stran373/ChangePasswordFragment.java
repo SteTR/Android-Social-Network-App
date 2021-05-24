@@ -17,6 +17,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,7 +67,7 @@ public class ChangePasswordFragment extends Fragment {
                 binding.buttonConfirmChangePassword.setEnabled(false);
                 sendChangePasswordRequest(oldpassword, newpassword);
             } else {
-                // TODO do something about empty and invalid pw
+                binding.editPasswordCurrent.setError(getString(R.string.text_password_invalid));
             }
         });
     }
@@ -78,6 +79,7 @@ public class ChangePasswordFragment extends Fragment {
      * @param newpassword new password to change to
      */
     private void sendChangePasswordRequest(final String oldpassword, final String newpassword) {
+        Snackbar.make(getView(), R.string.snackbar_password_sent, Snackbar.LENGTH_LONG).show();
         Log.d("old", oldpassword);
         Log.d("new", newpassword);
         final String url =  getString(R.string.base_url) + "auth/changePassword";
@@ -130,6 +132,7 @@ public class ChangePasswordFragment extends Fragment {
                     error.networkResponse.statusCode +
                             " " +
                             data);
+            Snackbar.make(getView(), R.string.snackbar_password_sent_failure, Snackbar.LENGTH_LONG).show();
         }
     }
 

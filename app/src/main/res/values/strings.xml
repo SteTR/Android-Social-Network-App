@@ -95,5 +95,9 @@
     <string name="hint_password_current">Current Password</string>
     <string name="hint_password_new">New Password</string>
     <string name="hint_change_password_again">Retype Password</string>
+    <string name="text_password_invalid">Password is invalid.</string>
+    <string name="snackbar_password_sent">Password Change Request being sent!</string>
+    <string name="snackbar_password_change_success">Password has been successfully reset. Signing out…</string>
+    <string name="snackbar_password_sent_failure">Password failed to reset. Please check valid password for both current and new</string>
 
 </resources>
