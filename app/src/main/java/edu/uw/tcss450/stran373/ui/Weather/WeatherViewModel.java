@@ -57,9 +57,9 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private int[][] mFutureDays;
 
-    private Double mLat;
+    private Object mLat;
 
-    private Double mLon;
+    private Object mLon;
 
     /**
      * Constructor for the ViewModel.
@@ -242,10 +242,17 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private void handleZip(final JSONObject theResult) {
         try {
-            Double lat = (Double) theResult.get("lat");
-            Double lon = (Double) theResult.get("lng");
-            mLat = lat;
-            mLon = lon;
+            if (theResult.get("lat") instanceof Integer) {
+                mLat = (Integer) theResult.get("lat");
+            } else {
+                mLat = (Double) theResult.get("lat");
+            }
+
+            if (theResult.get("lng") instanceof Integer) {
+                mLon = (Integer) theResult.get("lng");
+            } else {
+                mLon = (Double) theResult.get("lng");
+            }
             Log.d("Lat/Long", mLat + "/" + mLon);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -261,9 +268,9 @@ public class WeatherViewModel extends AndroidViewModel {
      * @param theZip is a postal code (zip code).
      */
     public void connectZip(long theZip) {
-        final String url = "https://www.zipcodeapi.com/rest/" +
-                "DemoOnly00ObhFbtTaiQcSYtMBW8HtCrtyCqyXFXkdT89S1wz6wvghf6ZAzbOQN9/info.json/"
-                + theZip + "/degrees";
+        final String url = "https://www.zipcodeapi.com/rest/"
+        + "jHC7gyngynPlUQuJwlxcccscoKqPYCZjupuRC54gRXTPcNP7KDF7x2mXyoc4lV3A/"
+                +"info.json/" + theZip + "/degrees";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
