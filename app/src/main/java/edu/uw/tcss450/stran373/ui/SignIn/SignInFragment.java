@@ -20,12 +20,15 @@ import android.widget.EditText;
 import com.auth0.android.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentSignInBinding;
+import edu.uw.tcss450.stran373.model.PushyTokenViewModel;
 
 /**
  * Fragment that houses the sign-in feature.
@@ -47,6 +50,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
      */
     private char[] mySpecials;
 
+    private PushyTokenViewModel mPushyTokenViewModel;
+    private UserInfoViewModel mUserViewModel;
+
     /**
      * Executed upon creation to create a new ViewModelProvider for log-in.
      *
@@ -58,6 +64,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         mySpecials = new char[] {'!', '?', '&', '$', '#'};
         mSignInModel = new ViewModelProvider(getActivity())
                 .get(SignInViewModel.class);
+
+        mPushyTokenViewModel = new ViewModelProvider(getActivity())
+                .get(PushyTokenViewModel.class);
     }
 
     /**
@@ -118,6 +127,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 Navigation.findNavController(getView()).navigate(
                         SignInFragmentDirections.actionSignInFragmentToResetPasswordFragment()
                 ));
+
+        //don't allow sign in until pushy token retrieved
+        mPushyTokenViewModel.addTokenObserver(getViewLifecycleOwner(), token ->
+                myBinding.buttonSignin.setEnabled(!token.isEmpty()));
+
+        mPushyTokenViewModel.addResponseObserver(
+                getViewLifecycleOwner(),
+                this::observePushyPutResponse);
     }
 
     /**
@@ -266,21 +283,68 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     myBinding.editEmail.setError(
                             "Error Authenticating: " +
                                     theResponse.getJSONObject("data").getString("message"));
+
+                    // If user is not verified, show pop-up message with the option to resend verification email
+                    if (theResponse.getJSONObject("data").getString("message").contains("verified")) {
+                        Snackbar mSnackbar = Snackbar.make(getView(),
+                                R.string.text_email_not_verified, Snackbar.LENGTH_INDEFINITE);
+                        mSnackbar.show();
+                        mSnackbar.setAction(R.string.button_resend, onClick -> {
+                            mSignInModel.resendEmail(myBinding.editEmail.getText().toString(),
+                                    myBinding.editPassword.getText().toString());
+                            Snackbar.make(getView(), R.string.text_email_sent, Snackbar.LENGTH_LONG).show();
+                        });
+                    }
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
             } else {
                 try {
-                    navigateToSuccess(
-                            myBinding.editEmail.getText().toString(),
-                            theResponse.getString("token"));
-                    Log.d("JSON Response", theResponse.getString("token"));
+                    mUserViewModel = new ViewModelProvider(getActivity(),
+                            new UserInfoViewModel.UserInfoViewModelFactory(
+                                    theResponse.getString("token"),
+                                    myBinding.editEmail.getText().toString()
+                            )).get(UserInfoViewModel.class);
+                    sendPushyToken();
+
+//                    navigateToSuccess(
+//                            myBinding.editEmail.getText().toString(),
+//                            theResponse.getString("token"));
+//                    Log.d("JSON Response", theResponse.getString("token"));
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
             }
         } else {
             Log.d("JSON Response", "No response");
+        }
+    }
+
+    /**
+     * Helper to abstract the request to send the pushy token to the web service
+     */
+    private void sendPushyToken() {
+        mPushyTokenViewModel.sendTokenToWebservice(mUserViewModel.getJwt());
+    }
+
+    /**
+     * An observer on the HTTP Response from the web server. This observer should be
+     * attached to PushyTokenViewModel.
+     *
+     * @param response the Response from the server
+     */
+    private void observePushyPutResponse(final JSONObject response) {
+        if (response.length() > 0) {
+            if (response.has("code")) {
+                //this error cannot be fixed by the user changing credentials...
+                myBinding.editEmail.setError(
+                        "Error Authenticating on Push Token. Please contact support");
+            } else {
+                navigateToSuccess(
+                        myBinding.editEmail.getText().toString(),
+                        mUserViewModel.getJwt()
+                );
+            }
         }
     }
 }
