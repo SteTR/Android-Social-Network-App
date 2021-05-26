@@ -2,6 +2,7 @@ package edu.uw.tcss450.stran373;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,7 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import edu.uw.tcss450.stran373.model.PushyTokenViewModel;
 import edu.uw.tcss450.stran373.utils.Utils;
+import me.pushy.sdk.Pushy;
 
 /**
  * A class used to hold all of the Authentification Fragments.
@@ -34,6 +37,13 @@ public class AuthActivity extends AppCompatActivity {
             Utils.onActivityCreateSetTheme(this);
         }
         setContentView(R.layout.activity_auth);
+
+        //If it is not already running, start the Pushy listening service
+        Pushy.listen(this);
+        initiatePushyTokenRequest();
     }
 
+    private void initiatePushyTokenRequest() {
+        new ViewModelProvider(this).get(PushyTokenViewModel.class).retrieveToken();
+    }
 }
