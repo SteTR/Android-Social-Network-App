@@ -13,9 +13,9 @@
         android:id="@+id/card_constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="auto"
-        android:background="?android:attr/selectableItemBackground"
         android:focusableInTouchMode="false">
 
         <TextView
@@ -23,20 +23,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:text="@string/chat_card_name"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/text_lastmessage"
-            app:layout_constraintStart_toEndOf="@+id/text_profilepic"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/text_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/chat_card_time"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -44,20 +36,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:alpha=".5"
             android:text="@string/chat_card_last_message"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_profilepic"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_name" />
 
-        <ImageButton
-            android:id="@+id/text_profilepic"
-            android:layout_width="62dp"
-            android:layout_height="53dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+        <TextView
+            android:id="@+id/text_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="16dp"
+            android:alpha="0.3"
+            android:text="@string/chat_card_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--        <ImageButton-->
+        <!--            android:id="@+id/text_profilepic"-->
+        <!--            android:layout_width="62dp"-->
+        <!--            android:layout_height="53dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            tools:src="@tools:sample/avatars" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
