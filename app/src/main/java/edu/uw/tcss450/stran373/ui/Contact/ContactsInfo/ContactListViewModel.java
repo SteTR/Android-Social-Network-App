@@ -93,17 +93,6 @@ public class ContactListViewModel extends AndroidViewModel {
             if(root.get("success").toString().equals("true")) {
                 JSONArray data = root.getJSONArray(getString.apply(
                         R.string.keys_json_contacts_data));
-                if(data.length() == 0) {
-                    ContactCard contact = new ContactCard.Builder("memberid",
-                            "No ",
-                            "Contacts",
-                            "default@default.com",
-                            "default").build();
-                    mContactCards.getValue().add(contact);
-                    mContactCards.setValue(mContactCards.getValue());
-                    return;
-                }
-
                 //Loop through and build the contact cards
                 for(int i = 0; i < data.length(); i++) {
                     JSONObject jsonContact = data.getJSONObject(i);
@@ -120,12 +109,14 @@ public class ContactListViewModel extends AndroidViewModel {
                         mContactCards.getValue().add(contact);
                     }
                 }
+                mContactCards.setValue(mContactCards.getValue());
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
         }
-        mContactCards.setValue(mContactCards.getValue());
+
     }
 
 

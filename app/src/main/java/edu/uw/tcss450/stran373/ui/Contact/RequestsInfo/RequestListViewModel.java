@@ -78,18 +78,10 @@ public class RequestListViewModel extends AndroidViewModel {
         //Check the result of the call
         try {
             JSONObject root = theResult;
-            if(root.get("success").toString().equals("true")) {
+            if (root.get("success").toString().equals("true")) {
                 JSONArray data = root.getJSONArray(getString.apply(
                         R.string.keys_json_contacts_data));
-                if(data.length() == 0) {
-                    RequestCard request = new RequestCard.Builder("memberid",
-                            "No ",
-                            "Requests").build();
-                    mRequestCards.getValue().add(request);
-                    mRequestCards.setValue(mRequestCards.getValue());
-                    return;
-                }
-                for(int i = 0; i < data.length(); i++) {
+                for (int i = 0; i < data.length(); i++) {
                     JSONObject jsonRequest = data.getJSONObject(i);
                     RequestCard request = new RequestCard.Builder(
                             jsonRequest.getString("memberid"),
@@ -102,11 +94,12 @@ public class RequestListViewModel extends AndroidViewModel {
                     }
                 }
             }
+            mRequestCards.setValue(mRequestCards.getValue());
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
         }
-        mRequestCards.setValue(mRequestCards.getValue());
+
     }
 
 

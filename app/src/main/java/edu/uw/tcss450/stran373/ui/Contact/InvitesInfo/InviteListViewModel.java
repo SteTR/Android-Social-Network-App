@@ -108,12 +108,14 @@ public class InviteListViewModel extends AndroidViewModel {
                         mInviteCards.getValue().add(contact);
                     }
                 }
+                mInviteCards.setValue(mInviteCards.getValue());
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
         }
-        mInviteCards.setValue(mInviteCards.getValue());
+
     }
 
 
