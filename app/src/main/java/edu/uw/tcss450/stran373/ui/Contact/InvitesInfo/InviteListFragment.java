@@ -93,6 +93,7 @@ public class InviteListFragment extends Fragment {
                                     public void onItemCheck(InviteCard card) {
                                         currentSelectedItems.add(card);
                                         Snackbar.make(getView(), R.string.invite_sent, Snackbar.LENGTH_LONG).show();
+                                        mModel.connectPost(card.getMemberID(), mUserViewModel.getJwt());
                                     }
                                     @Override
                                     public void onItemUncheck(InviteCard card) {
@@ -116,9 +117,10 @@ public class InviteListFragment extends Fragment {
 
         //For every item that was added to the list, call the invite endpoint
         //with a POST request
+        /*
         for(int i = 0; i < currentSelectedItems.size(); i++) {
             mModel.connectPost(currentSelectedItems.get(i).getMemberID(), jwt);
-        }
+        }*/
 
     }
 }
