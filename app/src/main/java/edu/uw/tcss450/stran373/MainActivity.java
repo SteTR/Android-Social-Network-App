@@ -101,6 +101,17 @@ public class MainActivity extends AppCompatActivity {
                 new UserInfoViewModel.UserInfoViewModelFactory(mArgs.getJwt(), mArgs.getEmail())
         ).get(UserInfoViewModel.class);
 
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_weather,
+                R.id.navigation_contacts, R.id.navigation_chats).build();
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
+
         // Prompt the user for permission to access the device's location.
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(
@@ -109,6 +120,76 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         } else {
             // Get the current location.
+            requestLocation();
+        }
+
+        mCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+
+                for (Location location: locationResult.getLocations()) {
+                    Log.d("Location: ", location.toString());
+                    if (mHomeModel == null) {
+                        mHomeModel = new ViewModelProvider(MainActivity.this)
+                                .get(HomeViewModel.class);
+                    }
+                    mHomeModel.setLocation(location);
+                }
+            }
+        };
+        createLocationRequest();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startLocationUpdates();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFusedLocationClient.removeLocationUpdates(mCallback);
+    }
+
+    private void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(mRequest, mCallback, null);
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    requestLocation();
+                } else {
+                    finishAndRemoveTask();
+                }
+            }
+        }
+    }
+
+    private void createLocationRequest() {
+        mRequest = LocationRequest.create();
+        mRequest.setInterval(UPDATE_INTERVAL);
+        mRequest.setFastestInterval(FASTEST_UPDATE);
+        mRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void requestLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        } else {
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
@@ -120,38 +201,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                             Log.d("Current location: ", location.toString());
                             mLoc = location;
+                            mHomeModel.setLocation(location);
                         }
                     });
         }
-
-//        mCallback = new LocationCallback() {
-//            @Override
-//            public void onLocationResult(LocationResult locationResult) {
-//                if (locationResult == null) {
-//                    return;
-//                }
-//
-//                for (Location location: locationResult.getLocations()) {
-//                    if (mHomeModel == null) {
-//                        mHomeModel = new ViewModelProvider(MainActivity.this)
-//                                .get(HomeViewModel.class);
-//                    }
-//                    mHomeModel.setLocation(location);
-//                }
-//            }
-//        };
-
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_weather,
-                R.id.navigation_contacts, R.id.navigation_chats).build();
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
     }
+
 
     public Location getLoc() {
         return mLoc;
