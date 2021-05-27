@@ -1,5 +1,6 @@
 package edu.uw.tcss450.stran373.ui.Home;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +62,8 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(HomeViewModel.class);
         MainActivity main = (MainActivity) getActivity();
+//        Location loc = main.getLoc();
+//        Log.d("Get our loc: ", loc.toString());
         mJWT = main.getTheArgs().getJwt();
         mModel.connect(mJWT);
         mModel.addResponseObserver(getViewLifecycleOwner(), weather -> {

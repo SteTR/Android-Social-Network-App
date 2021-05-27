@@ -1,6 +1,7 @@
 package edu.uw.tcss450.stran373.ui.Home;
 
 import android.app.Application;
+import android.location.Location;
 import android.os.Build;
 import android.util.Log;
 
@@ -42,6 +43,8 @@ public class HomeViewModel extends AndroidViewModel {
      * LiveData to hold the list of WeatherCard objects.
      */
     private MutableLiveData<Weather> mWeather;
+
+    private Location mLoc;
 
     /**
      * Constructor for the ViewModel.
@@ -109,6 +112,10 @@ public class HomeViewModel extends AndroidViewModel {
      */
     public void connect(String theJWT) {
         final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
+//        Double lat = mLoc.getLatitude();
+//        Double lng = mLoc.getLongitude();
+//        Log.d("Coordinates: ", lat + "/" + lng);
+//        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" + lat + "&lon=" + lng;
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -131,4 +138,9 @@ public class HomeViewModel extends AndroidViewModel {
 
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
+
+    public void setLocation(Location theLocation) {
+        mLoc = theLocation;
+    }
+
 }
