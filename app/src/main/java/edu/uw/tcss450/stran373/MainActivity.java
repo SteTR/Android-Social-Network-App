@@ -35,6 +35,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.text.DecimalFormat;
 
 import edu.uw.tcss450.stran373.ui.Home.HomeViewModel;
+import edu.uw.tcss450.stran373.ui.Home.LocationViewModel;
 import edu.uw.tcss450.stran373.utils.Utils;
 
 /**
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
     private LocationCallback mCallback;
 
     private Location mLoc;
+
+    private LocationViewModel mLocModel;
 
     /**
      * Method called when the activity is created.
@@ -132,11 +135,11 @@ public class MainActivity extends AppCompatActivity {
 
                 for (Location location: locationResult.getLocations()) {
                     Log.d("Location: ", location.toString());
-                    if (mHomeModel == null) {
-                        mHomeModel = new ViewModelProvider(MainActivity.this)
-                                .get(HomeViewModel.class);
+                    if (mLocModel == null) {
+                        mLocModel = new ViewModelProvider(MainActivity.this)
+                                .get(LocationViewModel.class);
                     }
-                    mHomeModel.setLocation(location);
+                    mLocModel.setLocation(location);
                 }
             }
         };
@@ -195,13 +198,14 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
-                                mHomeModel = new ViewModelProvider(MainActivity.this)
-                                        .get(HomeViewModel.class);
-                                Log.d("Current Lat/Long:", mLat + "/" + mLng);
+                                mLocModel = new ViewModelProvider(MainActivity.this)
+                                        .get(LocationViewModel.class);
+                                Log.d("Current Lat/Long:", location.getLatitude() + "/" + location.getLongitude());
                             }
+                            Log.d("Call 1: ", "Here");
                             Log.d("Current location: ", location.toString());
                             mLoc = location;
-                            mHomeModel.setLocation(location);
+                            mLocModel.setLocation(location);
                         }
                     });
         }

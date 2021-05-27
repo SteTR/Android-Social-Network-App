@@ -62,10 +62,15 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(HomeViewModel.class);
         MainActivity main = (MainActivity) getActivity();
-//        Location loc = main.getLoc();
-//        Log.d("Get our loc: ", loc.toString());
+        LocationViewModel model = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
         mJWT = main.getTheArgs().getJwt();
-        mModel.connect(mJWT);
+        model.addLocationObserver(getViewLifecycleOwner(), location -> {
+            mModel.connect(mJWT, location);
+        });
+
+//        Log.d("Call 2: ", "Here");
+//        Log.d("Latitude: ", "" + model.getLocation().getLatitude());
+//        mModel.connect(mJWT);
         mModel.addResponseObserver(getViewLifecycleOwner(), weather -> {
             mBinding.textCurrentLocation.setText(weather.getLocation());
             mBinding.textCurrentTemp.setText(weather.getTemp());

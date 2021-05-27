@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -44,7 +45,6 @@ public class HomeViewModel extends AndroidViewModel {
      */
     private MutableLiveData<Weather> mWeather;
 
-    private Location mLoc;
 
     /**
      * Constructor for the ViewModel.
@@ -110,12 +110,12 @@ public class HomeViewModel extends AndroidViewModel {
     /**
      * Used to connect to the weather web service.
      */
-    public void connect(String theJWT) {
-        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
-//        Double lat = mLoc.getLatitude();
-//        Double lng = mLoc.getLongitude();
-//        Log.d("Coordinates: ", lat + "/" + lng);
-//        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" + lat + "&lon=" + lng;
+    public void connect(String theJWT, Location theLoc) {
+//        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
+        Double lat = theLoc.getLatitude();
+        Double lng = theLoc.getLongitude();
+        Log.d("Coordinates: ", lat + "/" + lng);
+        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" + lat + "&lon=" + lng;
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -137,10 +137,6 @@ public class HomeViewModel extends AndroidViewModel {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
-    }
-
-    public void setLocation(Location theLocation) {
-        mLoc = theLocation;
     }
 
 }
