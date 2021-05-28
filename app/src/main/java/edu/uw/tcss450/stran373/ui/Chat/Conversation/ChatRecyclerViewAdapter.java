@@ -1,10 +1,13 @@
 package edu.uw.tcss450.stran373.ui.Chat.Conversation;
 
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,20 +52,10 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (viewType == 1) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_chat_send_message, parent, false);
-            view.setBackgroundColor(
-                    ColorUtils.setAlphaComponent(
-                            view.getResources().getColor(R.color.design_default_color_on_primary,
-                                    view.getContext().getTheme()),
-                            16));
             return new ChatRecyclerViewAdapter.SendMessageViewHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_chat_receive_message, parent, false);
-            view.setBackgroundColor(
-                    ColorUtils.setAlphaComponent(
-                            view.getResources().getColor(R.color.design_default_color_on_secondary,
-                                    view.getContext().getTheme()),
-                            16));
             return new ChatRecyclerViewAdapter.ReceiveMessageViewHolder(view);
         }
     }
@@ -95,11 +88,16 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 binding.textReceiveMessageName.setText(message.getSender());
                 binding.textReceiveMessageTimestamp.setText(message.getTime());
                 binding.textReceiveMessageContent.setText(message.getMessage());
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = mView.getContext().getTheme();
+            theme.resolveAttribute(R.attr.colorSecondaryVariant, typedValue, true);
+            binding.card.setCardBackgroundColor( typedValue.data);
         }
     }
 
     private class SendMessageViewHolder extends RecyclerView.ViewHolder {
         private final View mView;
+
         private FragmentChatSendMessageBinding binding;
 
         public SendMessageViewHolder(@NonNull View view) {
@@ -111,6 +109,11 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         void setMessage(final ChatMessage message) {
             binding.textSendMessageContent.setText(message.getMessage());
             binding.textSendMessageTime.setText(message.getTime());
+
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = mView.getContext().getTheme();
+            theme.resolveAttribute(R.attr.colorPrimaryVariant, typedValue, true);
+            binding.sendCard.setCardBackgroundColor( typedValue.data);
         }
     }
 }
