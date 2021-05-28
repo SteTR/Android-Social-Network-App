@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -48,10 +49,20 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (viewType == 1) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_chat_send_message, parent, false);
+            view.setBackgroundColor(
+                    ColorUtils.setAlphaComponent(
+                            view.getResources().getColor(R.color.design_default_color_on_primary,
+                                    view.getContext().getTheme()),
+                            16));
             return new ChatRecyclerViewAdapter.SendMessageViewHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_chat_receive_message, parent, false);
+            view.setBackgroundColor(
+                    ColorUtils.setAlphaComponent(
+                            view.getResources().getColor(R.color.design_default_color_on_secondary,
+                                    view.getContext().getTheme()),
+                            16));
             return new ChatRecyclerViewAdapter.ReceiveMessageViewHolder(view);
         }
     }
