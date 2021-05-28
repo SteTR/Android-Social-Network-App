@@ -83,7 +83,7 @@
         android:id="@+id/changePasswordFragment"
         android:name="edu.uw.tcss450.stran373.ChangePasswordFragment"
         android:label="@string/fragment_change_password_title"
-        tools:layout="@layout/fragment_change_password" /><action android:id="@+id/action_global_changePasswordFragment" app:destination="@id/changePasswordFragment"/>
+        tools:layout="@layout/fragment_change_password" /><action android:id="@+id/action_global_changePasswordFragment" app:destination="@id/changePasswordFragment"/><action android:id="@+id/action_global_navigation_contacts" app:destination="@id/navigation_contacts"/>
 
 
 </navigation>

@@ -1,5 +1,7 @@
 package edu.uw.tcss450.stran373.ui.Chat.Message;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -63,10 +65,21 @@ public class ChatMessage implements Serializable {
 
     /**
      * Returns the timestamp of the message
+     * TODO
+     * @return the timestamp
+     */
+    public String getDate() {
+        Log.d("TIMESTAMP", mTimeStamp);
+        return mTimeStamp.substring(11,19);
+    }
+
+    /**
+     * Returns the timestamp of the message
      *
      * @return the timestamp
      */
-    public String getTimeStamp() {
+    public String getTime() {
+        Log.d("TIMESTAMP", mTimeStamp);
         return mTimeStamp.substring(11,19);
     }
 

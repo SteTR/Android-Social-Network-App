@@ -9,13 +9,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uw.tcss450.stran373.MainActivity;
+import edu.uw.tcss450.stran373.NavGraphDirections;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.ActivityMainBinding;
@@ -57,6 +62,21 @@ public class ChatFragment extends Fragment {
         mChatViewModel = provider.get(ChatViewModel.class);
         mChatViewModel.getFirstMessages(mChatId, mUserViewModel.getJwt());
         mSendViewModel = provider.get(ChatSendViewModel.class);
+
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.chat_settings_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
+//        Navigation.findNavController(getView()).navigate(NavGraphDirections.actionGlobalNavigationContacts());
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -66,6 +86,7 @@ public class ChatFragment extends Fragment {
         binding = FragmentChatBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {

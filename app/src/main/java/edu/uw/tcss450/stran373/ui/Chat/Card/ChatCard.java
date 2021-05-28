@@ -1,6 +1,7 @@
 package edu.uw.tcss450.stran373.ui.Chat.Card;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a chat box in the lists of chats to display
@@ -9,7 +10,7 @@ import java.io.Serializable;
  * @author Haoying Li
  */
 public class ChatCard implements Serializable {
-    private final String mName;
+    private final String mChatName;
     private final String mLastMessage;
     private final String mTime;
     private final int mChatId;
@@ -97,7 +98,7 @@ public class ChatCard implements Serializable {
      */
     private ChatCard(final Builder builder)
     {
-        this.mName = builder.mName;
+        this.mChatName = builder.mName;
         this.mLastMessage = builder.mLastMessage;
 //        this.mPicture = builder.mPicture;
         this.mTime = builder.mTime;
@@ -120,10 +121,10 @@ public class ChatCard implements Serializable {
      * @return the chat name
      */
     public String getName() {
-        if (mName.length() <= 30)
-            return mName;
+        if (mChatName.length() <= 30)
+            return mChatName;
         else
-            return mName.substring(0, 29) + "...";
+            return mChatName.substring(0, 29) + "...";
     }
 
     /**

@@ -21,9 +21,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
@@ -37,8 +39,6 @@ import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
  */
 public class ChatViewModel extends AndroidViewModel {
 
-//    public static final int TEST_CHAT_ID = 1;
-
     /**
      * A Map of Lists of Chat Messages.
      * The Key represents the Chat ID
@@ -46,9 +46,32 @@ public class ChatViewModel extends AndroidViewModel {
      */
     private final Map<Integer, MutableLiveData<List<ChatMessage>>> mMessages;
 
+    private final Map<Integer, MutableLiveData<Set<Integer>>> mUsers;
+
     public ChatViewModel(@NonNull Application application) {
         super(application);
         mMessages = new HashMap<>();
+        mUsers = new HashMap<>();
+    }
+
+    /**
+     * Register as an observer to listen to a specific chat room's list of users.
+     *
+     * @param chatId   the chatid of the chat to observer
+     * @param owner    the fragments lifecycle owner
+     * @param observer the observer
+     */
+    public void addChatUserObserver(int chatId,
+                                   @NonNull LifecycleOwner owner,
+                                   @NonNull Observer<? super Set<Integer>> observer) {
+        getOrCreateMapEntryChatUsers(chatId).observe(owner, observer);
+    }
+
+    private MutableLiveData<Set<Integer>> getOrCreateMapEntryChatUsers(final int chatId) {
+        if (!mUsers.containsKey(chatId)) {
+            mUsers.put(chatId, new MutableLiveData<>(new HashSet<>()));
+        }
+        return mUsers.get(chatId);
     }
 
     /**
@@ -86,6 +109,90 @@ public class ChatViewModel extends AndroidViewModel {
         return mMessages.get(chatId);
     }
 
+    public void getUsers(final int chatId, final String jwt) {
+        String url = getApplication().getResources().getString(R.string.base_url); // TODO need endpoint
+
+        Request request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null, //no body for this get request
+                this::handleSuccess,
+                this::handleError) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                headers.put("Authorization", jwt);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //Instantiate the RequestQueue and add the request to the queue
+        RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
+                .addToRequestQueue(request);
+    }
+
+    public void addUser(final int chatId, final String jwt, final int userId) {
+        String url = getApplication().getResources().getString(R.string.base_url); // TODO need endpoint
+
+        Request request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null, //no body for this get request
+                this::handleSuccess,
+                this::handleError) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                headers.put("Authorization", jwt);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //Instantiate the RequestQueue and add the request to the queue
+        RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
+                .addToRequestQueue(request);
+    }
+
+    public void removeUser(final int chatId, final String jwt, final int userId) {
+        String url = getApplication().getResources().getString(R.string.base_url); // TODO need endpoint
+
+        Request request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null, //no body for this get request
+                this::handleSuccess,
+                this::handleError) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                headers.put("Authorization", jwt);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //Instantiate the RequestQueue and add the request to the queue
+        RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
+                .addToRequestQueue(request);
+    }
+
     /**
      * Makes a request to the web service to get the first batch of messages for a given Chat Room.
      * Parses the response and adds the ChatMessage object to the List associated with the
@@ -105,7 +212,7 @@ public class ChatViewModel extends AndroidViewModel {
                 Request.Method.GET,
                 url,
                 null, //no body for this get request
-                this::handelSuccess,
+                this::handleSuccess,
                 this::handleError) {
 
             @Override
@@ -149,7 +256,7 @@ public class ChatViewModel extends AndroidViewModel {
                 Request.Method.GET,
                 url,
                 null, //no body for this get request
-                this::handelSuccess,
+                this::handleSuccess,
                 this::handleError) {
 
             @Override
@@ -188,7 +295,7 @@ public class ChatViewModel extends AndroidViewModel {
      *
      * @param response the response
      */
-    private void handelSuccess(final JSONObject response) {
+    private void handleSuccess(final JSONObject response) {
         List<ChatMessage> list;
         if (!response.has("chatid")) {
             throw new IllegalStateException("Unexpected response in ChatViewModel: " + response);

@@ -41,7 +41,7 @@
     <string name="chat_card_last_message">This is a placeholder message. :)</string>
 
     <!--  Database URLS  -->
-    <string name="base_url">https://group4-tcss450-project.herokuapp.com/</string>
+    <string name="base_url">https://production-tcss450-backend.herokuapp.com/</string>
 
     <!--Charles string resources for signin and registration-->
     <string name="email">Email</string>
