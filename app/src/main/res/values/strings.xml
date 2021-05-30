@@ -89,5 +89,7 @@
     <string name="create_chat_descr">Add Contacts to Chat</string>
     <string name="friend_has_been_invited">Friend has been invited!</string>
     <string name="text_chat_created">A chat room has been successfully created</string>
+    <string name="title_activity_maps">Map</string>
 
+    <string name="label_location">Current location:</string>
 </resources>
