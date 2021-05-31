@@ -84,6 +84,16 @@
         android:name="edu.uw.tcss450.stran373.ChangePasswordFragment"
         android:label="@string/fragment_change_password_title"
         tools:layout="@layout/fragment_change_password" /><action android:id="@+id/action_global_changePasswordFragment" app:destination="@id/changePasswordFragment"/><action android:id="@+id/action_global_navigation_contacts" app:destination="@id/navigation_contacts"/>
+    <fragment
+        android:id="@+id/navigation_chat_list"
+        android:name="edu.uw.tcss450.stran373.ui.Chat.ConversationMember.ChatMembersListFragment"
+        android:label="@string/title_chat_members"
+        tools:layout="@layout/fragment_chat_members_list">
+        <argument
+            android:name="chatid"
+            app:argType="integer" />
+    </fragment>
+    <action android:id="@+id/action_global_navigation_chat_list" app:destination="@id/navigation_chat_list" />
 
 
 </navigation>

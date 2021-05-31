@@ -66,7 +66,7 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
         {
             binding.textLastmessage.setText(chat.getLastMessage());
             binding.textName.setText(chat.getName());
-            binding.textTime.setText(chat.getTime());
+//            binding.textTime.setText(chat.getTime());
 
             // Moves to the chat id in the chatcard
             binding.cardConstraint.setOnClickListener(view ->

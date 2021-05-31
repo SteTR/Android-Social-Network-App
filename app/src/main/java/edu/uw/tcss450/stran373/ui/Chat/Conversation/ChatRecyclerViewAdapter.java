@@ -26,6 +26,9 @@ import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
  */
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int SEND_MESSAGE_VIEW_TYPE = 1;
+    private static final int RECEIVE_MESSAGE_VIEW_TYPE = 1;
+
     private final List<ChatMessage> mMessages;
     private final String mEmail;
 
@@ -38,9 +41,9 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public int getItemViewType(final int position) {
         final ChatMessage message = mMessages.get(position);
         if (message.getSender().equals(mEmail)) {
-            return 1;
+            return SEND_MESSAGE_VIEW_TYPE;
         } else {
-            return 2;
+            return RECEIVE_MESSAGE_VIEW_TYPE;
         }
     }
 
@@ -49,7 +52,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
 
-        if (viewType == 1) {
+        if (viewType == SEND_MESSAGE_VIEW_TYPE) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_chat_send_message, parent, false);
             return new ChatRecyclerViewAdapter.SendMessageViewHolder(view);
@@ -62,7 +65,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == 1) {
+        if (holder.getItemViewType() == SEND_MESSAGE_VIEW_TYPE) {
             ((SendMessageViewHolder) holder).setMessage(mMessages.get(position));
         } else {
             ((ReceiveMessageViewHolder) holder).setMessage(mMessages.get(position));

@@ -75,7 +75,7 @@ public class ChatFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
-//        Navigation.findNavController(getView()).navigate(NavGraphDirections.actionGlobalNavigationContacts());
+        Navigation.findNavController(getView()).navigate(NavGraphDirections.actionGlobalNavigationChatList(mChatId));
         return super.onOptionsItemSelected(item);
     }
 

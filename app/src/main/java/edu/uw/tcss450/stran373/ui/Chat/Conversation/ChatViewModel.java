@@ -46,32 +46,9 @@ public class ChatViewModel extends AndroidViewModel {
      */
     private final Map<Integer, MutableLiveData<List<ChatMessage>>> mMessages;
 
-    private final Map<Integer, MutableLiveData<Set<Integer>>> mUsers;
-
     public ChatViewModel(@NonNull Application application) {
         super(application);
         mMessages = new HashMap<>();
-        mUsers = new HashMap<>();
-    }
-
-    /**
-     * Register as an observer to listen to a specific chat room's list of users.
-     *
-     * @param chatId   the chatid of the chat to observer
-     * @param owner    the fragments lifecycle owner
-     * @param observer the observer
-     */
-    public void addChatUserObserver(int chatId,
-                                   @NonNull LifecycleOwner owner,
-                                   @NonNull Observer<? super Set<Integer>> observer) {
-        getOrCreateMapEntryChatUsers(chatId).observe(owner, observer);
-    }
-
-    private MutableLiveData<Set<Integer>> getOrCreateMapEntryChatUsers(final int chatId) {
-        if (!mUsers.containsKey(chatId)) {
-            mUsers.put(chatId, new MutableLiveData<>(new HashSet<>()));
-        }
-        return mUsers.get(chatId);
     }
 
     /**
@@ -107,90 +84,6 @@ public class ChatViewModel extends AndroidViewModel {
             mMessages.put(chatId, new MutableLiveData<>(new ArrayList<>()));
         }
         return mMessages.get(chatId);
-    }
-
-    public void getUsers(final int chatId, final String jwt) {
-        String url = getApplication().getResources().getString(R.string.base_url); // TODO need endpoint
-
-        Request request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null, //no body for this get request
-                this::handleSuccess,
-                this::handleError) {
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                // add headers <key,value>
-                headers.put("Authorization", jwt);
-                return headers;
-            }
-        };
-
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //Instantiate the RequestQueue and add the request to the queue
-        RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
-                .addToRequestQueue(request);
-    }
-
-    public void addUser(final int chatId, final String jwt, final int userId) {
-        String url = getApplication().getResources().getString(R.string.base_url); // TODO need endpoint
-
-        Request request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null, //no body for this get request
-                this::handleSuccess,
-                this::handleError) {
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                // add headers <key,value>
-                headers.put("Authorization", jwt);
-                return headers;
-            }
-        };
-
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //Instantiate the RequestQueue and add the request to the queue
-        RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
-                .addToRequestQueue(request);
-    }
-
-    public void removeUser(final int chatId, final String jwt, final int userId) {
-        String url = getApplication().getResources().getString(R.string.base_url); // TODO need endpoint
-
-        Request request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null, //no body for this get request
-                this::handleSuccess,
-                this::handleError) {
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                // add headers <key,value>
-                headers.put("Authorization", jwt);
-                return headers;
-            }
-        };
-
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //Instantiate the RequestQueue and add the request to the queue
-        RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
-                .addToRequestQueue(request);
     }
 
     /**

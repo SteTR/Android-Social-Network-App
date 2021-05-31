@@ -101,4 +101,7 @@
     <string name="snackbar_password_change_success">Password has been successfully reset. Signing out…</string>
     <string name="snackbar_password_sent_failure">Password failed to reset. Please check valid password for both current and new</string>
 
+    <string name="title_chat_members">Chat Members</string>
+    <string name="chat_member_name">Name</string>
+    <string name="chat_member_id">123</string>
 </resources>

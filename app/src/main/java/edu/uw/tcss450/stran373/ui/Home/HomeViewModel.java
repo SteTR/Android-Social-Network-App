@@ -90,7 +90,7 @@ public class HomeViewModel extends AndroidViewModel {
             JSONArray currentWeather = (JSONArray) current.get("weather");
             JSONObject currentCond = currentWeather.getJSONObject(0);
             int currentCondition = (int) currentCond.get("id");
-            double currentTemp = (double) current.get("temp");
+            double currentTemp = 0; // (double) current.get("temp");
 
             // Weather card for Seattle, Washington
             Weather wc = new Weather("Seattle, WA", currentCondition,currentTemp + " F°");
