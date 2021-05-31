@@ -57,8 +57,8 @@ public class ChatFragment extends Fragment {
         mChatName = args.getChatName();
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-
         actionBar.setTitle(mChatName);
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         setHasOptionsMenu(true); // TODO this back button not work as intended, looks like it's resetting it
 
@@ -67,8 +67,15 @@ public class ChatFragment extends Fragment {
         mChatViewModel = provider.get(ChatViewModel.class);
         mChatViewModel.getFirstMessages(mChatId, mUserViewModel.getJwt());
         mSendViewModel = provider.get(ChatSendViewModel.class);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionBar.setTitle(mChatName);
+        actionBar.setDisplayHomeAsUpEnabled(false);
     }
 
     @Override

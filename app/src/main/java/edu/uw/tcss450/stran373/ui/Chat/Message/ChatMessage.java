@@ -69,7 +69,6 @@ public class ChatMessage implements Serializable {
      * @return the timestamp
      */
     public String getDate() {
-        Log.d("TIMESTAMP", mTimeStamp);
         return mTimeStamp.substring(11,19);
     }
 
@@ -79,7 +78,6 @@ public class ChatMessage implements Serializable {
      * @return the timestamp
      */
     public String getTime() {
-        Log.d("TIMESTAMP", mTimeStamp);
         return mTimeStamp.substring(11,19);
     }
 

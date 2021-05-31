@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,10 @@ public class ChatMembersListFragment extends Fragment {
 
         mChatMembersVM.addChatMemberObserver(getViewLifecycleOwner(), (response) -> {
             rv.getAdapter().notifyDataSetChanged();
+        });
+
+        binding.floatingActionButton.setOnClickListener(button -> {
+            new ChatMemberAddDialogFragment(ChatMembersListFragmentArgs.fromBundle(getArguments()).getChatid()).show(getChildFragmentManager(), "");
         });
     }
 }

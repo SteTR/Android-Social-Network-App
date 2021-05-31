@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -76,11 +77,13 @@ public class ChatMembersViewModel extends AndroidViewModel {
     public void deleteUser(final int chatId, final String jwt, final int memberid) {
         String url = getApplication().getResources().getString(R.string.base_url) + "chats/" + chatId + "/members?p=" + memberid;
 
+        Response.Listener<JSONObject> handleDeleteSuccess = (theJSONObject) -> getUsers(chatId, jwt);
+
         Request request = new JsonObjectRequest(
                 Request.Method.DELETE,
                 url,
                 null,
-                null,
+                handleDeleteSuccess,
                 this::handleError) {
 
             @Override
@@ -102,13 +105,17 @@ public class ChatMembersViewModel extends AndroidViewModel {
     }
 
     public void addUser(final int chatId, final String jwt, final int memberid) {
+        Log.d("ADD", chatId + ": " + jwt + " - " + memberid);
         String url = getApplication().getResources().getString(R.string.base_url) + "chats/" + chatId + "/members?p=" + memberid;
 
+        Response.Listener<JSONObject> handleAddSuccess = (theJSONObject) -> getUsers(chatId, jwt);
+
+        Log.d("ADD URL", url);
         Request request = new JsonObjectRequest(
                 Request.Method.PUT,
                 url,
                 null,
-                null,
+                handleAddSuccess,
                 this::handleError) {
 
             @Override
