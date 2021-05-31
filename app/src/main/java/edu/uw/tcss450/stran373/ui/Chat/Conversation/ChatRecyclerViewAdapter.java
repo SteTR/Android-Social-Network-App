@@ -27,7 +27,7 @@ import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int SEND_MESSAGE_VIEW_TYPE = 1;
-    private static final int RECEIVE_MESSAGE_VIEW_TYPE = 1;
+    private static final int RECEIVE_MESSAGE_VIEW_TYPE = 2;
 
     private final List<ChatMessage> mMessages;
     private final String mEmail;

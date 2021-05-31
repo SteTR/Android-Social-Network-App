@@ -24,12 +24,14 @@ public class ChatMemberUpdateDialogFragment extends DialogFragment {
     private ChatMembersViewModel mChatMembersVM;
     private final int mChatMemberId;
     private final String mName;
+    private final int mChatId;
     private UserInfoViewModel mUserViewModel;
 
-    public ChatMemberUpdateDialogFragment(final String name, final int chatMemberId) {
+    public ChatMemberUpdateDialogFragment(final String name, final int chatMemberId, final int chatId) {
         super();
         mChatMemberId = chatMemberId;
         mName = name;
+        mChatId = chatId;
     }
 
     @Nullable
@@ -51,7 +53,7 @@ public class ChatMemberUpdateDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(mName)
                 .setItems(new String[]{"DELETE"}, (dialog, which) -> {
-                    mChatMembersVM.deleteUser(0, mUserViewModel.getJwt(), mChatMemberId);
+                    mChatMembersVM.deleteUser(mChatId, mUserViewModel.getJwt(), mChatMemberId);
                     dismiss();
                 });
         return builder.create();

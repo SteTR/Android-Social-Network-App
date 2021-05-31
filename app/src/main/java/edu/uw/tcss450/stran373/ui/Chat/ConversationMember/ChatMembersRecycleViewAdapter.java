@@ -17,9 +17,11 @@ import edu.uw.tcss450.stran373.databinding.FragmentChatMemberBinding;
 public class ChatMembersRecycleViewAdapter extends RecyclerView.Adapter<ChatMembersRecycleViewAdapter.SendMessageViewHolder> {
 
     private final List<ChatMember> mChatMembers;
+    private final int mChatId;
 
-    public ChatMembersRecycleViewAdapter(final List<ChatMember> chatMembers) {
+    public ChatMembersRecycleViewAdapter(final List<ChatMember> chatMembers, final int chatid) {
         this.mChatMembers = chatMembers;
+        this.mChatId = chatid;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class ChatMembersRecycleViewAdapter extends RecyclerView.Adapter<ChatMemb
 
     @Override
     public void onBindViewHolder(@NonNull final ChatMembersRecycleViewAdapter.SendMessageViewHolder holder, final int position) {
-        holder.setChatMembercard(mChatMembers.get(position).getName(), mChatMembers.get(position).getMemberId());
+        holder.setChatMembercard(mChatMembers.get(position).getName(), mChatMembers.get(position).getMemberId(), mChatId);
     }
 
     @Override
@@ -50,10 +52,10 @@ public class ChatMembersRecycleViewAdapter extends RecyclerView.Adapter<ChatMemb
             binding = FragmentChatMemberBinding.bind(view);
         }
 
-        void setChatMembercard(final String name, final int id) {
+        void setChatMembercard(final String name, final int memberid, final int chatid) {
             binding.textName.setText(name);
-            binding.textId.setText(id + "");
-            binding.cardConstraint.setOnClickListener((mView) -> new ChatMemberUpdateDialogFragment(name, id)
+            binding.textId.setText(memberid + "");
+            binding.cardConstraint.setOnClickListener((mView) -> new ChatMemberUpdateDialogFragment(name, memberid, chatid)
                     .show(((AppCompatActivity) mContext).getSupportFragmentManager(), ""));
         }
     }

@@ -50,12 +50,17 @@ public class ChatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         ChatFragmentArgs args = ChatFragmentArgs.fromBundle(getArguments());
         mChatId = args.getChatId();
         mChatName = args.getChatName();
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+
         actionBar.setTitle(mChatName);
+
+        setHasOptionsMenu(true); // TODO this back button not work as intended, looks like it's resetting it
 
         ViewModelProvider provider = new ViewModelProvider(getActivity());
         mUserViewModel = provider.get(UserInfoViewModel.class);
@@ -63,7 +68,7 @@ public class ChatFragment extends Fragment {
         mChatViewModel.getFirstMessages(mChatId, mUserViewModel.getJwt());
         mSendViewModel = provider.get(ChatSendViewModel.class);
 
-        setHasOptionsMenu(true);
+
     }
 
     @Override

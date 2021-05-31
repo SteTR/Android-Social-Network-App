@@ -52,7 +52,8 @@ public class ChatMembersListFragment extends Fragment {
         final RecyclerView rv = binding.listRecyclerChatMembers;
 
         //Set the Adapter to hold a reference to the list the chat ID that the ChatViewModel holds.
-        rv.setAdapter(new ChatMembersRecycleViewAdapter(mChatMembersVM.getChatMembers()));
+        rv.setAdapter(new ChatMembersRecycleViewAdapter(mChatMembersVM.getChatMembers(),
+                ChatMembersListFragmentArgs.fromBundle(getArguments()).getChatid()));
 
         mChatMembersVM.addChatMemberObserver(getViewLifecycleOwner(), (response) -> {
             rv.getAdapter().notifyDataSetChanged();
