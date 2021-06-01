@@ -57,9 +57,30 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private int[][] mFutureDays;
 
+    /**
+     * Represents the most recent latitude used to retrieve the most recent location.
+     */
     private Object mLat;
 
+    /**
+     * Represents the most recent longitude used to retrieve the most recent location.
+     */
     private Object mLon;
+
+    /**
+     * Represents the most recent city location.
+     */
+    private String mCity;
+
+    /**
+     * Represents the most recent state.
+     */
+    private String mState;
+
+    /**
+     * Represents the most recent zip code used to retrieve the most recent location.
+     */
+    private long mZip;
 
     /**
      * Constructor for the ViewModel.
@@ -73,6 +94,7 @@ public class WeatherViewModel extends AndroidViewModel {
         mCardList.setValue(new ArrayList<>());
         mHourCards = new MutableLiveData<>();
         mHourCards.setValue(new ArrayList<>());
+        mZip = 0;
     }
 
     /**
@@ -128,16 +150,20 @@ public class WeatherViewModel extends AndroidViewModel {
             int currentCondition = (int) currentCond.get("id");
             double currentTemp = (double) current.get("temp");
 
-            // Weather card for Seattle, Washington
+            // Weather card for the most recent location.
             WeatherCard wc = new WeatherCard
-                    .Builder("Seattle, WA", currentTemp + " F°", currentCondition)
+                    .Builder(mCity + ", " + mState, currentTemp + " F°", currentCondition)
                     .addDay1(String.format("%d/%d", mFutureDays[0][0], mFutureDays[0][1]), (jDays[0]), jConds[0])
                     .addDay2(String.format("%d/%d", mFutureDays[1][0], mFutureDays[1][1]), (jDays[1]), jConds[1])
                     .addDay3(String.format("%d/%d", mFutureDays[2][0], mFutureDays[2][1]), (jDays[2]), jConds[2])
                     .addDay4(String.format("%d/%d", mFutureDays[3][0], mFutureDays[3][1]), (jDays[3]), jConds[3])
                     .addDay5(String.format("%d/%d", mFutureDays[4][0], mFutureDays[4][1]), (jDays[4]), jConds[4])
                     .build();
-            if (!mCardList.getValue().contains(wc) && mCardList.getValue().size() < 1) {
+            // !mCardList.getValue().contains(wc) && mCardList.getValue().size() < 1
+//            if (!mCardList.getValue().contains(wc)) {
+//                mCardList.getValue().add(wc);
+//            }
+            if (!cardExists(wc) || mCardList.getValue().isEmpty()) {
                 mCardList.getValue().add(wc);
             }
 
@@ -166,6 +192,24 @@ public class WeatherViewModel extends AndroidViewModel {
         // Set up the list of weather cards and hourly cards.
         mCardList.setValue(mCardList.getValue());
         mHourCards.setValue(mHourCards.getValue());
+    }
+
+    /**
+     * Helper method to check to see if the same weather card exists in the card list.
+     *
+     * @param theCard is a weather card.
+     * @return true if there is already the same existing card, false otherwise.
+     */
+    private boolean cardExists(WeatherCard theCard) {
+        boolean exists = false;
+        for (int i = 0; i < mCardList.getValue().size(); i++) {
+            String loc1 = mCardList.getValue().get(i).getLocation();
+            String loc2 = theCard.getLocation();
+            if (loc1.equals(loc2)) {
+                exists = true;
+            }
+        }
+        return exists;
     }
 
     /**
@@ -243,17 +287,19 @@ public class WeatherViewModel extends AndroidViewModel {
     private void handleZip(final JSONObject theResult) {
         try {
             if (theResult.get("lat") instanceof Integer) {
-                mLat = (Integer) theResult.get("lat");
+                mLat = theResult.get("lat");
             } else {
-                mLat = (Double) theResult.get("lat");
+                mLat = theResult.get("lat");
             }
 
             if (theResult.get("lng") instanceof Integer) {
-                mLon = (Integer) theResult.get("lng");
+                mLon = theResult.get("lng");
             } else {
-                mLon = (Double) theResult.get("lng");
+                mLon = theResult.get("lng");
             }
             Log.d("Lat/Long", mLat + "/" + mLon);
+            mCity = (String) theResult.get("city");
+            mState = (String) theResult.get("state");
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR!", e.getMessage());
@@ -325,7 +371,7 @@ public class WeatherViewModel extends AndroidViewModel {
      * Used to connect to the weather web service.
      */
     public void connect(String theJWT) {
-        connectZip(98109);
+        connectZip(mZip);
 //        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
         final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" +
                 mLat + "&lon=" + mLon;
@@ -350,6 +396,20 @@ public class WeatherViewModel extends AndroidViewModel {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+    }
+
+    /**
+     * Used to set the most recent zip code for retrieving the current location. Returns true
+     * if the user enters a new location, false otherwise.
+     *
+     * @param theZip is a zip code (postal code).
+     */
+    public boolean setZip(long theZip) {
+        boolean exists = theZip == mZip;
+        if (!exists) {
+            mZip = theZip;
+        }
+        return exists;
     }
 
     /**

@@ -52,7 +52,7 @@ public class WeatherFragment extends Fragment {
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
         MainActivity main = (MainActivity) getActivity();
         mJWT = main.getTheArgs().getJwt();
-//        mModel.connectZip(98467);
+        mModel.setZip(98109);
         mModel.connect(mJWT);
     }
 

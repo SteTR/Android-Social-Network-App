@@ -62,7 +62,6 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_register_short">Register</string>
 
-
     <!-- String resources for signin and shared preferences -->
     <string name="switch_sign_in">Stay Signed in</string>
     <string name="keys_shared_prefs">My Auth App Shared Prefs</string>
@@ -91,5 +90,6 @@
     <string name="text_chat_created">A chat room has been successfully created</string>
     <string name="title_activity_maps">Map</string>
 
-    <string name="label_location">Current location:</string>
+    <string name="label_location">Current Location:</string>
+    <string name="label_location_button">Add Location</string>
 </resources>

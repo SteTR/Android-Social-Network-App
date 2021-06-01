@@ -45,6 +45,15 @@ public class HomeViewModel extends AndroidViewModel {
      */
     private MutableLiveData<Weather> mWeather;
 
+    /**
+     * Represents the current state.
+     */
+    private String mState;
+
+    /**
+     * Represents the current city;
+     */
+    private String mCity;
 
     /**
      * Constructor for the ViewModel.
