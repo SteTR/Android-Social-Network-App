@@ -18,6 +18,25 @@ public class RequestCard implements Serializable {
     private final String mMemberID;
 
     /**
+     * This field is used to check if the invite was accepted or declined.
+     */
+    private boolean isAccepted;
+
+    /**
+     * This field is used to check if request was accepted or declined
+     */
+    private boolean isDeclined;
+
+    /**
+     * Set whether the contact is selected or not
+     */
+    public void setAccepted(boolean theChecked) { this.isAccepted = theChecked;}
+    /**
+     * Set whether the contact is selected or not
+     */
+    public void setDeclined(boolean theChecked) { this.isDeclined= theChecked;}
+
+    /**
      * Necessary builder function to build the Request card
      * @author Andrew Bennett
      */
@@ -25,6 +44,8 @@ public class RequestCard implements Serializable {
         private String mFirstName;
         private String mLastName;
         private String mMemberID;
+        private boolean isAccepted;
+        private boolean isDeclined;
 
         public Builder()
         {
@@ -38,7 +59,10 @@ public class RequestCard implements Serializable {
             this.mMemberID = theContactID;
             this.mFirstName = theFirstName;
             this.mLastName = theLastName;
+            this.isAccepted = false;
+            this.isDeclined = false;
         }
+
 
         /**
          * Sets the first name
@@ -102,4 +126,8 @@ public class RequestCard implements Serializable {
      * @return mLastName
      */
     public String getLastName(){return mLastName;}
+
+    public boolean getAccepted(){return isAccepted;}
+
+    public boolean getDeclined(){return isDeclined;}
 }

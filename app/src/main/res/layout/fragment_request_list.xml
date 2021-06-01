@@ -48,7 +48,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/requestRecycler"
-        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.RequestFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.RequestCard"
         android:layout_width="416dp"
         android:layout_height="493dp"
         android:layout_marginStart="8dp"

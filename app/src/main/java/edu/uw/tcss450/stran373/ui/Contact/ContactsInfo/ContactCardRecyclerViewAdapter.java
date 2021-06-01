@@ -26,19 +26,14 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
      */
     private final List<ContactCard> mContacts;
 
-    interface OnItemCheckListener {
+    public interface OnItemCheckListener {
         void onItemCheck(ContactCard card);
         void onItemUncheck(ContactCard card);
     }
 
     @NonNull
-    private OnItemCheckListener onItemClick;
+    public OnItemCheckListener onItemClick;
 
-
-    /**
-     * Listener to get list of checked boxes
-     */
-    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
 
     public ContactCardRecyclerViewAdapter(final List<ContactCard> theContactCards, @NonNull OnItemCheckListener onItemCheckListener)
     {
