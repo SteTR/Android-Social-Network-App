@@ -18,7 +18,9 @@ import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentChatMembersListBinding;
 
 /**
- * create an instance of this fragment.
+ * Fragment to hold the recyclerview of the chat member list and button to add
+ *
+ * @author Steven Tran
  */
 public class ChatMembersListFragment extends Fragment {
 
@@ -56,10 +58,12 @@ public class ChatMembersListFragment extends Fragment {
         rv.setAdapter(new ChatMembersRecycleViewAdapter(mChatMembersVM.getChatMembers(),
                 ChatMembersListFragmentArgs.fromBundle(getArguments()).getChatid()));
 
+        // Updates after chat members change for some reason (get, add, delete)
         mChatMembersVM.addChatMemberObserver(getViewLifecycleOwner(), (response) -> {
             rv.getAdapter().notifyDataSetChanged();
         });
 
+        // 
         binding.floatingActionButton.setOnClickListener(button -> {
             new ChatMemberAddDialogFragment(ChatMembersListFragmentArgs.fromBundle(getArguments()).getChatid()).show(getChildFragmentManager(), "");
         });

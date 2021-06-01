@@ -18,6 +18,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 
+/**
+ * Dialog Fragment to handle adding a chat member
+ *
+ * @author Steven Tran
+ */
 public class ChatMemberAddDialogFragment extends DialogFragment {
     private ChatMembersViewModel mChatMembersVM;
     private final int mChatId;
@@ -39,6 +44,7 @@ public class ChatMemberAddDialogFragment extends DialogFragment {
     /**
      * Method used to create a diolog message for the user
      * AKA a "pop-up" window.
+     *
      * @param savedInstanceState Bundle from previous state
      * @return The new Dialog window
      */

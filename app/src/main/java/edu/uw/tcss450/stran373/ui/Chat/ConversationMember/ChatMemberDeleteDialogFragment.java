@@ -19,7 +19,12 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.utils.Utils;
 
-public class ChatMemberUpdateDialogFragment extends DialogFragment {
+/**
+ * Dialog Fragment to handle deleting a chat member
+ *
+ * @author Steven Tran
+ */
+public class ChatMemberDeleteDialogFragment extends DialogFragment {
 
     private ChatMembersViewModel mChatMembersVM;
     private final int mChatMemberId;
@@ -27,7 +32,7 @@ public class ChatMemberUpdateDialogFragment extends DialogFragment {
     private final int mChatId;
     private UserInfoViewModel mUserViewModel;
 
-    public ChatMemberUpdateDialogFragment(final String name, final int chatMemberId, final int chatId) {
+    public ChatMemberDeleteDialogFragment(final String name, final int chatMemberId, final int chatId) {
         super();
         mChatMemberId = chatMemberId;
         mName = name;

@@ -55,7 +55,7 @@ public class ChatMembersRecycleViewAdapter extends RecyclerView.Adapter<ChatMemb
         void setChatMembercard(final String name, final int memberid, final int chatid) {
             binding.textName.setText(name);
             binding.textId.setText(memberid + "");
-            binding.cardConstraint.setOnClickListener((mView) -> new ChatMemberUpdateDialogFragment(name, memberid, chatid)
+            binding.cardConstraint.setOnClickListener((mView) -> new ChatMemberDeleteDialogFragment(name, memberid, chatid)
                     .show(((AppCompatActivity) mContext).getSupportFragmentManager(), ""));
         }
     }

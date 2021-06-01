@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import edu.uw.tcss450.stran373.R;
 
 /**
- * create an instance of this fragment.
+ * Fragment to represent a chatmember
+ *
+ * @author Steven Tran
  */
 public class ChatMemberFragment extends Fragment {
 

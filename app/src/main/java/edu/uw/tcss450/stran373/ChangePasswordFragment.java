@@ -32,7 +32,10 @@ import edu.uw.tcss450.stran373.databinding.FragmentResetPasswordBinding;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
 /**
- * create an instance of this fragment.
+ * Fragment to handle password changes
+ *
+ * NOTE: I got lazy and did not make a view model, all the view model
+ * @author Steven Tran
  */
 public class ChangePasswordFragment extends Fragment {
 

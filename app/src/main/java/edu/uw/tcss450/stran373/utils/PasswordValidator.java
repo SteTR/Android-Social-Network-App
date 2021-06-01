@@ -6,6 +6,12 @@ import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
+/**
+ *
+ * Combinator Password validator (not in use)
+ * @author Steven Tran
+ * @deprecated
+ */
 public interface PasswordValidator extends Function<String, Optional<PasswordValidator.ValidationResult>> {
 
     enum ValidationResult {

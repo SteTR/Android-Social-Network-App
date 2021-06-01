@@ -39,6 +39,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemViewType(final int position) {
+        // Checks the message if it belongs to user or other and puts a view type on them
         final ChatMessage message = mMessages.get(position);
         if (message.getSender().equals(mEmail)) {
             return SEND_MESSAGE_VIEW_TYPE;
@@ -77,6 +78,11 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         return mMessages.size();
     }
 
+    /**
+     * Holder that holds receive message (messages that do not belong to the signed in user)
+     *
+     * @author Steven Tran
+     */
     private class ReceiveMessageViewHolder extends RecyclerView.ViewHolder {
         private final View mView;
         private FragmentChatReceiveMessageBinding binding;
@@ -98,6 +104,11 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    /**
+     * Holder that holds send message (messages that do belong to the signed in user)
+     *
+     * @author Steven Tran
+     */
     private class SendMessageViewHolder extends RecyclerView.ViewHolder {
         private final View mView;
 
@@ -111,6 +122,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         void setMessage(final ChatMessage message) {
             binding.textSendMessageContent.setText(message.getMessage());
+            binding.textSendMessageDate.setText(message.getDate());
             binding.textSendMessageTime.setText(message.getTime());
 
             TypedValue typedValue = new TypedValue();

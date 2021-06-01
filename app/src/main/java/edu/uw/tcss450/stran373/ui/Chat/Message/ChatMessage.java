@@ -64,12 +64,11 @@ public class ChatMessage implements Serializable {
     }
 
     /**
-     * Returns the timestamp of the message
-     * TODO
-     * @return the timestamp
+     * Returns the date of the message
+     * @return the date
      */
     public String getDate() {
-        return mTimeStamp.substring(11,19);
+        return mTimeStamp.split(" ")[0];
     }
 
     /**
