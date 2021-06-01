@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="edu.uw.tcss450.stran373.ui.Home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_single_chat"
+            app:destination="@id/navigation_single_chat" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_chats"
         android:name="edu.uw.tcss450.stran373.ui.Chat.Card.ChatCardListFragment"
@@ -23,7 +27,7 @@
         android:id="@+id/navigation_single_chat"
         android:name="edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatFragment"
         android:label="@string/chat_card_name"
-        tools:layout="@layout/fragment_chat" >
+        tools:layout="@layout/fragment_chat">
         <argument
             android:name="chatId"
             app:argType="integer" />
