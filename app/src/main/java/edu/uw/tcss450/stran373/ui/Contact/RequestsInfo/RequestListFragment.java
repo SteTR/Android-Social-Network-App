@@ -76,9 +76,21 @@ public class RequestListFragment extends Fragment {
         mModel.addRequestListObserver(getViewLifecycleOwner(), requestList -> {
             if (!requestList.isEmpty()) {
                 binding.requestRecycler.setAdapter(
-                        new RequestCardRecyclerViewAdapter(requestList));
+                        new RequestCardRecyclerViewAdapter(requestList, new RequestCardRecyclerViewAdapter.ClickListener() {
+
+                            @Override
+                            public void onAcceptClicked(RequestCard card) {
+                                mModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
+                            }
+
+                            @Override
+                            public void onDeclineClicked(RequestCard card) {
+                                mModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+                            }
+                        }));
             }
         });
+
         binding.contactButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         RequestListFragmentDirections.actionRequestListFragmentToNavigationContacts()));

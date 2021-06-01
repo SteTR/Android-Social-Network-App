@@ -3,14 +3,20 @@ package edu.uw.tcss450.stran373.ui.Contact.RequestsInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.checkbox.MaterialCheckBox;
+
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentRequestCardBinding;
+import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCard;
+import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCardRecyclerViewAdapter;
 
 public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<RequestCardRecyclerViewAdapter.RequestCardViewHolder>{
     /**
@@ -18,10 +24,19 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
      */
     private final List<RequestCard> mRequests;
 
+    @NonNull
+    public ClickListener onClick;
 
-    public RequestCardRecyclerViewAdapter(final List<RequestCard> theRequestCards)
+    public interface ClickListener {
+        void onAcceptClicked(RequestCard card);
+        void onDeclineClicked(RequestCard card);
+    }
+
+
+    public RequestCardRecyclerViewAdapter(final List<RequestCard> theRequestCards, @NonNull ClickListener theClickListener)
     {
         this.mRequests= theRequestCards;
+        this.onClick = theClickListener;
     }
 
     /**
@@ -36,6 +51,7 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
         return new RequestCardRecyclerViewAdapter.RequestCardViewHolder(LayoutInflater.
                 from(parent.getContext())
                 .inflate(R.layout.fragment_request_card, parent, false));
+
     }
 
     /**
@@ -63,7 +79,7 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
      * Internal class used as a view holder for specific cards in the recycler
      * view
      */
-    public static class RequestCardViewHolder extends RecyclerView.ViewHolder {
+    public static class RequestCardViewHolder extends RecyclerView.ViewHolder implements Button.OnClickListener {
 
         /**
          * View for the card item
@@ -75,6 +91,12 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
          */
         public FragmentRequestCardBinding binding;
 
+        protected MaterialCheckBox acceptButton;
+
+        protected MaterialCheckBox declineButton;
+
+        private WeakReference<ClickListener> listenerRef;
+
         /**
          * The specific contact card
          */
@@ -85,6 +107,11 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
             super(itemView);
             mView = itemView;
             binding = FragmentRequestCardBinding.bind(itemView);
+            acceptButton = itemView.findViewById(R.id.acceptBox);
+            declineButton = itemView.findViewById(R.id.declineBox);
+
+            acceptButton.setOnClickListener(this);
+            declineButton.setOnClickListener(this);
         }
 
 
@@ -101,6 +128,18 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
             String fullName = binding.textFirstName.getText().toString()
                     +" " + binding.textLastName.getText().toString();
             binding.textFirstLast.setText(fullName);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(v.getId() == acceptButton.getId()) {
+                mRequest.setAccepted(true);
+                listenerRef.get().onAcceptClicked(mRequest);
+            } else {
+                mRequest.setDeclined(true);
+                listenerRef.get().onDeclineClicked(mRequest);
+            }
+
         }
     }
 }
