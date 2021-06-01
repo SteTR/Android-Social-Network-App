@@ -32,7 +32,7 @@
     <string name="title_pacnw_toolbar">PacNW</string>
 
     <string name="title_chats">Chats</string>
-    <string name="text_weather_search">Search...</string>
+    <string name="text_weather_search">Search…</string>
     <string name="button_weather_search">Go</string>
 
     <!--  Chat Card  -->
@@ -42,6 +42,7 @@
 
     <!--  Database URLS  -->
     <string name="base_url">https://production-tcss450-backend.herokuapp.com/</string>
+<!--  https://production-tcss450-backend.herokuapp.com  http://10.0.2.2:5000 -->
 
     <!--Charles string resources for signin and registration-->
     <string name="email">Email</string>

@@ -104,13 +104,11 @@ public class ChatMembersViewModel extends AndroidViewModel {
                 .addToRequestQueue(request);
     }
 
-    public void addUser(final int chatId, final String jwt, final int memberid) {
-        Log.d("ADD", chatId + ": " + jwt + " - " + memberid);
-        String url = getApplication().getResources().getString(R.string.base_url) + "chats/" + chatId + "/members?p=" + memberid;
+    public void addUser(final int chatId, final String jwt, final String email) {
+        String url = getApplication().getResources().getString(R.string.base_url) + "chats/" + chatId + "/members?p=" + email;
 
         Response.Listener<JSONObject> handleAddSuccess = (theJSONObject) -> getUsers(chatId, jwt);
 
-        Log.d("ADD URL", url);
         Request request = new JsonObjectRequest(
                 Request.Method.PUT,
                 url,

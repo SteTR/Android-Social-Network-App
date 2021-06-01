@@ -42,7 +42,7 @@ public class ChangePasswordFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
+        mUserViewModel = new ViewModelProvider(requireActivity()).get(UserInfoViewModel.class);
         setHasOptionsMenu(false);
     }
 
@@ -56,7 +56,7 @@ public class ChangePasswordFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding = FragmentChangePasswordBinding.bind(getView());
+        binding = FragmentChangePasswordBinding.bind(requireView());
 
         binding.buttonConfirmChangePassword.setOnClickListener(buttonView -> {
             String oldpassword = binding.editPasswordCurrent.getText().toString();
@@ -81,8 +81,6 @@ public class ChangePasswordFragment extends Fragment {
      */
     private void sendChangePasswordRequest(final String oldpassword, final String newpassword) {
         Snackbar.make(getView(), R.string.snackbar_password_sent, Snackbar.LENGTH_LONG).show();
-        Log.d("old", oldpassword);
-        Log.d("new", newpassword);
         final String url =  getString(R.string.base_url) + "auth/changePassword";
 
         final JSONObject body = new JSONObject();
@@ -92,7 +90,7 @@ public class ChangePasswordFragment extends Fragment {
         } catch(JSONException theE) {
             theE.printStackTrace();
         }
-        Request request = new JsonObjectRequest(
+        final Request request = new JsonObjectRequest(
                 Request.Method.PUT,
                 url,
                 body,
@@ -133,7 +131,7 @@ public class ChangePasswordFragment extends Fragment {
                     error.networkResponse.statusCode +
                             " " +
                             data);
-            Snackbar.make(getView(), R.string.snackbar_password_sent_failure, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(requireView(), R.string.snackbar_password_sent_failure, Snackbar.LENGTH_LONG).show();
         }
     }
 
