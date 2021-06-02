@@ -58,10 +58,5 @@ public class ChatCardListFragment extends Fragment {
                 binding.listRecyclerViewChat.setAdapter(new ChatCardRecycleViewAdapter(mChatListViewModel.getCardList()));
             }
         });
-
-        // Navigates to the sample chat message for now
-//        binding.listChatAddButton.setOnClickListener(button ->
-//                Navigation.findNavController(getView()).navigate(ChatCardListFragmentDirections
-//                        .actionNavigationChatsToNavigationSingleChat(ChatViewModel.TEST_CHAT_ID)));
     }
 }
