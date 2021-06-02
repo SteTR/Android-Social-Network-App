@@ -17,26 +17,31 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentRequestCardBinding;
 import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCard;
 import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCardRecyclerViewAdapter;
+import edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteCard;
+import edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteCardRecyclerViewAdapter;
 
+/**
+ * Holds the different cards for the pending requests
+ * @author Andrew Bennett
+ */
 public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<RequestCardRecyclerViewAdapter.RequestCardViewHolder>{
     /**
      * List of contacts to be displayed
      */
     private final List<RequestCard> mRequests;
 
-    @NonNull
-    public ClickListener onClick;
-
-    public interface ClickListener {
-        void onAcceptClicked(RequestCard card);
-        void onDeclineClicked(RequestCard card);
+    interface OnItemCheckListener {
+        void onItemCheck(RequestCard card);
     }
 
+    @NonNull
+    private RequestCardRecyclerViewAdapter.OnItemCheckListener onItemClick;
 
-    public RequestCardRecyclerViewAdapter(final List<RequestCard> theRequestCards, @NonNull ClickListener theClickListener)
+
+    public RequestCardRecyclerViewAdapter(final List<RequestCard> theRequestCards, @NonNull RequestCardRecyclerViewAdapter.OnItemCheckListener onItemCheckListener)
     {
         this.mRequests= theRequestCards;
-        this.onClick = theClickListener;
+        this.onItemClick = onItemCheckListener;
     }
 
     /**
@@ -64,6 +69,18 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
     public void onBindViewHolder(@NonNull RequestCardRecyclerViewAdapter.RequestCardViewHolder holder, int position) {
         final RequestCard request = mRequests.get(position);
         holder.setRequest(request);
+
+        holder.buttonAccept.setOnClickListener(view -> {
+            onItemClick.onItemCheck(request);
+            request.setDeclined(false);
+            request.setAccepted(true);
+        });
+
+        holder.buttonDecline.setOnClickListener(view -> {
+            onItemClick.onItemCheck(request);
+            request.setAccepted(false);
+            request.setDeclined(true);
+        });
     }
 
     /**
@@ -79,7 +96,7 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
      * Internal class used as a view holder for specific cards in the recycler
      * view
      */
-    public static class RequestCardViewHolder extends RecyclerView.ViewHolder implements Button.OnClickListener {
+    public static class RequestCardViewHolder extends RecyclerView.ViewHolder {
 
         /**
          * View for the card item
@@ -91,11 +108,9 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
          */
         public FragmentRequestCardBinding binding;
 
-        protected MaterialCheckBox acceptButton;
+        protected Button buttonAccept;
 
-        protected MaterialCheckBox declineButton;
-
-        private WeakReference<ClickListener> listenerRef;
+        protected Button buttonDecline;
 
         /**
          * The specific contact card
@@ -107,11 +122,8 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
             super(itemView);
             mView = itemView;
             binding = FragmentRequestCardBinding.bind(itemView);
-            acceptButton = itemView.findViewById(R.id.acceptBox);
-            declineButton = itemView.findViewById(R.id.declineBox);
-
-            acceptButton.setOnClickListener(this);
-            declineButton.setOnClickListener(this);
+            buttonAccept = itemView.findViewById(R.id.acceptBox);
+            buttonDecline = itemView.findViewById(R.id.declineBox);
         }
 
 
@@ -130,16 +142,5 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
             binding.textFirstLast.setText(fullName);
         }
 
-        @Override
-        public void onClick(View v) {
-            if(v.getId() == acceptButton.getId()) {
-                mRequest.setAccepted(true);
-                listenerRef.get().onAcceptClicked(mRequest);
-            } else {
-                mRequest.setDeclined(true);
-                listenerRef.get().onDeclineClicked(mRequest);
-            }
-
-        }
     }
 }

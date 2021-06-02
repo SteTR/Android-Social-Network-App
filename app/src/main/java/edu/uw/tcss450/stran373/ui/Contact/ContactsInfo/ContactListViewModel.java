@@ -220,4 +220,39 @@ public class ContactListViewModel extends AndroidViewModel {
         //Instantiate the RequestQueue and add the request to the queue
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
+
+    public void connectPost(final String theID, final String theJWT) {
+
+        String user_auth = theJWT;
+        String url = getApplication().getResources().getString(R.string.base_url)+"requests";
+        //Create the body for the JSON request
+        JSONObject body = new JSONObject();
+
+        //Use POST to send a request to the chat endpoint
+        try {
+            body.put("deleteid", theID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Request request = new JsonObjectRequest(Request.Method.POST,
+                url,
+                body, mResponse::setValue,
+                this::handleError) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add our new <key,value>
+                headers.put("Authorization", user_auth);
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        //Instantiate the RequestQueue and add the request to the queue
+        Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+    }
+
 }

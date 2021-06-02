@@ -66,7 +66,7 @@
             app:layout_constraintStart_toEndOf="@+id/declineBox"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.checkbox.MaterialCheckBox
+        <Button
             android:id="@+id/acceptBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,13 +80,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.checkbox.MaterialCheckBox
+        <Button
             android:id="@+id/declineBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:backgroundTint="#C59857"
+            android:textSize="10sp"
             android:text="@string/requests_decline"
             android:textColor="#652F2F"
             app:layout_constraintBottom_toBottomOf="parent"

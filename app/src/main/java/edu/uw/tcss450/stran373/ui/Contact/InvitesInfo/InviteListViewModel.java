@@ -95,7 +95,6 @@ public class InviteListViewModel extends AndroidViewModel {
                     mInviteCards.setValue(mInviteCards.getValue());
                     return;
                 }
-                Log.i("Data", data.toString());
                 for(int i = 0; i < data.length(); i++) {
                     JSONObject jsonInvite = data.getJSONObject(i);
                     InviteCard contact = new InviteCard.Builder(

@@ -29,9 +29,14 @@ public class RequestListFragment extends Fragment {
     UserInfoViewModel mUserViewModel;
 
     /**
-     * View model for the contact list
+     * View model for the request list
      */
     private RequestListViewModel mModel;
+
+    /**
+     * View model for the contact list
+     */
+
 
     /**
      * Inflate the layout
@@ -76,16 +81,14 @@ public class RequestListFragment extends Fragment {
         mModel.addRequestListObserver(getViewLifecycleOwner(), requestList -> {
             if (!requestList.isEmpty()) {
                 binding.requestRecycler.setAdapter(
-                        new RequestCardRecyclerViewAdapter(requestList, new RequestCardRecyclerViewAdapter.ClickListener() {
-
+                        new RequestCardRecyclerViewAdapter(requestList, new RequestCardRecyclerViewAdapter.OnItemCheckListener() {
                             @Override
-                            public void onAcceptClicked(RequestCard card) {
-                                mModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
-                            }
-
-                            @Override
-                            public void onDeclineClicked(RequestCard card) {
-                                mModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+                            public void onItemCheck(RequestCard card) {
+                                if(card.getAccepted()) {
+                                    mModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
+                                } else {
+                                    mModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+                                }
                             }
                         }));
             }

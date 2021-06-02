@@ -107,14 +107,6 @@ public class ContactSearchListFragment extends Fragment {
             }
         });
 
-
-        String jwt = mUserViewModel.getJwt();
-        //When floating action button pressed, create chat
-        binding.buttonAdd.setOnClickListener(button -> {
-            mModel.handleChatCreation(currentSelectedItems, jwt);
-            Snackbar.make(getView(), R.string.text_chat_created, Snackbar.LENGTH_LONG).show();
-        });
-
         //Navigate to other connection fragments
         binding.inviteButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
