@@ -30,43 +30,8 @@ public class PushReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //the following variables are used to store the information sent from Pushy
-        //In the WS, you define what gets sent. You can change it there to suit your needs
-        //Then here on the Android side, decide what to do with the message you got
-
-        //for the lab, the WS is only sending chat messages so the type will always be msg
-        //for your project, the WS needs to send different types of push messages.
-        //So perform logic/routing based on the "type"
-        //feel free to change the key or type of values.
         String typeOfMessage = intent.getStringExtra("type");
-        ChatMessage message = null;
-        int chatId = -1;
-        try{
-            message = ChatMessage.createFromJsonString(intent.getStringExtra("message"));
-            chatId = intent.getIntExtra("chatid", -1);
-        } catch (JSONException e) {
-            //Web service sent us something unexpected...I can't deal with this.
-            throw new IllegalStateException("Error from Web Service. Contact Dev Support");
-        }
-
-        ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
-        ActivityManager.getMyMemoryState(appProcessInfo);
-
-        if (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE) {
-            //app is in the foreground so send the message to the active Activities
-            Log.d("PUSHY", "Message received in foreground: " + message);
-
-            //create an Intent to broadcast a message to other parts of the app.
-            Intent i = new Intent(RECEIVED_NEW_MESSAGE);
-            i.putExtra("chatMessage", message);
-            i.putExtra("chatid", chatId);
-            i.putExtras(intent.getExtras());
-
-            context.sendBroadcast(i);
-
-        } else {
-            //app is in the background so create and post a notification
-            Log.d("PUSHY", "Message received in background: " + message.getMessage());
+        if (typeOfMessage.equals(RECEIVED_CHAT_CREATION)) {
 
             Intent i = new Intent(context, AuthActivity.class);
             i.putExtras(intent.getExtras());
@@ -74,25 +39,100 @@ public class PushReceiver extends BroadcastReceiver {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
                     i, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            //research more on notifications the how to display them
-            //https://developer.android.com/guide/topics/ui/notifiers/notifications
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setAutoCancel(true)
-                    .setSmallIcon(R.drawable.ic_chat_notification)
-                    .setContentTitle("Message from: " + message.getSender())
-                    .setContentText(message.getMessage())
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pendingIntent);
+            ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
+            ActivityManager.getMyMemoryState(appProcessInfo);
 
-            // Automatically configure a ChatMessageNotification Channel for devices running Android O+
-            Pushy.setNotificationChannel(builder, context);
+            Log.d("OK GOOGLE", intent.getStringExtra("groupname"));
 
-            // Get an instance of the NotificationManager service
-            NotificationManager notificationManager =
-                    (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+            // App is in background, build the notification
+            if (!(appProcessInfo.importance == IMPORTANCE_FOREGROUND) && !(appProcessInfo.importance == IMPORTANCE_VISIBLE)) {
 
-            // Build the notification and display it
-            notificationManager.notify(1, builder.build());
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setAutoCancel(true)
+                        .setSmallIcon(R.drawable.ic_baseline_group_notification)
+                        .setContentTitle("Chat Creation")
+                        .setContentText("You are now part of " + intent.getStringExtra("groupname"))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent);
+
+                // Automatically configure a ChatMessageNotification Channel for devices running Android O+
+                Pushy.setNotificationChannel(builder, context);
+
+                // Get an instance of the NotificationManager service
+                NotificationManager notificationManager =
+                        (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+
+                // Build the notification and display it
+                notificationManager.notify(1, builder.build());
+            } else {
+                // Just update the chats page
+            }
+
+        } else {
+            //the following variables are used to store the information sent from Pushy
+            //In the WS, you define what gets sent. You can change it there to suit your needs
+            //Then here on the Android side, decide what to do with the message you got
+
+            //for the lab, the WS is only sending chat messages so the type will always be msg
+            //for your project, the WS needs to send different types of push messages.
+            //So perform logic/routing based on the "type"
+            //feel free to change the key or type of values.
+            ChatMessage message = null;
+            int chatId = -1;
+            try {
+                message = ChatMessage.createFromJsonString(intent.getStringExtra("message"));
+                chatId = intent.getIntExtra("chatid", -1);
+            } catch (JSONException e) {
+                //Web service sent us something unexpected...I can't deal with this.
+                throw new IllegalStateException("Error from Web Service. Contact Dev Support");
+            }
+
+            ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
+            ActivityManager.getMyMemoryState(appProcessInfo);
+
+            if (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE) {
+                //app is in the foreground so send the message to the active Activities
+                Log.d("PUSHY", "Message received in foreground: " + message);
+
+                //create an Intent to broadcast a message to other parts of the app.
+                Intent i = new Intent(RECEIVED_NEW_MESSAGE);
+                i.putExtra("chatMessage", message);
+                i.putExtra("chatid", chatId);
+                i.putExtras(intent.getExtras());
+
+                context.sendBroadcast(i);
+
+            } else {
+                //app is in the background so create and post a notification
+                Log.d("PUSHY", "Message received in background: " + message.getMessage());
+
+                Intent i = new Intent(context, AuthActivity.class);
+                i.putExtras(intent.getExtras());
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                        i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                //research more on notifications the how to display them
+                //https://developer.android.com/guide/topics/ui/notifiers/notifications
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setAutoCancel(true)
+                        .setSmallIcon(R.drawable.ic_chat_notification)
+                        .setContentTitle("Message from: " + message.getSender())
+                        .setContentText(message.getMessage())
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent);
+
+                // Automatically configure a ChatMessageNotification Channel for devices running Android O+
+                Pushy.setNotificationChannel(builder, context);
+
+                // Get an instance of the NotificationManager service
+                NotificationManager notificationManager =
+                        (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+
+                // Build the notification and display it
+                notificationManager.notify(1, builder.build());
+            }
         }
+
     }
 }

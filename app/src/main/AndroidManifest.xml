@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Team4TCSS450">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+                  android:launchMode="singleTask"/>
         <activity android:name=".AuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
