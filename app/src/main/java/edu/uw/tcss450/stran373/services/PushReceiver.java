@@ -23,6 +23,7 @@ import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIB
 public class PushReceiver extends BroadcastReceiver {
 
     public static final String RECEIVED_NEW_MESSAGE = "new message from pushy";
+    public static final String RECEIVED_CHAT_CREATION = "chatcreation";
 
     private static final String CHANNEL_ID = "1";
 
@@ -93,6 +94,5 @@ public class PushReceiver extends BroadcastReceiver {
             // Build the notification and display it
             notificationManager.notify(1, builder.build());
         }
-
     }
 }

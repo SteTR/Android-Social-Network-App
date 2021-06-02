@@ -94,9 +94,11 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         void setMessage(final ChatMessage message) {
-                binding.textReceiveMessageName.setText(message.getSender());
-                binding.textReceiveMessageTimestamp.setText(message.getTime());
-                binding.textReceiveMessageContent.setText(message.getMessage());
+            binding.textReceiveMessageName.setText(message.getSender());
+            binding.textReceiveMessageTimestamp.setText(message.getTime());
+            binding.textReceiveMessageContent.setText(message.getMessage());
+            binding.textReceiveMessageDate.setText(message.getDate());
+
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = mView.getContext().getTheme();
             theme.resolveAttribute(R.attr.colorSecondaryVariant, typedValue, true);
