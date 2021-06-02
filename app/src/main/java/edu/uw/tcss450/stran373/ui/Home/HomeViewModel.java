@@ -37,6 +37,8 @@ import edu.uw.tcss450.stran373.ui.Weather.WeatherCard;
 /**
  * ViewModel used for the WeatherFragment. This will be used to handle the main
  * functionality for displaying the weather.
+ *
+ * @author Jonathan Lee
  */
 public class HomeViewModel extends AndroidViewModel {
 

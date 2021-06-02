@@ -28,6 +28,9 @@ import edu.uw.tcss450.stran373.ui.Weather.WeatherCard;
  */
 public class HomeFragment extends Fragment {
 
+    /**
+     *
+     */
     private FragmentHomeBinding mBinding;
 
     /**

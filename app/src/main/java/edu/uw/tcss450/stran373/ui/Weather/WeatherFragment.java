@@ -23,6 +23,8 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
 
 /**
  * The fragment used for the application's weather feature.
+ *
+ * @author Jonathan Lee
  */
 public class WeatherFragment extends Fragment {
 

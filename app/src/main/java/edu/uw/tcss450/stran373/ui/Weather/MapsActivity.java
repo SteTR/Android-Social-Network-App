@@ -14,6 +14,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.ActivityMapsBinding;
 
+/**
+ *
+ *
+ * @author Jonathan Lee
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;

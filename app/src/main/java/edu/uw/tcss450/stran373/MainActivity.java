@@ -201,19 +201,15 @@ public class MainActivity extends AppCompatActivity {
                                 mLocModel = new ViewModelProvider(MainActivity.this)
                                         .get(LocationViewModel.class);
                                 Log.d("Current Lat/Long:", location.getLatitude() + "/" + location.getLongitude());
+                                Log.d("Call 1: ", "Here");
+                                Log.d("Current location: ", location.toString());
+                                mLoc = location;
+                                mLocModel.setLocation(location);
                             }
-                            Log.d("Call 1: ", "Here");
-                            Log.d("Current location: ", location.toString());
-                            mLoc = location;
-                            mLocModel.setLocation(location);
+
                         }
                     });
         }
-    }
-
-
-    public Location getLoc() {
-        return mLoc;
     }
 
     /**
@@ -281,21 +277,4 @@ public class MainActivity extends AppCompatActivity {
         return mArgs;
     }
 
-//    /**
-//     * Getter method for the latitude.
-//     *
-//     * @return
-//     */
-//    public Double getLat() {
-//        return mLat;
-//    }
-//
-//    /**
-//     * Getter method for the longitude.
-//     *
-//     * @return
-//     */
-//    public Double getLng() {
-//        return mLng;
-//    }
 }

@@ -39,6 +39,8 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
 /**
  * ViewModel used for the WeatherFragment. This will be used to handle the main
  * functionality for displaying the weather.
+ *
+ * @author Jonathan Lee
  */
 public class WeatherViewModel extends AndroidViewModel {
 
@@ -227,7 +229,6 @@ public class WeatherViewModel extends AndroidViewModel {
         }
         return result;
     }
-    
 
     /**
      * Helper method to get the five conditions for the 5-day forecast.

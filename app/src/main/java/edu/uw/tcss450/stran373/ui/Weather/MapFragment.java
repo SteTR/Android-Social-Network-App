@@ -37,7 +37,9 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
 import edu.uw.tcss450.stran373.ui.Home.LocationViewModel;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Used to manage activities related to Google Maps.
+ *
+ * @author Jonathan Lee
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener, View.OnClickListener {
@@ -64,6 +66,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     private Marker mMarker;
 
+    private MapViewModel mMapModel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mJWT = mMain.getTheArgs().getJwt();
         mCoder = new Geocoder(getContext(), Locale.getDefault());
         mBuilder = new AlertDialog.Builder(getContext());
-
+        mMapModel = new ViewModelProvider(getActivity()).get(MapViewModel.class);
     }
 
     @Override
@@ -94,6 +98,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 CameraUpdateFactory.newLatLngZoom(
                         latLng, mMap.getCameraPosition().zoom));
         mLatLng = latLng;
+        Log.d("LAT/LNG: ", mLatLng.latitude + "/" + mLatLng.longitude);
         if (!mBinding.addLocButton.isEnabled()) {
             mBinding.addLocButton.setEnabled(true);
         }
@@ -130,21 +135,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         // If the user enters yes
         mBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                try {
-                    mAddresses = mCoder.getFromLocation(mLatLng.latitude, mLatLng.longitude, 1);
-                    long zipcode = Long.parseLong(mAddresses.get(0).getPostalCode());
-                    boolean newLoc = mWeather.setZip(zipcode);
-                    if (newLoc) {
-                        Log.d("NEW CONNECTION: ", "" + zipcode);
-                        mWeather.connect(mJWT);
-                    } else {
-                        Toast.makeText(getContext(), "Location already exists.", Toast.LENGTH_SHORT);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e("ERROR: ", "Unable to process location");
+                Log.d("Getting location: ", "NOW");
+                mMapModel.connectLatLng(mLatLng);
+                Log.d("Get it!", "");
+                long zipcode = mMapModel.getZip();
+                boolean newLoc = mWeather.setZip(zipcode);
+                if (newLoc) {
+                    Log.d("NEW CONNECTION: ", "" + zipcode);
+                    mWeather.connect(mJWT);
+                } else {
+                    Toast.makeText(getContext(), "Location already exists.", Toast.LENGTH_SHORT);
                 }
                 dialog.dismiss();
+
             }
         });
 
@@ -174,4 +177,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         });
         mMap.setOnMapClickListener(this);
     }
+
 }
