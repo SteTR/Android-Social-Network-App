@@ -65,6 +65,15 @@ public class ChatListViewModel extends AndroidViewModel {
         return mCardList.getValue();
     }
 
+    public List<ChatCard> getRecentCardList() {
+        List<ChatCard> temp = new ArrayList<>();
+        if (mCardList.getValue().size() >= 1)
+            temp.add(mCardList.getValue().get(0));
+        if (mCardList.getValue().size() >= 2)
+            temp.add(mCardList.getValue().get(1));
+        return temp;
+    }
+
     /**
      * Connects to the web service to get chats that the user is part of
      *

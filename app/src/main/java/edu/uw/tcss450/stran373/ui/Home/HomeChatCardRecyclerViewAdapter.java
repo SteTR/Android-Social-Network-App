@@ -1,6 +1,5 @@
-package edu.uw.tcss450.stran373.ui.Chat.Card;
+package edu.uw.tcss450.stran373.ui.Home;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,7 @@ import java.util.List;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentChatCardBinding;
-
-import static edu.uw.tcss450.stran373.MainActivity.CHAT_ID;
-import static edu.uw.tcss450.stran373.MainActivity.NEW_MESSAGE;
+import edu.uw.tcss450.stran373.ui.Chat.Card.ChatCard;
 
 /**
  * A RecycleView holder to hold the chat cards
@@ -23,12 +20,12 @@ import static edu.uw.tcss450.stran373.MainActivity.NEW_MESSAGE;
  * @author Steven Tran
  * @author Haoying Li
  */
-public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRecycleViewAdapter.ChatCardViewHolder> {
+public class HomeChatCardRecyclerViewAdapter extends RecyclerView.Adapter<HomeChatCardRecyclerViewAdapter.ChatCardViewHolder> {
 
     // List of chat cards to be displayed
     private final List<ChatCard> mChatCards;
 
-    public ChatCardRecycleViewAdapter(final List<ChatCard> theChatCards)
+    public HomeChatCardRecyclerViewAdapter(final List<ChatCard> theChatCards)
     {
         mChatCards = theChatCards;
     }
@@ -72,18 +69,12 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
             binding.textName.setText(chat.getName());
             binding.textTime.setText(chat.getTime());
 
-            if (chat.getChatID() == CHAT_ID && NEW_MESSAGE == 1)
-                binding.textLastmessage.setTextColor(Color.RED);
-            else
-                binding.textLastmessage.setTextColor(Color.BLACK);
-
             // Moves to the chat id in the chatcard
-            binding.cardConstraint.setOnClickListener(view -> {
-                    Navigation.findNavController(mView).navigate(ChatCardListFragmentDirections
-                            .actionNavigationChatsToNavigationSingleChat(chat.getChatID(), chat.getName()));
-                    if (chat.getChatID() == CHAT_ID)
-                        NEW_MESSAGE = 0;
-            });
+            binding.cardConstraint.setOnClickListener(view ->
+                    Navigation.findNavController(mView).navigate(
+                            HomeFragmentDirections.actionNavigationHomeToNavigationSingleChat(
+                                    chat.getChatID(), chat.getName())));
+
         }
     }
 }

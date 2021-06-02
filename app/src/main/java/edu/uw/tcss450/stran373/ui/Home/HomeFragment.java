@@ -10,15 +10,15 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
 import edu.uw.tcss450.stran373.MainActivity;
 import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentHomeBinding;
-import edu.uw.tcss450.stran373.ui.Weather.WeatherCard;
+import edu.uw.tcss450.stran373.ui.Chat.Card.ChatListViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +27,8 @@ import edu.uw.tcss450.stran373.ui.Weather.WeatherCard;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding mBinding;
+    private UserInfoViewModel mUserViewModel;
+    private ChatListViewModel mChatListViewModel;
 
     /**
      * The ViewModel used for displaying functionality.
@@ -46,6 +48,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUserViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
+        mChatListViewModel = new ViewModelProvider(getActivity()).get(ChatListViewModel.class);
+        mChatListViewModel.getChats(mUserViewModel.getJwt());
     }
 
     @Override
@@ -68,6 +73,15 @@ public class HomeFragment extends Fragment {
             setWeatherIcon(weather.getCondition());
         });
         mBinding.textHomeName.setText(main.getTheArgs().getEmail() + '!');
+
+        mBinding = FragmentHomeBinding.bind(getView());
+
+        mChatListViewModel.addChatListObserver(getViewLifecycleOwner(), chatlist -> {
+            if (!chatlist.isEmpty()) {
+                mBinding.recylcerChats.setAdapter(
+                        new HomeChatCardRecyclerViewAdapter(mChatListViewModel.getRecentCardList()));
+            }
+        });
     }
 
     /**
