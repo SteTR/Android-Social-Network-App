@@ -1,5 +1,6 @@
 package edu.uw.tcss450.stran373.ui.Chat.Card;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import java.util.List;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentChatCardBinding;
+
+import static edu.uw.tcss450.stran373.MainActivity.CHAT_ID;
+import static edu.uw.tcss450.stran373.MainActivity.NEW_MESSAGE;
 
 /**
  * A RecycleView holder to hold the chat cards
@@ -68,10 +72,18 @@ public class ChatCardRecycleViewAdapter extends RecyclerView.Adapter<ChatCardRec
             binding.textName.setText(chat.getName());
             binding.textTime.setText(chat.getTime());
 
+            if (chat.getChatID() == CHAT_ID && NEW_MESSAGE == 1)
+                binding.textLastmessage.setTextColor(Color.RED);
+            else
+                binding.textLastmessage.setTextColor(Color.BLACK);
+
             // Moves to the chat id in the chatcard
-            binding.cardConstraint.setOnClickListener(view ->
+            binding.cardConstraint.setOnClickListener(view -> {
                     Navigation.findNavController(mView).navigate(ChatCardListFragmentDirections
-                            .actionNavigationChatsToNavigationSingleChat(chat.getChatID(), chat.getName())));
+                            .actionNavigationChatsToNavigationSingleChat(chat.getChatID(), chat.getName()));
+                    if (chat.getChatID() == CHAT_ID)
+                        NEW_MESSAGE = 0;
+            });
         }
     }
 }

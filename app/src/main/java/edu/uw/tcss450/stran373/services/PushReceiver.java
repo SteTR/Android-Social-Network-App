@@ -21,6 +21,8 @@ import me.pushy.sdk.Pushy;
 
 import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
 import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE;
+import static edu.uw.tcss450.stran373.MainActivity.CHAT_ID;
+import static edu.uw.tcss450.stran373.MainActivity.NEW_MESSAGE;
 
 public class PushReceiver extends BroadcastReceiver {
 
@@ -69,7 +71,7 @@ public class PushReceiver extends BroadcastReceiver {
             //app is in the background so create and post a notification
             Log.d("PUSHY", "Message received in background: " + message.getMessage());
 
-            Intent i = new Intent(context, MainActivity.class);
+            Intent i = new Intent(context, AuthActivity.class);
             i.putExtras(intent.getExtras());
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
@@ -94,6 +96,9 @@ public class PushReceiver extends BroadcastReceiver {
 
             // Build the notification and display it
             notificationManager.notify(1, builder.build());
+
+            CHAT_ID = chatId;
+            NEW_MESSAGE = 1;
         }
     }
 }

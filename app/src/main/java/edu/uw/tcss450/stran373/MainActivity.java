@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,6 +28,8 @@ import edu.uw.tcss450.stran373.databinding.ActivityMainBinding;
 import edu.uw.tcss450.stran373.model.NewMessageCountViewModel;
 import edu.uw.tcss450.stran373.model.PushyTokenViewModel;
 import edu.uw.tcss450.stran373.services.PushReceiver;
+import edu.uw.tcss450.stran373.ui.Chat.Card.ChatCardRecycleViewAdapter;
+import edu.uw.tcss450.stran373.ui.Chat.Card.ChatListViewModel;
 import edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel;
 import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
 import edu.uw.tcss450.stran373.utils.Utils;
@@ -50,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
     private MainPushMessageReceiver mPushMessageReceiver;
     private NewMessageCountViewModel mNewMessageModel;
+
+    public static int CHAT_ID;
+    public static int NEW_MESSAGE;
 
     /**
      * Method called when the activity is created.
@@ -206,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
         private ChatViewModel mModel =
                 new ViewModelProvider(MainActivity.this)
                         .get(ChatViewModel.class);
+
         @Override
         public void onReceive(Context context, Intent intent) {
             NavController nc =
@@ -222,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
                 //Inform the view model holding chatroom messages of the new
                 //message.
                 mModel.addMessage(intent.getIntExtra("chatid", -1), cm);
+                CHAT_ID = intent.getIntExtra("chatid", -1);
+                NEW_MESSAGE = 1;
             }
         }
     }
