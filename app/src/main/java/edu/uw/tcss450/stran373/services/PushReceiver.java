@@ -135,8 +135,9 @@ public class PushReceiver extends BroadcastReceiver {
 
                 // Build the notification and display it
                 notificationManager.notify(1, builder.build());
-            CHAT_ID = chatId;
-            NEW_MESSAGE = 1;
+                CHAT_ID = chatId;
+                NEW_MESSAGE = 1;
+            }
         }
     }
 }
