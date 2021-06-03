@@ -59,6 +59,9 @@
         <action
             android:id="@+id/action_navigation_contacts_to_requestListFragment"
             app:destination="@id/requestListFragment" />
+        <action
+            android:id="@+id/action_navigation_contacts_to_contactSearch"
+            app:destination="@id/contactSearch" />
     </fragment>
 
     <fragment
@@ -88,6 +91,11 @@
         android:name="edu.uw.tcss450.stran373.ChangePasswordFragment"
         android:label="@string/fragment_change_password_title"
         tools:layout="@layout/fragment_change_password" /><action android:id="@+id/action_global_changePasswordFragment" app:destination="@id/changePasswordFragment"/>
+    <fragment
+        android:id="@+id/contactSearch"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactSearch"
+        android:label="Search Your Contacts"
+        tools:layout="@layout/fragment_contact_search" />
 
 
 </navigation>

@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
@@ -79,7 +80,6 @@ public class InviteListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FragmentInviteListBinding binding = FragmentInviteListBinding.bind(getView());
-
         //Add an observer and create list. The code that is in there now
         //is for Sprint 3, it will allow us to build a list of users
         //to invite all at once

@@ -1,4 +1,4 @@
-package edu.uw.tcss450.stran373.ui.Contact.InvitesInfo;
+package edu.uw.tcss450.stran373.ui.Contact.ContactsInfo;
 
 import android.app.Application;
 import android.util.Log;
@@ -26,27 +26,22 @@ import java.util.Map;
 import java.util.function.IntFunction;
 
 import edu.uw.tcss450.stran373.R;
+import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactCard;
 
 
-/**
- * View model to hold the contact cards, observer will be used to
- * navigate to specific contacts in next sprint
- * @author Andrew Bennett
- */
-public class InviteListViewModel extends AndroidViewModel {
-
+public class ContactSearchViewModel extends AndroidViewModel {
     /**
      * A list of all contact cards. For the moment it will be randomly generated,
      * next sprint we will need to pull from our endpoint
      */
-    private MutableLiveData<List<InviteCard>> mInviteCards;
+    private MutableLiveData<List<ContactCard>> mContactCards;
 
     private MutableLiveData<JSONObject> mResponse;
 
-    public InviteListViewModel(@NonNull Application application) {
+    public ContactSearchViewModel(@NonNull Application application) {
         super(application);
-        mInviteCards = new MutableLiveData<>();
-        mInviteCards.setValue(new ArrayList<>());
+        mContactCards = new MutableLiveData<>();
+        mContactCards.setValue(new ArrayList<>());
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
@@ -59,9 +54,9 @@ public class InviteListViewModel extends AndroidViewModel {
      * @param observer watches for change of state in contact cards
      * @author Andrew Bennett
      */
-    public void addInviteListObserver(@NonNull LifecycleOwner owner,
-                                       @NonNull Observer<? super List<InviteCard>> observer) {
-        mInviteCards.observe(owner, observer);
+    public void addContactSearchListObserver(@NonNull LifecycleOwner owner,
+                                      @NonNull Observer<? super List<ContactCard>> observer) {
+        mContactCards.observe(owner, observer);
     }
 
     /**
@@ -84,30 +79,29 @@ public class InviteListViewModel extends AndroidViewModel {
         IntFunction<String> getString = getApplication().getResources()::getString;
         try {
             JSONObject root = theResult;
+
+            //If the request returned success, create all of the cards. If no cards were returned,
+            //create a card that says "No Contacts"
             if(root.get("success").toString().equals("true")) {
                 JSONArray data = root.getJSONArray(getString.apply(
                         R.string.keys_json_contacts_data));
-                if(data.length() == 0) {
-                    InviteCard invite = new InviteCard.Builder("memberid",
-                            "No ",
-                            "Invites").build();
-                    mInviteCards.getValue().add(invite);
-                    mInviteCards.setValue(mInviteCards.getValue());
-                    return;
-                }
+                //Loop through and build the contact cards
                 for(int i = 0; i < data.length(); i++) {
-                    JSONObject jsonInvite = data.getJSONObject(i);
-                    InviteCard contact = new InviteCard.Builder(
-                            jsonInvite.getString("memberid"),
-                            jsonInvite.getString("firstname"),
-                            jsonInvite.getString("lastname"))
+                    JSONObject jsonContact = data.getJSONObject(i);
+                    ContactCard contact = new ContactCard.Builder(
+                            jsonContact.getString("memberid"),
+                            jsonContact.getString("firstname"),
+                            jsonContact.getString("lastname"),
+                            jsonContact.getString("email"),
+                            jsonContact.getString("username")
+                    )
                             .build();
-                    if (!mInviteCards.getValue().contains(contact)
-                            && mInviteCards.getValue().size() < data.length()) {
-                        mInviteCards.getValue().add(contact);
+                    if (!mContactCards.getValue().contains(contact)
+                            && mContactCards.getValue().size() < data.length()) {
+                        mContactCards.getValue().add(contact);
                     }
                 }
-                mInviteCards.setValue(mInviteCards.getValue());
+                mContactCards.setValue(mContactCards.getValue());
             }
 
         } catch (JSONException e) {
@@ -117,15 +111,12 @@ public class InviteListViewModel extends AndroidViewModel {
 
     }
 
-
     /**
      * Get the contacts from the web service endpoint
      */
-    public void connectGet(final String theJWT) {
-        //Need to add our contact endpoint
+    public void connectGet(final String theJWT, final String theSearch, final String theType) {
+        String url = getApplication().getResources().getString(R.string.base_url)+"contactSearch?type="+theType+"&search="+theSearch;
         String user_auth = theJWT;
-        String url = getApplication().getResources().getString(R.string.base_url)+"invites";
-
         //Request the contact information and hand in auth token
         try {
             Request request = new JsonObjectRequest(
@@ -153,39 +144,5 @@ public class InviteListViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void connectPost(final String theID, final String theJWT) {
-
-        String user_auth = theJWT;
-        String url = getApplication().getResources().getString(R.string.base_url)+"invites";
-        //Create the body for the JSON request
-        JSONObject body = new JSONObject();
-
-        //Use POST to send a request to the chat endpoint
-        try {
-            body.put("inviteeid", theID);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Request request = new JsonObjectRequest(Request.Method.POST,
-                url,
-                body, mResponse::setValue,
-                this::handleError) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                // add our new <key,value>
-                headers.put("Authorization", user_auth);
-                return headers;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        //Instantiate the RequestQueue and add the request to the queue
-        Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
 }

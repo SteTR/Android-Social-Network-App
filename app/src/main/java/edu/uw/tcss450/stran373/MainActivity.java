@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +30,7 @@ import edu.uw.tcss450.stran373.model.PushyTokenViewModel;
 import edu.uw.tcss450.stran373.services.PushReceiver;
 import edu.uw.tcss450.stran373.ui.Chat.Conversation.ChatViewModel;
 import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
+import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestCardRecyclerViewAdapter;
 import edu.uw.tcss450.stran373.utils.Utils;
 
 /**
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(

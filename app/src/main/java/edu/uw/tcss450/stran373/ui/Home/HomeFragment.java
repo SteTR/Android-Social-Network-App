@@ -19,6 +19,10 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentHomeBinding;
 import edu.uw.tcss450.stran373.ui.Chat.Card.ChatListViewModel;
+import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactListViewModel;
+import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestCard;
+import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestCardRecyclerViewAdapter;
+import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestListViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,9 +30,11 @@ import edu.uw.tcss450.stran373.ui.Chat.Card.ChatListViewModel;
  */
 public class HomeFragment extends Fragment {
 
+
     private FragmentHomeBinding mBinding;
     private UserInfoViewModel mUserViewModel;
     private ChatListViewModel mChatListViewModel;
+    private RequestListViewModel mRequestListViewModel;
 
     /**
      * The ViewModel used for displaying functionality.
@@ -50,7 +56,9 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mUserViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
         mChatListViewModel = new ViewModelProvider(getActivity()).get(ChatListViewModel.class);
+        mRequestListViewModel = new ViewModelProvider(getActivity()).get(RequestListViewModel.class);
         mChatListViewModel.getChats(mUserViewModel.getJwt());
+        mRequestListViewModel.connectGet(mUserViewModel.getJwt());
     }
 
     @Override
@@ -67,6 +75,8 @@ public class HomeFragment extends Fragment {
         MainActivity main = (MainActivity) getActivity();
         mJWT = main.getTheArgs().getJwt();
         mModel.connect(mJWT);
+
+
         mModel.addResponseObserver(getViewLifecycleOwner(), weather -> {
             mBinding.textCurrentLocation.setText(weather.getLocation());
             mBinding.textCurrentTemp.setText(weather.getTemp());
@@ -80,6 +90,27 @@ public class HomeFragment extends Fragment {
             if (!chatlist.isEmpty()) {
                 mBinding.recylcerChats.setAdapter(
                         new HomeChatCardRecyclerViewAdapter(mChatListViewModel.getRecentCardList()));
+            }
+        });
+
+        mRequestListViewModel.addRequestListObserver(getViewLifecycleOwner(), requestList -> {
+            if (!requestList.isEmpty()) {
+                mBinding.homeRequestRecycler.setAdapter(
+                        new RequestCardRecyclerViewAdapter(requestList,
+                                new RequestCardRecyclerViewAdapter.OnItemCheckListener() {
+                                    @Override
+                                    public void onAcceptCheck(RequestCard card) {
+                                        mRequestListViewModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
+                                    }
+
+                                    @Override
+                                    public void onDeclineCheck(RequestCard card) {
+                                        mRequestListViewModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+                                    }
+                                }
+                        )
+
+                );
             }
         });
     }

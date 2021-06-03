@@ -41,7 +41,7 @@
     <string name="chat_card_last_message">This is a placeholder message. :)</string>
 
     <!--  Database URLS  -->
-    <string name="base_url">https://group4-tcss450-project.herokuapp.com/</string>
+    <string name="base_url">http://10.0.2.2:5000/</string>
 
     <!--Charles string resources for signin and registration-->
     <string name="email">Email</string>
@@ -85,10 +85,11 @@
     <string name="checkbox_contact_chatinvite">Chat Invite</string>
     <string name="invite_sent">Invite Sent!</string>
     <string name="button_accept">Accept</string>
-    <string name="requests_reject">Reject</string>
+    <string name="requests_decline">Decline</string>
     <string name="create_chat_descr">Add Contacts to Chat</string>
     <string name="friend_has_been_invited">Friend has been invited!</string>
     <string name="text_chat_created">A chat room has been successfully created</string>
+    <string name="checkbox_request_accept">Accept</string>
 
     <!--  Change Password Fragment Resources  -->
     <string name="fragment_change_password_title">Change Password</string>
@@ -100,5 +101,18 @@
     <string name="snackbar_password_sent">Password Change Request being sent!</string>
     <string name="snackbar_password_change_success">Password has been successfully reset. Signing out…</string>
     <string name="snackbar_password_sent_failure">Password failed to reset. Please check valid password for both current and new</string>
+    <string name="select_contact">Select Contact</string>
+    <string name="contacts_users_deleted">Users Deleted</string>
+    <string name="contact_delete">Delete Users</string>
+    <string name="contact_search">Search Users</string>
+    <string name="create_chat">Create Chat</string>
+
+    <!-- Contact search method string array-->
+    <string-array name="search_array">
+        <item>First, Last</item>
+        <item>MemberID</item>
+        <item>Email</item>
+    </string-array>
+
 
 </resources>

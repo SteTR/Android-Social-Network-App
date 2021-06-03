@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +20,7 @@ import edu.uw.tcss450.stran373.databinding.FragmentContactCardBinding;
  * The item checks allow us to build a list to launch chats.
  * @author Andrew Bennett
  */
-public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<ContactCardRecyclerViewAdapter.ContactCardViewHolder> {
+public class ContactSearchRecyclerViewAdapter extends RecyclerView.Adapter<ContactSearchRecyclerViewAdapter.ContactCardViewHolder> {
 
     /**
      * List of contacts to be displayed
@@ -35,7 +36,7 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
     public OnItemCheckListener onItemClick;
 
 
-    public ContactCardRecyclerViewAdapter(final List<ContactCard> theContactCards, @NonNull OnItemCheckListener onItemCheckListener)
+    public ContactSearchRecyclerViewAdapter(final List<ContactCard> theContactCards, @NonNull OnItemCheckListener onItemCheckListener)
     {
         this.mContacts = theContactCards;
         this.onItemClick = onItemCheckListener;
@@ -112,12 +113,15 @@ public class ContactCardRecyclerViewAdapter extends RecyclerView.Adapter<Contact
          */
         private ContactCard mContact;
 
+        private Spinner spinner;
+
 
         public ContactCardViewHolder(@NonNull final View itemView) {
             super(itemView);
             mView = itemView;
             binding = FragmentContactCardBinding.bind(itemView);
             checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            spinner = (Spinner) itemView.findViewById(R.id.search_spinner);
         }
 
 
