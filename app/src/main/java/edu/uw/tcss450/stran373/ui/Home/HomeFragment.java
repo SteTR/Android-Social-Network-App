@@ -92,7 +92,6 @@ public class HomeFragment extends Fragment {
         MainActivity main = (MainActivity) getActivity();
         LocationViewModel model = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
         mJWT = main.getTheArgs().getJwt();
-        mModel.connect(mJWT);
         model.addLocationObserver(getViewLifecycleOwner(), location -> {
             mModel.connect(mJWT, location);
         });

@@ -205,6 +205,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(mRequest, mCallback, null);
+        }
+    }
+
     private void createLocationRequest() {
         mRequest = LocationRequest.create();
         mRequest.setInterval(UPDATE_INTERVAL);
