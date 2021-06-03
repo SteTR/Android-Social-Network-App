@@ -1,6 +1,5 @@
 package edu.uw.tcss450.stran373.ui.Home;
 
-import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,13 +22,14 @@ import edu.uw.tcss450.stran373.databinding.FragmentHomeBinding;
 import edu.uw.tcss450.stran373.ui.Weather.WeatherCard;
 
 /**
- * A simple {@link Fragment} subclass.
- * A blank fragment used for UI at the moment.
+ * Fragment that represents the home page.
+ *
+ * @author Jonathan Lee
  */
 public class HomeFragment extends Fragment {
 
     /**
-     *
+     * Represents the binding for this fragment.
      */
     private FragmentHomeBinding mBinding;
 
@@ -53,6 +53,14 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +68,12 @@ public class HomeFragment extends Fragment {
         return mBinding.getRoot();
     }
 
+    /**
+     *
+     *
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -104,10 +104,15 @@ public class HomeViewModel extends AndroidViewModel {
             JSONArray currentWeather = (JSONArray) current.get("weather");
             JSONObject currentCond = currentWeather.getJSONObject(0);
             int currentCondition = (int) currentCond.get("id");
-            double currentTemp = (double) current.get("temp");
-
+            Object currentTemp = (Object) current.get("temp");
+            Double temp = 0.0;
+            if (currentTemp instanceof Integer) {
+                temp = Double.valueOf((Integer) current.get("temp"));
+            } else {
+                temp = (Double) current.get("temp");
+            }
             // Weather card for Seattle, Washington
-            Weather wc = new Weather("Seattle, WA", currentCondition,currentTemp + " F°");
+            Weather wc = new Weather("Seattle, WA", currentCondition,temp + " F°");
             mWeather.setValue(wc);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -122,7 +127,6 @@ public class HomeViewModel extends AndroidViewModel {
      * Used to connect to the weather web service.
      */
     public void connect(String theJWT, Location theLoc) {
-//        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
         Double lat = theLoc.getLatitude();
         Double lng = theLoc.getLongitude();
         Log.d("Coordinates: ", lat + "/" + lng);

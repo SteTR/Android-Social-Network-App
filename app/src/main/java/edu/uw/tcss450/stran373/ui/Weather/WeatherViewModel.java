@@ -150,11 +150,17 @@ public class WeatherViewModel extends AndroidViewModel {
             JSONArray currentWeather = (JSONArray) current.get("weather");
             JSONObject currentCond = currentWeather.getJSONObject(0);
             int currentCondition = (int) currentCond.get("id");
-            double currentTemp = (double) current.get("temp");
+            Object currentTemp = current.get("temp");
+            Double num = 0.0;
+            if (currentTemp instanceof Integer) {
+                num = Double.valueOf((Integer) currentTemp);
+            } else {
+                num = (Double) current.get("temp");
+            }
 
             // Weather card for the most recent location.
             WeatherCard wc = new WeatherCard
-                    .Builder(mCity + ", " + mState, currentTemp + " F°", currentCondition)
+                    .Builder(mCity + ", " + mState, num + " F°", currentCondition)
                     .addDay1(String.format("%d/%d", mFutureDays[0][0], mFutureDays[0][1]), (jDays[0]), jConds[0])
                     .addDay2(String.format("%d/%d", mFutureDays[1][0], mFutureDays[1][1]), (jDays[1]), jConds[1])
                     .addDay3(String.format("%d/%d", mFutureDays[2][0], mFutureDays[2][1]), (jDays[2]), jConds[2])

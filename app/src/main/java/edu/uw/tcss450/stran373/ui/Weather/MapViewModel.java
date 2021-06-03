@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -20,19 +21,28 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Used to keep track of the location requested by the user via
+ * Google Maps
+ *
+ * @author Jonathan Lee
+ */
 public class MapViewModel extends AndroidViewModel {
 
-    private String mCity;
+    /**
+     * Represents a JSON response.
+     */
+    private MutableLiveData<JSONObject> mResponse;
 
-    private String mState;
-
-    private String mCountry;
-
-    private long mZip;
-
+    /**
+     * Constructor used to create the ViewModel.
+     *
+     * @param theApplication is the application that uses this ViewModel.
+     */
     public MapViewModel(@NonNull Application theApplication) {
         super(theApplication);
-        mZip  = 0;
+        mResponse = new MutableLiveData<>();
+        mResponse.setValue(new JSONObject());
     }
 
     /**
@@ -45,42 +55,44 @@ public class MapViewModel extends AndroidViewModel {
         throw new IllegalStateException(theError.getMessage());
     }
 
-    private void handleResult(final JSONObject theRoot) {
+    /**
+     * Used for connecting to the database to add a new location entry to the database,
+     * which are used for displaying their weather information.
+     *
+     * NOTE: Sometimes, you will need to disconnect and reconnect the device from Wi-Fi
+     * just to make proper use of the geocoding used here.
+     *
+     * @param theJWT is the JWT used for authentication.
+     * @param theLat is the latitude of the location.
+     * @param theLon is the longitude of the location.
+     * @param theNN is the nickname of the location.
+     */
+    public void connect(String theJWT, Double theLat, Double theLon, String theNN) {
+        Log.d("JWT: ", theJWT);
+        final String url = "https://production-tcss450-backend.herokuapp.com/weather";
+
+        // Request body
+        JSONObject body = new JSONObject();
         try {
-            mState = (String) theRoot.get("state");
-            mCity = (String) theRoot.get("city");
-            JSONObject alt = (JSONObject) theRoot.get("alt");
-            JSONArray loc = (JSONArray) alt.get("loc");
-            String num = (String) loc.getJSONObject(0).get("postal");
-            mZip = conversion(num);
-            mCountry = (String) theRoot.get("prov");
+            body.put("lat", "" + theLon);
+            body.put("lon", "" + theLat);
+            body.put("nickname", theNN);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
 
-    private long conversion(String theResult) {
-        String num = theResult;
-        if (theResult.length() > 5) {
-            num = theResult.substring(0, 5);
-        }
-        return Long.parseLong(num);
-    }
-
-    public void connectLatLng(LatLng theLL) {
-        Log.d("Let's connect!", "");
-        final String url = "https://geocode.xyz/" + theLL.latitude + "," + theLL.longitude + "?json=1";
+        // Headers
         Request request = new JsonObjectRequest(
-                Request.Method.GET,
+                Request.Method.POST,
                 url,
-                null,
-                this::handleResult,
+                body,
+                mResponse::setValue,
                 this::handleError) {
 
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("json", "1");
+                headers.put("Authorization", theJWT);
                 return headers;
             }
         };
@@ -91,22 +103,6 @@ public class MapViewModel extends AndroidViewModel {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
-    }
-
-    public String getCity() {
-        return mCity;
-    }
-
-    public String getCountry() {
-        return mCountry;
-    }
-
-    public String getState() {
-        return mState;
-    }
-
-    public long getZip() {
-        return mZip;
     }
 
 }

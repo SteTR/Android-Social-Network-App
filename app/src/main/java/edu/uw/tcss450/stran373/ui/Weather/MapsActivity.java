@@ -15,7 +15,7 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.ActivityMapsBinding;
 
 /**
- *
+ * Represents the activity used for Google Maps.
  *
  * @author Jonathan Lee
  */
@@ -45,6 +45,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
+     *
+     * @param googleMap is the Google
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
