@@ -143,7 +143,7 @@ public class ContactCard implements Serializable {
 
     /**
      * Returns the id corresponding to the contact
-     * @return Integer chat id
+     * @return String contact id
      */
     public String getMemberID()
     {

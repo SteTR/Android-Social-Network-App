@@ -12,9 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentRequestListBinding;
+import edu.uw.tcss450.stran373.ui.Contact.InvitesInfo.InviteCard;
 
 /**
  * This is the class that contains all of the buttons for navigation,
@@ -29,9 +36,14 @@ public class RequestListFragment extends Fragment {
     UserInfoViewModel mUserViewModel;
 
     /**
-     * View model for the contact list
+     * View model for the request list
      */
     private RequestListViewModel mModel;
+
+    /**
+     * View model for the contact list
+     */
+    List<RequestCard> currentSelectedItems = new ArrayList<>();
 
     /**
      * Inflate the layout
@@ -71,14 +83,27 @@ public class RequestListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         FragmentRequestListBinding binding = FragmentRequestListBinding.bind(getView());
 
-
         //Next sprint we will need to add listeners here so that they can accept/reject lists
         mModel.addRequestListObserver(getViewLifecycleOwner(), requestList -> {
             if (!requestList.isEmpty()) {
                 binding.requestRecycler.setAdapter(
-                        new RequestCardRecyclerViewAdapter(requestList));
+                        new RequestCardRecyclerViewAdapter(requestList,
+                                new RequestCardRecyclerViewAdapter.OnItemCheckListener() {
+                                    @Override
+                                    public void onAcceptCheck(RequestCard card) {
+                                        mModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
+                                    }
+
+                                    @Override
+                                    public void onDeclineCheck(RequestCard card) {
+                                        mModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+                                    }
+                                }
+                        )
+                        );
             }
         });
+
         binding.contactButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         RequestListFragmentDirections.actionRequestListFragmentToNavigationContacts()));

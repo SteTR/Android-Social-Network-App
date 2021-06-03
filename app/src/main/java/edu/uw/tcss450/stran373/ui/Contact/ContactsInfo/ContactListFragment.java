@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class ContactListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_contact_list, container, false);
     }
 
@@ -115,9 +117,20 @@ public class ContactListFragment extends Fragment {
 
         String jwt = mUserViewModel.getJwt();
         //When floating action button pressed, create chat
-        binding.buttonAdd.setOnClickListener(button -> {
+        binding.expandableFabChat.setOnClickListener(button -> {
             mModel.handleChatCreation(currentSelectedItems, jwt);
             Snackbar.make(getView(), R.string.text_chat_created, Snackbar.LENGTH_LONG).show();
+        });
+
+        binding.expandableFabSearch.setOnClickListener(button -> {
+            Navigation.findNavController(getView()).navigate(
+                    ContactListFragmentDirections.actionNavigationContactsToContactSearch());
+        });
+
+        binding.expandableFabDelete.setOnClickListener(button -> {
+            for(int i = 0; i < currentSelectedItems.size(); i++) {
+                mModel.connectPost(Integer.parseInt(currentSelectedItems.get(i).getMemberID()), mUserViewModel.getJwt());
+            }
         });
 
         //Navigate to other connection fragments

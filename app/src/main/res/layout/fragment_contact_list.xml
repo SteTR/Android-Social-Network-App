@@ -63,17 +63,44 @@
         tools:context=".edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactListFragment"
         tools:listitem="@layout/fragment_contact_card" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.nambimobile.widgets.efab.ExpandableFabLayout
+        android:id="@+id/expandable_fab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
-        android:clickable="true"
-        android:src="@drawable/ic_contacts_add_chat"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="ADD CHAT"
-        android:focusable="true" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.nambimobile.widgets.efab.ExpandableFab
+            android:id="@+id/expandable_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            app:efab_closingAnticipateTension="0"
+            app:efab_icon="@drawable/ic_baseline_menu_open_24"
+            app:efab_iconAnimationRotationDeg="-225" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/expandable_fab_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_search_black_24dp"
+            app:label_text="@string/contact_search" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/expandable_fab_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_map_black_24dp"
+            app:label_text="@string/contact_delete" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/expandable_fab_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_map_black_24dp"
+            app:label_text="@string/create_chat" />
+    </com.nambimobile.widgets.efab.ExpandableFabLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

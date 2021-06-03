@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,10 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentHomeBinding;
 import edu.uw.tcss450.stran373.ui.Chat.Card.ChatListViewModel;
+import edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactListViewModel;
+import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestCard;
+import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestCardRecyclerViewAdapter;
+import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestListViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,9 +31,13 @@ import edu.uw.tcss450.stran373.ui.Chat.Card.ChatListViewModel;
  */
 public class HomeFragment extends Fragment {
 
+    /**
+     * Represents the binding for this fragment.
+     */
     private FragmentHomeBinding mBinding;
     private UserInfoViewModel mUserViewModel;
     private ChatListViewModel mChatListViewModel;
+    private RequestListViewModel mRequestListViewModel;
 
     /**
      * The ViewModel used for displaying functionality.
@@ -50,23 +59,43 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mUserViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
         mChatListViewModel = new ViewModelProvider(getActivity()).get(ChatListViewModel.class);
+        mRequestListViewModel = new ViewModelProvider(getActivity()).get(RequestListViewModel.class);
         mChatListViewModel.getChats(mUserViewModel.getJwt());
+        mRequestListViewModel.connectGet(mUserViewModel.getJwt());
     }
 
+    /**
+     * Called upon creating the view. Initializes the binding for the fragment.
+     *
+     * @param theInflater is a LayoutInflater object.
+     * @param theContainer is a ViewGroup object.
+     * @param savedInstanceState is the saved instance state.
+     * @return
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
                              Bundle savedInstanceState) {
-        mBinding = FragmentHomeBinding.inflate(inflater);
+        mBinding = FragmentHomeBinding.inflate(theInflater);
         return mBinding.getRoot();
     }
 
+    /**
+     * Called upon view creation. Initializes the observer and view model needed for the fragment.
+     *
+     * @param theView is the current View.
+     * @param theSavedInstanceState is the saved instance state.
+     */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
+        super.onViewCreated(theView, theSavedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(HomeViewModel.class);
         MainActivity main = (MainActivity) getActivity();
+        LocationViewModel model = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
         mJWT = main.getTheArgs().getJwt();
-        mModel.connect(mJWT);
+        model.addLocationObserver(getViewLifecycleOwner(), location -> {
+            mModel.connect(mJWT, location);
+        });
+
         mModel.addResponseObserver(getViewLifecycleOwner(), weather -> {
             mBinding.textCurrentLocation.setText(weather.getLocation());
             mBinding.textCurrentTemp.setText(weather.getTemp());
@@ -80,6 +109,27 @@ public class HomeFragment extends Fragment {
             if (!chatlist.isEmpty()) {
                 mBinding.recylcerChats.setAdapter(
                         new HomeChatCardRecyclerViewAdapter(mChatListViewModel.getRecentCardList()));
+            }
+        });
+
+        mRequestListViewModel.addRequestListObserver(getViewLifecycleOwner(), requestList -> {
+            if (!requestList.isEmpty()) {
+                mBinding.homeRequestRecycler.setAdapter(
+                        new RequestCardRecyclerViewAdapter(requestList,
+                                new RequestCardRecyclerViewAdapter.OnItemCheckListener() {
+                                    @Override
+                                    public void onAcceptCheck(RequestCard card) {
+                                        mRequestListViewModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
+                                    }
+
+                                    @Override
+                                    public void onDeclineCheck(RequestCard card) {
+                                        mRequestListViewModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+                                    }
+                                }
+                        )
+
+                );
             }
         });
     }

@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_navigation_weather_to_weatherSearchFragment"
             app:destination="@id/weatherSearchFragment" />
+        <action
+            android:id="@+id/action_navigation_weather_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/weatherSearchFragment"
@@ -59,6 +62,9 @@
         <action
             android:id="@+id/action_navigation_contacts_to_requestListFragment"
             app:destination="@id/requestListFragment" />
+        <action
+            android:id="@+id/action_navigation_contacts_to_contactSearch"
+            app:destination="@id/contactSearch" />
     </fragment>
 
     <fragment
@@ -84,9 +90,20 @@
             app:destination="@id/inviteListFragment" />
     </fragment>
     <fragment
+        android:id="@+id/mapFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Weather.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
+    <fragment
         android:id="@+id/changePasswordFragment"
         android:name="edu.uw.tcss450.stran373.ChangePasswordFragment"
         android:label="@string/fragment_change_password_title"
+        tools:layout="@layout/fragment_change_password" /><action android:id="@+id/action_global_changePasswordFragment" app:destination="@id/changePasswordFragment"/>
+    <fragment
+        android:id="@+id/contactSearch"
+        android:name="edu.uw.tcss450.stran373.ui.Contact.ContactsInfo.ContactSearch"
+        android:label="Search Your Contacts"
+        tools:layout="@layout/fragment_contact_search" />
         tools:layout="@layout/fragment_change_password" /><action android:id="@+id/action_global_changePasswordFragment" app:destination="@id/changePasswordFragment"/><action android:id="@+id/action_global_navigation_contacts" app:destination="@id/navigation_contacts"/>
     <fragment
         android:id="@+id/navigation_chat_list"

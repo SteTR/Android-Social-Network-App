@@ -32,7 +32,6 @@
     <string name="title_pacnw_toolbar">PacNW</string>
 
     <string name="title_chats">Chats</string>
-    <string name="text_weather_search">Search…</string>
     <string name="button_weather_search">Go</string>
 
     <!--  Chat Card  -->
@@ -41,8 +40,7 @@
     <string name="chat_card_last_message">This is a placeholder message. :)</string>
 
     <!--  Database URLS  -->
-    <string name="base_url">http://10.0.2.2:5000/</string>
-<!--  https://production-tcss450-backend.herokuapp.com  http://10.0.2.2:5000 -->
+    <string name="base_url">https://production-tcss450-backend.herokuapp.com/</string>
 
     <!--Charles string resources for signin and registration-->
     <string name="email">Email</string>
@@ -55,6 +53,9 @@
     <string name="hello">Hello </string>
     <string name="home">Home</string>
 
+    <string name="button_weather_add">Add Location</string>
+    <string name="text_weather_search">Enter a zipcode</string>
+
     <string name="hint_first">First Name</string>
     <string name="hint_last">Last Name</string>
     <string name="hint_email">Email</string>
@@ -62,7 +63,6 @@
     <string name="hint_password_again">Retype Password</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_register_short">Register</string>
-
 
     <!-- String resources for signin and shared preferences -->
     <string name="switch_sign_in">Stay Signed in</string>
@@ -86,10 +86,12 @@
     <string name="checkbox_contact_chatinvite">Chat Invite</string>
     <string name="invite_sent">Invite Sent!</string>
     <string name="button_accept">Accept</string>
-    <string name="requests_reject">Reject</string>
+    <string name="requests_decline">Decline</string>
     <string name="create_chat_descr">Add Contacts to Chat</string>
     <string name="friend_has_been_invited">Friend has been invited!</string>
     <string name="text_chat_created">A chat room has been successfully created</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="checkbox_request_accept">Accept</string>
 
     <!--  Change Password Fragment Resources  -->
     <string name="fragment_change_password_title">Change Password</string>
@@ -101,7 +103,21 @@
     <string name="snackbar_password_sent">Password Change Request being sent!</string>
     <string name="snackbar_password_change_success">Password has been successfully reset. Signing out…</string>
     <string name="snackbar_password_sent_failure">Password failed to reset. Please check valid password for both current and new</string>
+    <string name="select_contact">Select Contact</string>
+    <string name="contacts_users_deleted">Users Deleted</string>
+    <string name="contact_delete">Delete Users</string>
+    <string name="contact_search">Search Users</string>
+    <string name="create_chat">Create Chat</string>
 
+    <!-- Contact search method string array-->
+    <string-array name="search_array">
+        <item>First, Last</item>
+        <item>MemberID</item>
+        <item>Email</item>
+    </string-array>
+
+    <string name="label_location">Current Location:</string>
+    <string name="label_location_button">Add Location</string>
     <string name="title_chat_members">Chat Members</string>
     <string name="chat_member_name">Name</string>
     <string name="chat_member_id">123</string>
