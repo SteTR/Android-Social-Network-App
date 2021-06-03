@@ -71,17 +71,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //mModel = new ViewModelProvider(getActivity()).get(HomeViewModel.class);
+        mModel = new ViewModelProvider(getActivity()).get(HomeViewModel.class);
         MainActivity main = (MainActivity) getActivity();
         mJWT = main.getTheArgs().getJwt();
-        //mModel.connect(mJWT);
+        mModel.connect(mJWT);
 
 
-        /*mModel.addResponseObserver(getViewLifecycleOwner(), weather -> {
+        mModel.addResponseObserver(getViewLifecycleOwner(), weather -> {
             mBinding.textCurrentLocation.setText(weather.getLocation());
             mBinding.textCurrentTemp.setText(weather.getTemp());
             setWeatherIcon(weather.getCondition());
-        });*/
+        });
         mBinding.textHomeName.setText(main.getTheArgs().getEmail() + '!');
 
         mBinding = FragmentHomeBinding.bind(getView());
