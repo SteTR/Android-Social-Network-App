@@ -46,11 +46,11 @@ public class WeatherFragment extends Fragment {
     /**
      * Instantiates the ViewModel needed for functionality.
      *
-     * @param savedInstanceState is a Bundle object that keeps track of the saved instance state.
+     * @param theSavedInstanceState is a Bundle object that keeps track of the saved instance state.
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle theSavedInstanceState) {
+        super.onCreate(theSavedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
         MainActivity main = (MainActivity) getActivity();
         mJWT = main.getTheArgs().getJwt();
@@ -61,17 +61,17 @@ public class WeatherFragment extends Fragment {
     /**
      * Initializes the contents of the ViewModel.
      *
-     * @param inflater is a LayoutInflater object.
-     * @param container is a ViewGroup object.
-     * @param savedInstanceState is a Bundle object that keeps track of the saved instance state.
+     * @param theInflater is a LayoutInflater object.
+     * @param theContainer is a ViewGroup object.
+     * @param theSavedInstanceState is a Bundle object that keeps track of the saved instance state.
      * @return a View used to reference the current View.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
+                             Bundle theSavedInstanceState) {
 
         // Inflate the layout for this fragment
-        mBinding = FragmentWeatherBinding.inflate(inflater);
+        mBinding = FragmentWeatherBinding.inflate(theInflater);
         mModel.addWeatherCardListObserver(getViewLifecycleOwner(), cardList -> {
             if (!cardList.isEmpty()) {
                 mBinding.weatherRecyler.setAdapter(
@@ -85,12 +85,12 @@ public class WeatherFragment extends Fragment {
     /**
      * Enables the searching button for searching up the weather.
      *
-     * @param view is the current View of the application.
-     * @param savedInstanceState is a Bundle object that keeps track of the saved instance state.
+     * @param theView is the current View of the application.
+     * @param theSavedInstanceState is a Bundle object that keeps track of the saved instance state.
      */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
+        super.onViewCreated(theView, theSavedInstanceState);
         //Setting up Listeners
 
         mBinding.expandableFabSearch.setOnClickListener(button ->

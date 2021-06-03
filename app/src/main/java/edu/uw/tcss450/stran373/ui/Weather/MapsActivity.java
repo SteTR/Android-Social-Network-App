@@ -21,12 +21,24 @@ import edu.uw.tcss450.stran373.databinding.ActivityMapsBinding;
  */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    /**
+     * Represents the Google Map for the activity.
+     */
     private GoogleMap mMap;
+
+    /**
+     * Represents this activity's binding.
+     */
     private ActivityMapsBinding binding;
 
+    /**
+     * Called when the app wants to create this activity.
+     *
+     * @param theSavedInstanceState is the saved instance state.
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle theSavedInstanceState) {
+        super.onCreate(theSavedInstanceState);
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -39,18 +51,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
      *
-     * @param googleMap is the Google
+     * @param theGoogleMap is the Google Map.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    public void onMapReady(GoogleMap theGoogleMap) {
+        mMap = theGoogleMap;
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);

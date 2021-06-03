@@ -98,11 +98,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     /**
      * Constructor for this fragment.
      *
-     * @param savedInstanceState is a Bundle object.
+     * @param theSavedInstanceState is a Bundle object.
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle theSavedInstanceState) {
+        super.onCreate(theSavedInstanceState);
         mMain = (MainActivity) getActivity();
         mJWT = mMain.getTheArgs().getJwt();
         mCoder = new Geocoder(getActivity().getApplicationContext());
@@ -119,10 +119,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
      * Retrieves local location upon succession. An extra thread is used to decrease the
      * workload of the main thread.
      *
-     * @param view is a view used to run this method.
+     * @param theView is a view used to run this method.
      */
     @Override
-    public void onClick(View view) {
+    public void onClick(View theView) {
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -146,22 +146,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     /**
      * Used to create a marker on the map and retrieve the coordinates of the selected location.
      *
-     * @param latLng is the lat/long coordinates of the selected location.
+     * @param theLatLng is the lat/long coordinates of the selected location.
      */
     @Override
-    public void onMapClick(LatLng latLng) {
-        Log.d("LAT/LONG", latLng.toString());
+    public void onMapClick(LatLng theLatLng) {
+        Log.d("LAT/LONG", theLatLng.toString());
         if (mMarker != null) {
-            mMarker.setPosition(latLng);
+            mMarker.setPosition(theLatLng);
         } else {
             mMarker = mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
+                    .position(theLatLng)
                     .title("New Marker"));
         }
         mMap.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
-                        latLng, mMap.getCameraPosition().zoom));
-        mLatLng = latLng;
+                        theLatLng, mMap.getCameraPosition().zoom));
+        mLatLng = theLatLng;
         Log.d("LAT/LNG: ", mLatLng.latitude + "/" + mLatLng.longitude);
         if (!mBinding.addLocButton.isEnabled()) {
             mBinding.addLocButton.setEnabled(true);
@@ -171,26 +171,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     /**
      * Called upon creation of the view to retrieve the inflated view.
      *
-     * @param inflater is a LayoutInflater object.
+     * @paramtheInflater is a LayoutInflater object.
      * @param container is a ViewGroup object.
-     * @param savedInstanceState is a Bundle object.
+     * @param theSavedInstanceState is a Bundle object.
      * @return the inflated view.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_map, container, false);
+    public View onCreateView(LayoutInflater theInflater, ViewGroup container,
+                             Bundle theSavedInstanceState) {
+        return theInflater.inflate(R.layout.fragment_map, container, false);
     }
 
     /**
      * Used to set up the necessary view models and buttons for the fragment.
      *
-     * @param view is the current view.
-     * @param savedInstanceState is a Bundle object.
+     * @param theView is the current view.
+     * @param theSavedInstanceState is a Bundle object.
      */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
+        super.onViewCreated(theView, theSavedInstanceState);
 
         mBinding = FragmentMapBinding.bind(getView());
 
@@ -211,18 +211,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     /**
      * Preps up the map for usage.
      *
-     * @param googleMap is the map used for this fragment.
+     * @param theGoogleMap is the map used for this fragment.
      */
     @SuppressLint("MissingPermission")
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    public void onMapReady(GoogleMap theGoogleMap) {
+        mMap = theGoogleMap;
         LocationViewModel model = new ViewModelProvider(getActivity())
                 .get(LocationViewModel.class);
         model.addLocationObserver(getViewLifecycleOwner(), location -> {
             if (location != null) {
-                googleMap.getUiSettings().setZoomControlsEnabled(true);
-                googleMap.setMyLocationEnabled(true);
+                theGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+                theGoogleMap.setMyLocationEnabled(true);
 
                 final LatLng c = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(c, 15.0f));
