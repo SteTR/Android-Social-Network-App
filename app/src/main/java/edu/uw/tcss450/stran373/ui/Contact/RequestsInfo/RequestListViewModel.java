@@ -143,6 +143,7 @@ public class RequestListViewModel extends AndroidViewModel {
     public void connectPost(final String theID, final String theAnswer, final String theJWT) {
 
         String user_auth = theJWT;
+        Log.i("JWT", user_auth);
         String url = getApplication().getResources().getString(R.string.base_url)+"requests";
         //Create the body for the JSON request
         JSONObject body = new JSONObject();
@@ -173,5 +174,9 @@ public class RequestListViewModel extends AndroidViewModel {
 
         //Instantiate the RequestQueue and add the request to the queue
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+    }
+
+    public int getSize() {
+        return mRequestCards.getValue().size();
     }
 }

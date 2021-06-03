@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,12 +123,14 @@ public class ContactListFragment extends Fragment {
         });
 
         binding.expandableFabSearch.setOnClickListener(button -> {
-            mModel.handleChatCreation(currentSelectedItems, jwt);
-            Snackbar.make(getView(), R.string.contacts_users_deleted, Snackbar.LENGTH_LONG).show();
+            Navigation.findNavController(getView()).navigate(
+                    ContactListFragmentDirections.actionNavigationContactsToContactSearch());
         });
 
-        binding.expandableFabChat.setOnClickListener(button -> {
-            mModel.handleChatCreation(currentSelectedItems, jwt);
+        binding.expandableFabDelete.setOnClickListener(button -> {
+            for(int i = 0; i < currentSelectedItems.size(); i++) {
+                mModel.connectPost(Integer.parseInt(currentSelectedItems.get(i).getMemberID()), mUserViewModel.getJwt());
+            }
         });
 
         //Navigate to other connection fragments

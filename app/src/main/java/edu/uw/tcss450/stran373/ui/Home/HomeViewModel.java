@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.ui.Weather.HourlyCard;
 import edu.uw.tcss450.stran373.ui.Weather.WeatherCard;
 
@@ -108,7 +109,7 @@ public class HomeViewModel extends AndroidViewModel {
      * Used to connect to the weather web service.
      */
     public void connect(String theJWT) {
-        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
+        final String url = getApplication().getResources().getString(R.string.base_url) + "weather?lat=47.608013&lon=-122.335167";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,

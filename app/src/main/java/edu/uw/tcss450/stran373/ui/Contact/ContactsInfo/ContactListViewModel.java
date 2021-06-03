@@ -221,10 +221,10 @@ public class ContactListViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
 
-    public void connectPost(final String theID, final String theJWT) {
+    public void connectPost(final int theID, final String theJWT) {
 
         String user_auth = theJWT;
-        String url = getApplication().getResources().getString(R.string.base_url)+"requests";
+        String url = getApplication().getResources().getString(R.string.base_url) + "contacts";
         //Create the body for the JSON request
         JSONObject body = new JSONObject();
 
@@ -246,6 +246,7 @@ public class ContactListViewModel extends AndroidViewModel {
                 return headers;
             }
         };
+
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

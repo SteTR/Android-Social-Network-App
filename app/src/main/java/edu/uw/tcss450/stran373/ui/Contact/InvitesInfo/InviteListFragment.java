@@ -94,12 +94,6 @@ public class InviteListFragment extends Fragment {
                                         currentSelectedItems.add(card);
                                         Snackbar.make(getView(), R.string.invite_sent, Snackbar.LENGTH_LONG).show();
                                         mModel.connectPost(card.getMemberID(), mUserViewModel.getJwt());
-                                        try {
-                                            TimeUnit.SECONDS.sleep(5);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        mModel.connectGet(mUserViewModel.getJwt());
                                     }
                                     @Override
                                     public void onItemUncheck(InviteCard card) {

@@ -20,12 +20,12 @@ public class RequestCard implements Serializable {
     /**
      * This field is used to check if the invite was accepted or declined.
      */
-    private boolean isAccepted;
+    protected boolean isAccepted;
 
     /**
      * This field is used to check if request was accepted or declined
      */
-    private boolean isDeclined;
+    protected boolean isDeclined;
 
     /**
      * Set whether the contact is selected or not
@@ -59,7 +59,7 @@ public class RequestCard implements Serializable {
             this.mMemberID = theContactID;
             this.mFirstName = theFirstName;
             this.mLastName = theLastName;
-            this.isAccepted = false;
+            this.isAccepted = true;
             this.isDeclined = false;
         }
 

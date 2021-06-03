@@ -23,6 +23,7 @@ import java.util.List;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.databinding.FragmentContactListBinding;
+import edu.uw.tcss450.stran373.databinding.FragmentContactSearchListBinding;
 
 /**
 
@@ -60,8 +61,6 @@ public class ContactSearchListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mUserViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
         mModel = new ViewModelProvider(getActivity()).get(ContactSearchViewModel.class);
-        String jwt = mUserViewModel.getJwt();
-        mModel.connectGet(jwt);
     }
 
     /**
@@ -74,7 +73,7 @@ public class ContactSearchListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_contact_list, container, false);
+        return inflater.inflate(R.layout.fragment_contact_search_list, container, false);
     }
 
 
@@ -87,11 +86,14 @@ public class ContactSearchListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FragmentContactListBinding binding = FragmentContactListBinding.bind(getView());
+        FragmentContactSearchListBinding binding = FragmentContactSearchListBinding.bind(getView());
+
+        String jwt = mUserViewModel.getJwt();
+        //mModel.connectPost(jwt);
 
         mModel.addContactSearchListObserver(getViewLifecycleOwner(), contactList -> {
             if (!contactList.isEmpty()) {
-                binding.contactRecycler.setAdapter(
+                binding.contactSearchRecycler.setAdapter(
                         new ContactCardRecyclerViewAdapter(contactList,
                                 new ContactCardRecyclerViewAdapter.OnItemCheckListener() {
                                     @Override
@@ -106,14 +108,7 @@ public class ContactSearchListFragment extends Fragment {
                         ));
             }
         });
-
-        //Navigate to other connection fragments
-        binding.inviteButton.setOnClickListener(button ->
-                Navigation.findNavController(getView()).navigate(
-                        ContactListFragmentDirections.actionNavigationContactsToInviteListFragment()));
-
-        binding.requestButton.setOnClickListener(button ->
-                Navigation.findNavController(getView()).navigate(
-                        ContactListFragmentDirections.actionNavigationContactsToRequestListFragment()));
     }
+
+
 }
