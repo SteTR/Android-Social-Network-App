@@ -1,13 +1,17 @@
 package edu.uw.tcss450.stran373.ui.Contact.RequestsInfo;
 
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.lang.ref.WeakReference;
@@ -134,6 +138,15 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
         public void setRequest(final RequestCard theRequest)
         {
             mRequest = theRequest;
+            final Resources res = mView.getContext().getResources();
+            binding.declineBox.setBackgroundColor(
+                    ColorUtils.setAlphaComponent(
+                            res.getColor(R.color.secondaryLightColor, null),
+                            16));
+            binding.declineBox.setTextColor(
+                    ColorUtils.setAlphaComponent(
+                            res.getColor(R.color.design_default_color_on_secondary, null),
+                            16));
             binding.textFirstName.setText(theRequest.getFirstName());
             binding.textLastName.setText(theRequest.getLastName());
             String fullName = binding.textFirstName.getText().toString()

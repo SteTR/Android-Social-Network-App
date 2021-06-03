@@ -39,8 +39,13 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
 /**
  * ViewModel used for the WeatherFragment. This will be used to handle the main
  * functionality for displaying the weather.
+ *
+ * @author Jonathan Lee
+ * @author Bryce Fujita
  */
 public class WeatherViewModel extends AndroidViewModel {
+
+    private String[] DAYS_OF_WEEK = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
 
     /**
      * LiveData to hold the list of WeatherCard objects.
@@ -57,6 +62,24 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private int[][] mFutureDays;
 
+
+    /**
+     * Represents the most recent city location.
+     */
+    private String mCity;
+
+    /**
+     * Represents the most recent state.
+     */
+    private String mState;
+
+    /**
+     * Represents the most recent zip code used to retrieve the most recent location.
+     */
+    private long mZip;
+
+    private String mJWT;
+
     /**
      * Constructor for the ViewModel.
      *
@@ -69,6 +92,8 @@ public class WeatherViewModel extends AndroidViewModel {
         mCardList.setValue(new ArrayList<>());
         mHourCards = new MutableLiveData<>();
         mHourCards.setValue(new ArrayList<>());
+        mZip = 0;
+        mJWT = "";
     }
 
     /**
@@ -98,21 +123,22 @@ public class WeatherViewModel extends AndroidViewModel {
      * @param theResult is the root JSONObject for retrieving all of the necessary data.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void handleResult(final JSONObject theResult) {
+    private void handleResult(final JSONObject theResult, String theName) {
         try {
             JSONObject root = theResult;
             List<HourlyCard> list = new ArrayList<HourlyCard>();
 
             // Get the current date information.
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-            int currentDay = cal.get(Calendar.DATE);
+            int currentDate = cal.get(Calendar.DATE);
+            int currentDay = cal.get(Calendar.DAY_OF_WEEK);
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             YearMonth ymo = YearMonth.of(year, month);
             int daysInMonth = ymo.lengthOfMonth();
 
             // Get the 5-day forecast.
-            mFutureDays = fiveDays(year, month, currentDay, daysInMonth);
+            mFutureDays = fiveDays(year, month, currentDate, daysInMonth);
             JSONArray jArr = (JSONArray) root.get("daily");
             String[] jDays = fiveForeCast(jArr);
             int[] jConds = fiveConditions(jArr);
@@ -122,18 +148,33 @@ public class WeatherViewModel extends AndroidViewModel {
             JSONArray currentWeather = (JSONArray) current.get("weather");
             JSONObject currentCond = currentWeather.getJSONObject(0);
             int currentCondition = (int) currentCond.get("id");
-            double currentTemp = (double) current.get("temp");
+            Object currentTemp = current.get("temp");
+            Double num = 0.0;
+            if (currentTemp instanceof Integer) {
+                num = Double.valueOf((Integer) currentTemp);
+            } else {
+                num = (Double) current.get("temp");
+            }
 
-            // Weather card for Seattle, Washington
+            // Weather card for the most recent location.
             WeatherCard wc = new WeatherCard
-                    .Builder("Seattle, WA", currentTemp + " F°", currentCondition)
-                    .addDay1(String.format("%d/%d", mFutureDays[0][0], mFutureDays[0][1]), (jDays[0]), jConds[0])
-                    .addDay2(String.format("%d/%d", mFutureDays[1][0], mFutureDays[1][1]), (jDays[1]), jConds[1])
-                    .addDay3(String.format("%d/%d", mFutureDays[2][0], mFutureDays[2][1]), (jDays[2]), jConds[2])
-                    .addDay4(String.format("%d/%d", mFutureDays[3][0], mFutureDays[3][1]), (jDays[3]), jConds[3])
-                    .addDay5(String.format("%d/%d", mFutureDays[4][0], mFutureDays[4][1]), (jDays[4]), jConds[4])
+                    .Builder(theName, String.format("%,.0f",num)+ " F°", currentCondition)
+                    .addDay1(String.format("%d/%d", mFutureDays[0][0], mFutureDays[0][1]) +
+                            " " + DAYS_OF_WEEK[currentDay%7], (jDays[0]), jConds[0])
+                    .addDay2(String.format("%d/%d", mFutureDays[1][0], mFutureDays[1][1]) +
+                            " " + DAYS_OF_WEEK[(currentDay+1)%7], (jDays[1]), jConds[1])
+                    .addDay3(String.format("%d/%d", mFutureDays[2][0], mFutureDays[2][1]) +
+                            " " + DAYS_OF_WEEK[(currentDay+2)%7], (jDays[2]), jConds[2])
+                    .addDay4(String.format("%d/%d", mFutureDays[3][0], mFutureDays[3][1]) +
+                            " " + DAYS_OF_WEEK[(currentDay+3)%7], (jDays[3]), jConds[3])
+                    .addDay5(String.format("%d/%d", mFutureDays[4][0], mFutureDays[4][1]) +
+                            " " + DAYS_OF_WEEK[(currentDay+4)%7], (jDays[4]), jConds[4])
                     .build();
-            if (!mCardList.getValue().contains(wc) && mCardList.getValue().size() < 1) {
+            // !mCardList.getValue().contains(wc) && mCardList.getValue().size() < 1
+//            if (!mCardList.getValue().contains(wc)) {
+//                mCardList.getValue().add(wc);
+//            }
+            if (!cardExists(wc) || mCardList.getValue().isEmpty()) {
                 mCardList.getValue().add(wc);
             }
 
@@ -165,6 +206,24 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     /**
+     * Helper method to check to see if the same weather card exists in the card list.
+     *
+     * @param theCard is a weather card.
+     * @return true if there is already the same existing card, false otherwise.
+     */
+    private boolean cardExists(WeatherCard theCard) {
+        boolean exists = false;
+        for (int i = 0; i < mCardList.getValue().size(); i++) {
+            String loc1 = mCardList.getValue().get(i).getLocation();
+            String loc2 = theCard.getLocation();
+            if (loc1.equals(loc2)) {
+                exists = true;
+            }
+        }
+        return exists;
+    }
+
+    /**
      * Helper method to represent numerical values into readable Strings.
      *
      * @param theObject is an object that holds the numerical value.
@@ -173,7 +232,7 @@ public class WeatherViewModel extends AndroidViewModel {
     private String formatter(Object theObject) {
         String result = "";
         if (theObject instanceof Double) {
-            result = String.format("%,.1f", theObject);
+            result = String.format("%,.0f", theObject);
         } else if (theObject instanceof Integer) {
             result = String.format("%d", theObject);
         }
@@ -230,6 +289,40 @@ public class WeatherViewModel extends AndroidViewModel {
         return null;
     }
 
+
+//    /**
+//     * Uses the zip code to retrieve the latitude and longitude needed
+//     * to retrieve location data.
+//     * Connects to another API service for this purpose.
+//     *
+//     * @param theZip is a postal code (zip code).
+//     */
+//    public void connectZip(long theZip) {
+//        final String url = "https://www.zipcodeapi.com/rest/"
+//        + "jHC7gyngynPlUQuJwlxcccscoKqPYCZjupuRC54gRXTPcNP7KDF7x2mXyoc4lV3A/"
+//                +"info.json/" + theZip + "/degrees";
+//        Request request = new JsonObjectRequest(
+//                Request.Method.GET,
+//                url,
+//                null,
+//                this::handleZip,
+//                this::handleError) {
+//
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                return headers;
+//            }
+//        };
+//
+//        request.setRetryPolicy(new DefaultRetryPolicy(
+//                10_000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//
+//        Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+//    }
+
     /**
      * Helper method to get the next five dates.
      *
@@ -261,13 +354,85 @@ public class WeatherViewModel extends AndroidViewModel {
     /**
      * Used to connect to the weather web service.
      */
-    public void connect(String theJWT) {
-        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void connectWeather(double theLat, double theLon, String theName) {
+//        connectZip(mZip);
+//        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=47.608013&lon=-122.335167";
+        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" +
+                theLon + "&lon=" + theLat;
+        Log.d("Getting Location at", url);
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
                 null,
-                this::handleResult,
+                response -> handleResult(response, theName),
+                this::handleError) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", mJWT);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+    }
+
+    /**
+     * How to handle retrieved list
+     * @param result The list returned
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void handleListResult(final JSONObject result) {
+        IntFunction<String> getString =
+                getApplication().getResources()::getString;
+        try {
+            JSONObject root = result;
+            if (root.has("success")) {
+                if (root.has("data")) {
+                    JSONArray data = root.getJSONArray("data");
+
+                    for(int i = 0; i < data.length(); i++) {
+                        JSONObject jsonLocation = data.getJSONObject(i);
+                        double lat = Double.parseDouble(jsonLocation.getString("lat"));
+                        double lon = Double.parseDouble(jsonLocation.getString("long"));
+                        String name = jsonLocation.getString("nickname");
+                        Log.d("Getting Location", name);
+                        connectWeather(lat,lon,name);
+                    }
+                } else {
+                    Log.e("ERROR!", "No data array");
+                }
+            } else {
+                Log.e("ERROR!", "No response");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("ERROR!", e.getMessage());
+        }
+    }
+
+    /**
+     * A connect method that retrieves a list of weather locations
+     * to then retrieve information from OpenWeatherApi.
+     * @param theJWT a string used for authorization
+     */
+    public void connect(String theJWT) {
+        mJWT = theJWT;
+        Log.d("Connecting with", mJWT);
+        final String url = "https://production-tcss450-backend.herokuapp.com/weather/get";
+        Request request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                this::handleListResult,
                 this::handleError) {
 
             @Override
@@ -284,6 +449,20 @@ public class WeatherViewModel extends AndroidViewModel {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+    }
+
+    /**
+     * Used to set the most recent zip code for retrieving the current location. Returns true
+     * if the user enters a new location, false otherwise.
+     *
+     * @param theZip is a zip code (postal code).
+     */
+    public boolean setZip(long theZip) {
+        boolean exists = theZip == mZip;
+        if (!exists) {
+            mZip = theZip;
+        }
+        return exists;
     }
 
     /**
