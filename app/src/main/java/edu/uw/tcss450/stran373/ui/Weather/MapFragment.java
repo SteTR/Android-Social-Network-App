@@ -134,7 +134,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                             Double.parseDouble(df.format(mLatLng.longitude)), 1);
                     Log.d("Here: ", mAddresses.get(0).getLocality());
                     mMapModel.connect(mJWT, mAddresses.get(0).getLatitude(), mAddresses.get(0).getLongitude(),
-                            mAddresses.get(0).getLocality());
+                            mAddresses.get(0).getLocality() + ", " +
+                                    mAddresses.get(0).getAdminArea());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
