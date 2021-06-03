@@ -32,7 +32,6 @@
     <string name="title_pacnw_toolbar">PacNW</string>
 
     <string name="title_chats">Chats</string>
-    <string name="text_weather_search">Search...</string>
     <string name="button_weather_search">Go</string>
 
     <!--  Chat Card  -->
@@ -53,6 +52,9 @@
     <string name="confirm">Confirm Password</string>
     <string name="hello">Hello </string>
     <string name="home">Home</string>
+
+    <string name="button_weather_add">Add Location</string>
+    <string name="text_weather_search">Enter a zipcode</string>
 
     <string name="hint_first">First Name</string>
     <string name="hint_last">Last Name</string>

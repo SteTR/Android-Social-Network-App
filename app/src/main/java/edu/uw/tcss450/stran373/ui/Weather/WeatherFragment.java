@@ -58,6 +58,12 @@ public class WeatherFragment extends Fragment {
         mModel.connect(mJWT);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mModel.connect(mJWT);
+    }
+
     /**
      * Initializes the contents of the ViewModel.
      *
