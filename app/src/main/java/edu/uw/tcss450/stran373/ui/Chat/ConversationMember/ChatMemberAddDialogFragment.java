@@ -53,7 +53,7 @@ public class ChatMemberAddDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("ADD");
         final EditText input = new EditText(builder.getContext());
-
+        input.setHint("Enter email");
         input.setInputType(InputType.TYPE_CLASS_TEXT);
 
         builder.setView(input);
