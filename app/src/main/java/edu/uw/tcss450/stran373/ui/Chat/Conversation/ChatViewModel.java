@@ -21,9 +21,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
@@ -36,8 +38,6 @@ import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
  * @author Haoying Li
  */
 public class ChatViewModel extends AndroidViewModel {
-
-//    public static final int TEST_CHAT_ID = 1;
 
     /**
      * A Map of Lists of Chat Messages.
@@ -105,7 +105,7 @@ public class ChatViewModel extends AndroidViewModel {
                 Request.Method.GET,
                 url,
                 null, //no body for this get request
-                this::handelSuccess,
+                this::handleSuccess,
                 this::handleError) {
 
             @Override
@@ -149,7 +149,7 @@ public class ChatViewModel extends AndroidViewModel {
                 Request.Method.GET,
                 url,
                 null, //no body for this get request
-                this::handelSuccess,
+                this::handleSuccess,
                 this::handleError) {
 
             @Override
@@ -188,7 +188,7 @@ public class ChatViewModel extends AndroidViewModel {
      *
      * @param response the response
      */
-    private void handelSuccess(final JSONObject response) {
+    private void handleSuccess(final JSONObject response) {
         List<ChatMessage> list;
         if (!response.has("chatid")) {
             throw new IllegalStateException("Unexpected response in ChatViewModel: " + response);

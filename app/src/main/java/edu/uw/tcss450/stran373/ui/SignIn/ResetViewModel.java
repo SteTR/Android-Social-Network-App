@@ -24,6 +24,11 @@ import java.util.Objects;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 
+/**
+ * ViewModel to hold response after reset
+ *
+ * @author Steven Tran
+ */
 public class ResetViewModel extends AndroidViewModel {
     // TODO at the moment, the post response does not get tracked.
     // TODO need to inform the user that password has been changed
@@ -35,11 +40,21 @@ public class ResetViewModel extends AndroidViewModel {
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Add a observer to any changes to response
+     *
+     * @param owner owner who wants to observe
+     * @param observer the function after observing
+     */
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
     }
 
+    /**
+     * Sends a post request to reset account password with associated email
+     * @param email the email of the account to reset
+     */
     public void connectPost(final String email) {
         final JSONObject body = new JSONObject();
         try {
@@ -59,6 +74,13 @@ public class ResetViewModel extends AndroidViewModel {
                 getApplication().getApplicationContext()).addToRequestQueue(resetPasswordRequest);
     }
 
+    /**
+     * Sends a put request with a code to ensure the email received the code for resetting password
+     *
+     * @param email the email associated with the password reset request
+     * @param code the 5 digit code needed to verify the user from the email
+     * @param password the new password
+     */
     public void connectPut(final String email, final int code, final String password) {
         final JSONObject body = new JSONObject();
         try {

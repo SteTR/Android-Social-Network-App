@@ -1,26 +1,22 @@
 package edu.uw.tcss450.stran373.ui.Chat.Conversation;
 
 import android.content.res.Resources;
-import android.util.Log;
-import android.view.Gravity;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.shape.CornerFamily;
 
 import java.util.List;
 
 import edu.uw.tcss450.stran373.R;
-import edu.uw.tcss450.stran373.databinding.FragmentChatMessageBinding;
+import edu.uw.tcss450.stran373.databinding.FragmentChatReceiveMessageBinding;
+import edu.uw.tcss450.stran373.databinding.FragmentChatSendMessageBinding;
 import edu.uw.tcss450.stran373.ui.Chat.Message.ChatMessage;
-import edu.uw.tcss450.stran373.utils.Utils;
 
 /**
  * A recycle view adapter to keep track of a specific chat's messages and the owner
@@ -28,7 +24,10 @@ import edu.uw.tcss450.stran373.utils.Utils;
  * @author Steven Tran
  * @author Charles Bryan
  */
-public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerViewAdapter.MessageViewHolder> {
+public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int SEND_MESSAGE_VIEW_TYPE = 1;
+    private static final int RECEIVE_MESSAGE_VIEW_TYPE = 2;
 
     private final List<ChatMessage> mMessages;
     private final String mEmail;
@@ -38,18 +37,40 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         mEmail = email;
     }
 
+    @Override
+    public int getItemViewType(final int position) {
+        // Checks the message if it belongs to user or other and puts a view type on them
+        final ChatMessage message = mMessages.get(position);
+        if (message.getSender().equals(mEmail)) {
+            return SEND_MESSAGE_VIEW_TYPE;
+        } else {
+            return RECEIVE_MESSAGE_VIEW_TYPE;
+        }
+    }
 
     @NonNull
     @Override
-    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MessageViewHolder(LayoutInflater
-                .from(parent.getContext())
-                .inflate(R.layout.fragment_chat_message, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+
+        if (viewType == SEND_MESSAGE_VIEW_TYPE) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_chat_send_message, parent, false);
+            return new ChatRecyclerViewAdapter.SendMessageViewHolder(view);
+        } else {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_chat_receive_message, parent, false);
+            return new ChatRecyclerViewAdapter.ReceiveMessageViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-        holder.setMessage(mMessages.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder.getItemViewType() == SEND_MESSAGE_VIEW_TYPE) {
+            ((SendMessageViewHolder) holder).setMessage(mMessages.get(position));
+        } else {
+            ((ReceiveMessageViewHolder) holder).setMessage(mMessages.get(position));
+        }
     }
 
     @Override
@@ -57,87 +78,59 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         return mMessages.size();
     }
 
-    class MessageViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * Holder that holds receive message (messages that do not belong to the signed in user)
+     *
+     * @author Steven Tran
+     */
+    private class ReceiveMessageViewHolder extends RecyclerView.ViewHolder {
         private final View mView;
-        private FragmentChatMessageBinding binding;
+        private FragmentChatReceiveMessageBinding binding;
 
-        public MessageViewHolder(@NonNull View view) {
+        public ReceiveMessageViewHolder(@NonNull View view) {
             super(view);
             mView = view;
-            binding = FragmentChatMessageBinding.bind(view);
+            binding = FragmentChatReceiveMessageBinding.bind(view);
         }
 
         void setMessage(final ChatMessage message) {
-            final Resources res = mView.getContext().getResources();
-            final MaterialCardView card = binding.cardRoot;
+            binding.textReceiveMessageName.setText(message.getSender());
+            binding.textReceiveMessageTimestamp.setText(message.getTime());
+            binding.textReceiveMessageContent.setText(message.getMessage());
+            binding.textReceiveMessageDate.setText(message.getDate());
 
-            int standard = (int) res.getDimension(R.dimen.chat_margin);
-            int extended = (int) res.getDimension(R.dimen.chat_margin_sided);
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = mView.getContext().getTheme();
+            theme.resolveAttribute(R.attr.colorSecondaryVariant, typedValue, true);
+            binding.card.setCardBackgroundColor( typedValue.data);
+        }
+    }
 
-            binding.messageTextName.setText(message.getSender());
-            binding.messageTextContent.setText(message.getMessage());
-            binding.messageTextTimestamp.setText(message.getTimeStamp());
+    /**
+     * Holder that holds send message (messages that do belong to the signed in user)
+     *
+     * @author Steven Tran
+     */
+    private class SendMessageViewHolder extends RecyclerView.ViewHolder {
+        private final View mView;
 
-            // Code taken from lab 5
-            if (mEmail.equals(message.getSender())) {
-                ViewGroup.MarginLayoutParams layoutParams =
-                        (ViewGroup.MarginLayoutParams) card.getLayoutParams();
-                //Set the left margin
-                layoutParams.setMargins(extended, standard, standard, standard);
-                // Set this View to the right (end) side
-                ((FrameLayout.LayoutParams) card.getLayoutParams()).gravity = Gravity.END;
-                card.setCardBackgroundColor(
-                        ColorUtils.setAlphaComponent(
-                                res.getColor(R.color.primaryLightColor, null),
-                                16));
-                card.setStrokeWidth(standard / 5);
-                card.setStrokeColor(ColorUtils.setAlphaComponent(
-                        res.getColor(R.color.primaryLightColor, null),
-                        200));
+        private FragmentChatSendMessageBinding binding;
 
-                //Round the corners on the left side
-                card.setShapeAppearanceModel(
-                        card.getShapeAppearanceModel()
-                                .toBuilder()
-                                .setTopLeftCorner(CornerFamily.ROUNDED, standard * 2)
-                                .setBottomLeftCorner(CornerFamily.ROUNDED, standard * 2)
-                                .setBottomRightCornerSize(0)
-                                .setTopRightCornerSize(0)
-                                .build());
+        public SendMessageViewHolder(@NonNull View view) {
+            super(view);
+            mView = view;
+            binding = FragmentChatSendMessageBinding.bind(view);
+        }
 
-                card.requestLayout();
-            } else {
-                ViewGroup.MarginLayoutParams layoutParams =
-                        (ViewGroup.MarginLayoutParams) card.getLayoutParams();
+        void setMessage(final ChatMessage message) {
+            binding.textSendMessageContent.setText(message.getMessage());
+            binding.textSendMessageDate.setText(message.getDate());
+            binding.textSendMessageTime.setText(message.getTime());
 
-                //Set the right margin
-                layoutParams.setMargins(standard, standard, extended, standard);
-
-                // Set this View to the left (start) side --Henry
-                ((FrameLayout.LayoutParams) card.getLayoutParams()).gravity =
-                        Gravity.START;
-
-                card.setCardBackgroundColor(
-                        ColorUtils.setAlphaComponent(
-                                res.getColor(R.color.secondaryLightColor, null),
-                                16));
-
-                card.setStrokeWidth(standard / 5);
-                card.setStrokeColor(ColorUtils.setAlphaComponent(
-                        res.getColor(R.color.secondaryLightColor, null),
-                        200));
-
-                //Round the corners on the right side
-                card.setShapeAppearanceModel(
-                        card.getShapeAppearanceModel()
-                                .toBuilder()
-                                .setTopRightCorner(CornerFamily.ROUNDED, standard * 2)
-                                .setBottomRightCorner(CornerFamily.ROUNDED, standard * 2)
-                                .setBottomLeftCornerSize(0)
-                                .setTopLeftCornerSize(0)
-                                .build());
-                card.requestLayout();
-            }
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = mView.getContext().getTheme();
+            theme.resolveAttribute(R.attr.colorPrimaryVariant, typedValue, true);
+            binding.sendCard.setCardBackgroundColor( typedValue.data);
         }
     }
 }

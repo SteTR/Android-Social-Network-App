@@ -27,7 +27,7 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 import me.pushy.sdk.Pushy;
 
-public class PushyTokenViewModel extends AndroidViewModel{
+public class PushyTokenViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> mPushyToken;
     private final MutableLiveData<JSONObject> mResponse;

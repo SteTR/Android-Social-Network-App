@@ -116,7 +116,9 @@
         <item>Email</item>
     </string-array>
 
-
     <string name="label_location">Current Location:</string>
     <string name="label_location_button">Add Location</string>
+    <string name="title_chat_members">Chat Members</string>
+    <string name="chat_member_name">Name</string>
+    <string name="chat_member_id">123</string>
 </resources>

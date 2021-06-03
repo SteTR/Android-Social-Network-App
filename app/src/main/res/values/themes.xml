@@ -3,11 +3,11 @@
     <style name="ThemeB" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#ff9100</item>
-        <item name="colorPrimaryVariant">#c56200</item>
+        <item name="colorPrimaryVariant">#ffc246</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#757575</item>
-        <item name="colorSecondaryVariant">#494949</item>
+        <item name="colorSecondaryVariant">#a4a4a4</item>
         <item name="colorOnSecondary">#000000</item>
         <!-- Text Coloring -->
         <!-- Status bar color. -->
@@ -19,11 +19,11 @@
     <style name="ThemeC" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#212121</item>
-        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorPrimaryVariant">#484848</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#c51162</item>
-        <item name="colorSecondaryVariant">#8e0038</item>
+        <item name="colorSecondaryVariant">#fd558f</item>
         <item name="colorOnSecondary">#FFFFFF</item>
         <!-- Text Coloring -->
         <!-- Status bar color. -->
@@ -35,11 +35,11 @@
     <style name="ThemeE" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#0097a7</item>
-        <item name="colorPrimaryVariant">#006978</item>
+        <item name="colorPrimaryVariant">#56c8d8</item>
         <item name="colorOnPrimary">#000000</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#1b5e20</item>
-        <item name="colorSecondaryVariant">#003300</item>
+        <item name="colorSecondaryVariant">#4c8c4a</item>
         <item name="colorOnSecondary">#FFFFFF</item>
         <!-- Text Coloring -->
         <!-- Status bar color. -->
