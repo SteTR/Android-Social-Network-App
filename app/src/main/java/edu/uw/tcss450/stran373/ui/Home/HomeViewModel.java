@@ -1,6 +1,7 @@
 package edu.uw.tcss450.stran373.ui.Home;
 
 import android.app.Application;
+import android.location.Location;
 import android.os.Build;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -43,6 +45,16 @@ public class HomeViewModel extends AndroidViewModel {
      * LiveData to hold the list of WeatherCard objects.
      */
     private MutableLiveData<Weather> mWeather;
+
+    /**
+     * Represents the current state.
+     */
+    private String mState;
+
+    /**
+     * Represents the current city;
+     */
+    private String mCity;
 
     /**
      * Constructor for the ViewModel.
@@ -91,10 +103,15 @@ public class HomeViewModel extends AndroidViewModel {
             JSONArray currentWeather = (JSONArray) current.get("weather");
             JSONObject currentCond = currentWeather.getJSONObject(0);
             int currentCondition = (int) currentCond.get("id");
-            double currentTemp = (double) current.get("temp");
-
+            Object currentTemp = (Object) current.get("temp");
+            Double temp = 0.0;
+            if (currentTemp instanceof Integer) {
+                temp = Double.valueOf((Integer) current.get("temp"));
+            } else {
+                temp = (Double) current.get("temp");
+            }
             // Weather card for Seattle, Washington
-            Weather wc = new Weather("Seattle, WA", currentCondition,currentTemp + " F°");
+            Weather wc = new Weather("Seattle, WA", currentCondition,temp + " F°");
             mWeather.setValue(wc);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -108,8 +125,10 @@ public class HomeViewModel extends AndroidViewModel {
     /**
      * Used to connect to the weather web service.
      */
-    public void connect(String theJWT) {
-        final String url = getApplication().getResources().getString(R.string.base_url) + "weather?lat=47.608013&lon=-122.335167";
+    public void connect(String theJWT, Location theLoc) {
+        Double lat = theLoc.getLatitude();
+        Double lng = theLoc.getLongitude();
+        final String url = getApplication().getResources().getString(R.string.base_url) + "weather?lat=" + lat + "&lon=" + lng;
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -132,4 +151,5 @@ public class HomeViewModel extends AndroidViewModel {
 
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
+
 }

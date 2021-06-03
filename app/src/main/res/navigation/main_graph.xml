@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_navigation_weather_to_weatherSearchFragment"
             app:destination="@id/weatherSearchFragment" />
+        <action
+            android:id="@+id/action_navigation_weather_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/weatherSearchFragment"
@@ -86,6 +89,11 @@
             android:id="@+id/action_requestListFragment_to_inviteListFragment"
             app:destination="@id/inviteListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="edu.uw.tcss450.stran373.ui.Weather.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/changePasswordFragment"
         android:name="edu.uw.tcss450.stran373.ChangePasswordFragment"

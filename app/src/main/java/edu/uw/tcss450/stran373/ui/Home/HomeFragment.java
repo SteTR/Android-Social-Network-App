@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,9 @@ import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestListViewModel;
  */
 public class HomeFragment extends Fragment {
 
-
+    /**
+     * Represents the binding for this fragment.
+     */
     private FragmentHomeBinding mBinding;
     private UserInfoViewModel mUserViewModel;
     private ChatListViewModel mChatListViewModel;
@@ -61,21 +64,38 @@ public class HomeFragment extends Fragment {
         mRequestListViewModel.connectGet(mUserViewModel.getJwt());
     }
 
+    /**
+     * Called upon creating the view. Initializes the binding for the fragment.
+     *
+     * @param theInflater is a LayoutInflater object.
+     * @param theContainer is a ViewGroup object.
+     * @param savedInstanceState is the saved instance state.
+     * @return
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater theInflater, ViewGroup theContainer,
                              Bundle savedInstanceState) {
-        mBinding = FragmentHomeBinding.inflate(inflater);
+        mBinding = FragmentHomeBinding.inflate(theInflater);
         return mBinding.getRoot();
     }
 
+    /**
+     * Called upon view creation. Initializes the observer and view model needed for the fragment.
+     *
+     * @param theView is the current View.
+     * @param theSavedInstanceState is the saved instance state.
+     */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View theView, @Nullable Bundle theSavedInstanceState) {
+        super.onViewCreated(theView, theSavedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(HomeViewModel.class);
         MainActivity main = (MainActivity) getActivity();
+        LocationViewModel model = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
         mJWT = main.getTheArgs().getJwt();
         mModel.connect(mJWT);
-
+        model.addLocationObserver(getViewLifecycleOwner(), location -> {
+            mModel.connect(mJWT, location);
+        });
 
         mModel.addResponseObserver(getViewLifecycleOwner(), weather -> {
             mBinding.textCurrentLocation.setText(weather.getLocation());

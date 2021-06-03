@@ -2,6 +2,9 @@ package edu.uw.tcss450.stran373;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -11,19 +14,36 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.BroadcastReceiver;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.DecimalFormat;
+
+import edu.uw.tcss450.stran373.ui.Home.HomeViewModel;
+import edu.uw.tcss450.stran373.ui.Home.LocationViewModel;
 import edu.uw.tcss450.stran373.databinding.ActivityMainBinding;
 import edu.uw.tcss450.stran373.model.NewMessageCountViewModel;
 import edu.uw.tcss450.stran373.model.PushyTokenViewModel;
@@ -38,13 +58,25 @@ import edu.uw.tcss450.stran373.utils.Utils;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private Double mLat;
+
+    private Double mLng;
+
+    private LocationManager mManager;
+
+    private static final int REQUEST_LOCATION = 8414;
+
+    private static final long UPDATE_INTERVAL = 10000;
+
+    public static final long FASTEST_UPDATE = UPDATE_INTERVAL / 2;
+
     /**
      * Configurations for the menu bar
      */
     private AppBarConfiguration mAppBarConfiguration;
 
     /**
-     * List of agruments that are passed to main
+     * List of arguments that are passed to main
      */
     private MainActivityArgs mArgs;
 
@@ -52,6 +84,18 @@ public class MainActivity extends AppCompatActivity {
 
     private MainPushMessageReceiver mPushMessageReceiver;
     private NewMessageCountViewModel mNewMessageModel;
+
+    private FusedLocationProviderClient mFusedLocationClient;
+
+    private HomeViewModel mHomeModel;
+
+    private LocationRequest mRequest;
+
+    private LocationCallback mCallback;
+
+    private Location mLoc;
+
+    private LocationViewModel mLocModel;
 
     /**
      * Method called when the activity is created.
@@ -73,12 +117,13 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Get our args.
         mArgs = MainActivityArgs.fromBundle(getIntent().getExtras());
 
+        // Our new ViewModelProvider
         new ViewModelProvider(this,
                 new UserInfoViewModel.UserInfoViewModelFactory(mArgs.getJwt(), mArgs.getEmail())
         ).get(UserInfoViewModel.class);
-
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
@@ -115,11 +160,87 @@ public class MainActivity extends AppCompatActivity {
                 badge.setVisible(false);
             }
         });
+        // Prompt the user for permission to access the device's location.
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(
+                MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
+            // Get the current location.
+            requestLocation();
+        }
+
+        mCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+
+                for (Location location: locationResult.getLocations()) {
+                    Log.d("Location: ", location.toString());
+                    if (mLocModel == null) {
+                        mLocModel = new ViewModelProvider(MainActivity.this)
+                                .get(LocationViewModel.class);
+                    }
+                    mLocModel.setLocation(location);
+                }
+            }
+        };
+        createLocationRequest();
+    }
+
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    requestLocation();
+                } else {
+                    finishAndRemoveTask();
+                }
+            }
+        }
+    }
+
+    private void createLocationRequest() {
+        mRequest = LocationRequest.create();
+        mRequest.setInterval(UPDATE_INTERVAL);
+        mRequest.setFastestInterval(FASTEST_UPDATE);
+        mRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void requestLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        } else {
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                mLocModel = new ViewModelProvider(MainActivity.this)
+                                        .get(LocationViewModel.class);
+                                Log.d("Current Lat/Long:", location.getLatitude() + "/" + location.getLongitude());
+                                Log.d("Call 1: ", "Here");
+                                Log.d("Current location: ", location.toString());
+                                mLoc = location;
+                                mLocModel.setLocation(location);
+                            }
+
+                        }
+                    });
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        startLocationUpdates();
         if (mPushMessageReceiver == null) {
             mPushMessageReceiver = new MainPushMessageReceiver();
         }
@@ -129,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        mFusedLocationClient.removeLocationUpdates(mCallback);
         if (mPushMessageReceiver != null){
             unregisterReceiver(mPushMessageReceiver);
         }
@@ -203,6 +325,11 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    /**
+     * Getter method to retrieve the Main Activity's arguments.
+     *
+     * @return all of this activity's arguments
+     */
     public MainActivityArgs getTheArgs() {
         return mArgs;
     }
