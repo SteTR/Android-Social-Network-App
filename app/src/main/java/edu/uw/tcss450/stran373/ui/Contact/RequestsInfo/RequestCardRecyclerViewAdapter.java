@@ -34,6 +34,9 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
      */
     private final List<RequestCard> mRequests;
 
+    /**
+     * Listener for accept/deny
+     */
     public interface OnItemCheckListener {
         void onAcceptCheck(RequestCard card);
         void onDeclineCheck(RequestCard card);
@@ -138,15 +141,6 @@ public class RequestCardRecyclerViewAdapter extends RecyclerView.Adapter<Request
         public void setRequest(final RequestCard theRequest)
         {
             mRequest = theRequest;
-            final Resources res = mView.getContext().getResources();
-            binding.declineBox.setBackgroundColor(
-                    ColorUtils.setAlphaComponent(
-                            res.getColor(R.color.secondaryLightColor, null),
-                            16));
-            binding.declineBox.setTextColor(
-                    ColorUtils.setAlphaComponent(
-                            res.getColor(R.color.design_default_color_on_secondary, null),
-                            16));
             binding.textFirstName.setText(theRequest.getFirstName());
             binding.textLastName.setText(theRequest.getLastName());
             String fullName = binding.textFirstName.getText().toString()
