@@ -57,20 +57,9 @@ public class ChatMemberAddDialogFragment extends DialogFragment {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
 
         builder.setView(input);
-
         // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mChatMembersVM.addUser(mChatId, mUserViewModel.getJwt(), input.getText().toString());
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setPositiveButton("OK", (dialog, which) -> mChatMembersVM.addUser(mChatId, mUserViewModel.getJwt(), input.getText().toString()));
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         return builder.create();
     }

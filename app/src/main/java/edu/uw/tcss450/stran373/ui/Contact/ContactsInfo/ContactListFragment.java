@@ -1,9 +1,12 @@
 package edu.uw.tcss450.stran373.ui.Contact.ContactsInfo;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -118,8 +121,10 @@ public class ContactListFragment extends Fragment {
         String jwt = mUserViewModel.getJwt();
         //When floating action button pressed, create chat
         binding.expandableFabChat.setOnClickListener(button -> {
-            mModel.handleChatCreation(currentSelectedItems, jwt);
-            Snackbar.make(getView(), R.string.text_chat_created, Snackbar.LENGTH_LONG).show();
+            new ChatCreationGroupDialogFragment(currentSelectedItems)
+                    .show(this.getChildFragmentManager(), "");
+//            mModel.handleChatCreation(currentSelectedItems, jwt);
+//            Snackbar.make(getView(), R.string.text_chat_created, Snackbar.LENGTH_LONG).show();
         });
 
         binding.expandableFabSearch.setOnClickListener(button -> {

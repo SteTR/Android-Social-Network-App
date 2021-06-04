@@ -160,7 +160,7 @@ public class ContactListViewModel extends AndroidViewModel {
      * a new chat
      * @param theCards are the users the owner wants to invite
      */
-    protected void handleChatCreation(final List<ContactCard> theCards, final String theJWT) {
+    protected void handleChatCreation(final String theGroupName, final List<ContactCard> theCards, final String theJWT) {
 
         if(theCards.isEmpty()) {
             return;
@@ -181,8 +181,14 @@ public class ContactListViewModel extends AndroidViewModel {
         StringBuilder sb = new StringBuilder();
         sb.append(theCards.get(0).getFirstName());
         array.put(first_id);
+
+        // Group name was provided so we use that instead of default
+        if (!theGroupName.isEmpty()) {
+            sb.setLength(0);
+            sb.append(theGroupName);
+        }
         //Create the group name and build the array for userids
-        if(theCards.size() > 1) {
+        else if (theCards.size() > 1) {
             //Loop through and add the first names of the
             //chat members and add the member id to the array
             for(int i = 1; i < theCards.size(); i++) {
@@ -190,6 +196,7 @@ public class ContactListViewModel extends AndroidViewModel {
                 array.put(Integer.parseInt(theCards.get(i).getMemberID()));
             }
         }
+
         //Create the body for the JSON request
         JSONObject body = new JSONObject();
 
