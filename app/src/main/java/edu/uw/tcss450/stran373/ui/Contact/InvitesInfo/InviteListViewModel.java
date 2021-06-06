@@ -19,10 +19,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.IntFunction;
 
 import edu.uw.tcss450.stran373.R;
@@ -51,6 +53,14 @@ public class InviteListViewModel extends AndroidViewModel {
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Remove this invite from the view model
+     * @param theCard  is the invite to be removed
+     */
+    public void removeInvite(InviteCard theCard) {
+        mInviteCards.getValue().remove(theCard);
+    }
+
 
     /**
      * Add an observer to the contact cards to check for change of state
@@ -70,9 +80,16 @@ public class InviteListViewModel extends AndroidViewModel {
      * @param error that may occur during a request from the endpoint
      */
     private void handleError(final VolleyError error) {
-        //We will need to improve this error handler
-        Log.e("CONNECTION ERROR", mResponse.getValue().toString());
-        throw new IllegalStateException(error.getMessage());
+        if (Objects.isNull(error.networkResponse)) {
+            Log.e("NETWORK ERROR", error.getMessage());
+        }
+        else {
+            String data = new String(error.networkResponse.data, Charset.defaultCharset());
+            Log.e("CLIENT ERROR",
+                    error.networkResponse.statusCode +
+                            " " +
+                            data);
+        }
     }
 
 

@@ -115,7 +115,7 @@ public class ContactSearchViewModel extends AndroidViewModel {
      * Get the contacts from the web service endpoint
      */
     public void connectGet(final String theJWT, final String theSearch, final String theType) {
-        String url = getApplication().getResources().getString(R.string.base_url)+"contactSearch?type="+theType+"&search="+theSearch;
+        String url = getApplication().getResources().getString(R.string.base_url)+"contactSearch"+theType+"?search="+theSearch;
         String user_auth = theJWT;
         //Request the contact information and hand in auth token
         try {

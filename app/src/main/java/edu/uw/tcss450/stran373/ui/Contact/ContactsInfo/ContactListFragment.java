@@ -130,7 +130,9 @@ public class ContactListFragment extends Fragment {
         binding.expandableFabDelete.setOnClickListener(button -> {
             for(int i = 0; i < currentSelectedItems.size(); i++) {
                 mModel.connectPost(Integer.parseInt(currentSelectedItems.get(i).getMemberID()), mUserViewModel.getJwt());
+                mModel.removeInvite(currentSelectedItems.get(i));
             }
+            binding.contactRecycler.getAdapter().notifyDataSetChanged();
         });
 
         //Navigate to other connection fragments

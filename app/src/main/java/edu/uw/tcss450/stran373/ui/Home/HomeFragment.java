@@ -120,11 +120,15 @@ public class HomeFragment extends Fragment {
                                     @Override
                                     public void onAcceptCheck(RequestCard card) {
                                         mRequestListViewModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
+                                        mRequestListViewModel.removeRequest(card);
+                                        mBinding.homeRequestRecycler.getAdapter().notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onDeclineCheck(RequestCard card) {
                                         mRequestListViewModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+                                        mRequestListViewModel.removeRequest(card);
+                                        mBinding.homeRequestRecycler.getAdapter().notifyDataSetChanged();
                                     }
                                 }
                         )
