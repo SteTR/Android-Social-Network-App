@@ -1,6 +1,5 @@
 package edu.uw.tcss450.stran373.ui.Weather;
 
-import android.graphics.drawable.Icon;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,44 +9,62 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentHourlyCardBinding;
 
 /**
  * Adapter used to bind and change HourlyCards.
+ *
+ * @author Bryce Fujita
+ * @author Jonathan Lee
  */
 public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecyclerViewAdapter.HourlyViewHolder>{
 
     /**
-    List of all the hourly cards.
+     * List of all the hourly cards.
      */
     private final List<HourlyCard> mHourlys;
 
     /**
-     * Constructor.
-     * @param items HourlyCards being put into the view
+     * Constructor for the Adapter for the RecyclerView
+     * @param theItems HourlyCards being put into the view
      */
-    public HourlyRecyclerViewAdapter(List<HourlyCard> items) {
-        this.mHourlys = items;
+    public HourlyRecyclerViewAdapter(List<HourlyCard> theItems) {
+        this.mHourlys = theItems;
     }
 
+    /**
+     * Used to create a ViewHolder for the HourlyCards.
+     *
+     * @param theParent is the parent ViewGroup.
+     * @param theViewType is the type of view used.
+     * @return a new HourlyViewHolder for the 24-hour forecast cards.
+     */
     @NonNull
     @Override
-    public HourlyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HourlyViewHolder onCreateViewHolder(@NonNull ViewGroup theParent, int theViewType) {
         return new HourlyViewHolder(LayoutInflater
-                .from(parent.getContext())
-                .inflate(R.layout.fragment_hourly_card, parent, false));
+                .from(theParent.getContext())
+                .inflate(R.layout.fragment_hourly_card, theParent, false));
     }
 
+    /**
+     * Displays the data in the ViewHolder at a specified position.
+     *
+     * @param theHolder is the current ViewHolder.
+     * @param thePosition is the specified position.
+     */
     @Override
-    public void onBindViewHolder(@NonNull HourlyViewHolder holder, int position) {
-        holder.setHourly(mHourlys.get(position));
+    public void onBindViewHolder(@NonNull HourlyViewHolder theHolder, int thePosition) {
+        theHolder.setHourly(mHourlys.get(thePosition));
     }
 
+    /**
+     * Retrieves the number of hourly cards.
+     *
+     * @return
+     */
     @Override
     public int getItemCount() {
         return mHourlys.size();
@@ -57,13 +74,26 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
      * Inner class used to interact with individual Cards.
      */
     public class HourlyViewHolder extends RecyclerView.ViewHolder{
-        public final View mView;
-        public FragmentHourlyCardBinding binding;
 
-        public HourlyViewHolder(View view) {
-            super(view);
-            mView = view;
-            binding = FragmentHourlyCardBinding.bind(view);
+        /**
+         * Represents the current View.
+         */
+        public final View mView;
+
+        /**
+         * Represents the current binding of the card.
+         */
+        public FragmentHourlyCardBinding mBinding;
+
+        /**
+         * Constructor used to create the ViewHolder.
+         *
+         * @param theView is the current View.
+         */
+        public HourlyViewHolder(View theView) {
+            super(theView);
+            mView = theView;
+            mBinding = FragmentHourlyCardBinding.bind(theView);
         }
 
         /**
@@ -75,11 +105,11 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
             int hour = theCard.getTimeNum();
 
             if (theCard.getCond() < 233) {
-                binding.imageCurrent.setImageResource(R.drawable.ic_thunder);
+                mBinding.imageCurrent.setImageResource(R.drawable.ic_thunder);
             } else if (theCard.getCond() < 532 && theCard.getCond() > 299) {
-                binding.imageCurrent.setImageResource(R.drawable.ic_rainy_24dp);
+                mBinding.imageCurrent.setImageResource(R.drawable.ic_rainy_24dp);
             } else if (theCard.getCond() < 623 && theCard.getCond() > 599) {
-                binding.imageCurrent.setImageResource(R.drawable.ic_snowy_24dp);
+                mBinding.imageCurrent.setImageResource(R.drawable.ic_snowy_24dp);
             } else if ((theCard.getCond() < 782 && theCard.getCond() > 700) || theCard.getCond() > 800) {
                 nightOrDay(hour, new int[] {R.drawable.ic_cloudy_night_24dp, R.drawable.ic_cloudy});
             } else if (theCard.getCond() == 800){
@@ -96,9 +126,9 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
         private void nightOrDay(int theHour, int[] theResources) {
             boolean day = theHour < 17 && theHour > 5;
             if (day) {
-                binding.imageCurrent.setImageResource(theResources[1]);
+                mBinding.imageCurrent.setImageResource(theResources[1]);
             } else {
-                binding.imageCurrent.setImageResource(theResources[0]);
+                mBinding.imageCurrent.setImageResource(theResources[0]);
             }
         }
 
@@ -107,8 +137,8 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
          * @param theHourly HourlyCard that is used to reference
          */
         public void setHourly(final HourlyCard theHourly) {
-            binding.textTime.setText(theHourly.getTime());
-            binding.textTemp.setText(theHourly.getTemp());
+            mBinding.textTime.setText(theHourly.getTime());
+            mBinding.textTemp.setText(theHourly.getTemp());
             for (int i = 0; i < mHourlys.size(); i++) {
                 updateHourlyIcon(mHourlys.get(i));
             }

@@ -27,7 +27,7 @@ import java.util.Map;
  * Used to convert a zipcode to a coordinate.
  *
  * @author Bryce Fujita
- * */
+ */
 public class ZipcodeViewModel extends AndroidViewModel {
 
     /**

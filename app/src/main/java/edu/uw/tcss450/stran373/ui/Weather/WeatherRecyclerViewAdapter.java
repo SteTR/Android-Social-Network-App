@@ -22,45 +22,102 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherCardBinding;
 
 /**
  * Adapter used to hold Weather cards to the Weather Fragment.
+ *
+ * @author Bryce Fujita
+ * @author Jonathan Lee
  */
 public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecyclerViewAdapter.WeatherViewHolder>{
 
+    /**
+     * Represents the list of all present weather cards/locations.
+     */
     private final List<WeatherCard> mWeathers;
 
+    /**
+     * Used to keep track of which weather cards are expanded.
+     */
     private final Map<WeatherCard, Boolean> mExpandedFlags;
 
+    /**
+     * Represents the ViewModel used for accessing data.
+     */
     private WeatherViewModel mWeatherModel;
 
-    public WeatherRecyclerViewAdapter(List<WeatherCard> items, WeatherViewModel theModel) {
-        this.mWeathers = items;
+    /**
+     * Constructor for the Adapter for the RecyclerView.
+     *
+     * @param theItems are the weather cards.
+     * @param theModel is the necessary ViewModel.
+     */
+    public WeatherRecyclerViewAdapter(List<WeatherCard> theItems, WeatherViewModel theModel) {
+        this.mWeathers = theItems;
         this.mExpandedFlags = mWeathers.stream()
                 .collect(Collectors.toMap(Function.identity(),weather -> false));
         mWeatherModel = theModel;
     }
 
+    /**
+     * Used to create the ViewHolder for holding all of the weather cards.
+     *
+     * @param theParent is the parent ViewGroup.
+     * @param theViewType is the view type number.
+     * @return a ViewHolder to hold the weather cards.
+     */
     @NonNull
     @Override
-    public WeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public WeatherViewHolder onCreateViewHolder(@NonNull ViewGroup theParent, int theViewType) {
         return new WeatherViewHolder(LayoutInflater
-        .from(parent.getContext())
-        .inflate(R.layout.fragment_weather_card, parent, false), mWeatherModel);
+        .from(theParent.getContext())
+        .inflate(R.layout.fragment_weather_card, theParent, false), mWeatherModel);
     }
 
+    /**
+     * Used to manage data in the ViewHolder at a specified position.
+     *
+     * @param holder is the current ViewHolder.
+     * @param position is the specified position.
+     */
     @Override
     public void onBindViewHolder(@NonNull WeatherViewHolder holder, int position) {
         holder.setWeather(mWeathers.get(position));
     }
 
+    /**
+     * Getter method for the number of present weather cards.
+     *
+     * @return the number of present weather cards.
+     */
     @Override
     public int getItemCount() {
         return mWeathers.size();
     }
 
-    public class WeatherViewHolder extends RecyclerView.ViewHolder{
+    /**
+     * ViewHolder used to keep track of the weather card.
+     */
+    public class WeatherViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * Represents the current View.
+         */
         public final View mView;
+
+        /**
+         * Represents the current binding.
+         */
         public FragmentWeatherCardBinding binding;
+
+        /**
+         * Represents the current weather card.
+         */
         private WeatherCard mWeather;
 
+        /**
+         * Constructor for the ViewHolder.
+         *
+         * @param theView is the current view.
+         * @param theModel is the necessary ViewModel.
+         */
         public WeatherViewHolder(View theView, WeatherViewModel theModel) {
             super(theView);
             mView = theView;
@@ -73,6 +130,11 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             rv.setAdapter(new HourlyRecyclerViewAdapter(theModel.getHours()));
         }
 
+        /**
+         * Used to allow the cards to expand.
+         *
+         * @param theButton is a button used for expanding the weather cards.
+         */
         private void handleMoreOrLess(final View theButton) {
             mExpandedFlags.put(mWeather, !mExpandedFlags.get(mWeather));
             displayPreview();
@@ -137,6 +199,9 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             }
         }
 
+        /**
+         * used to display a preview of the RecyclerView.
+         */
         private void displayPreview() {
             if (mExpandedFlags.get(mWeather)) {
                 binding.hourlyRecyler.setVisibility(View.VISIBLE);
@@ -183,7 +248,12 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
             }
         }
 
-        void setWeather(final WeatherCard theWeather) {
+        /**
+         * Used to set the weather status of the weather card.
+         *
+         * @param theWeather is a weather card.
+         */
+        public void setWeather(final WeatherCard theWeather) {
             mWeather = theWeather;
             binding.textLocation.setText(theWeather.getLocation());
             binding.textCurrentTemp.setText(theWeather.getCurrentTemp());

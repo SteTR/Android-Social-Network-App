@@ -29,40 +29,39 @@ import edu.uw.tcss450.stran373.ui.SignIn.SignInViewModel;
 import static android.view.View.GONE;
 
 /**
- * A simple {@link Fragment} subclass.
- * A Blank fragment with nothing in it.
+ * Represents the weather search feature of the application.
  */
 public class WeatherSearchFragment extends Fragment {
 
     /**
      * Bindings used to access fragment elements.
      */
-    FragmentWeatherSearchBinding mBinding;
+    private FragmentWeatherSearchBinding mBinding;
 
     /**
      * The latitude that is returned from the zip model.
      */
-    double mLat;
+    private double mLat;
 
     /**
      * The longitude that is returned from the zip model.
      */
-    double mLon;
+    private double mLon;
 
     /**
      * The location that is returned from the Zip model.
      */
-    String mLocation;
+    private String mLocation;
 
     /**
      * Jwt used for remote authorization.
      */
-    String mJWT;
+    private String mJWT;
 
     /**
      * The ZipModel used to get information about a zipcode entered.
      */
-    ZipcodeViewModel mZipModel;
+    private ZipcodeViewModel mZipModel;
 
     /**
      * Executed upon creation to create a new ViewModelProvider for log-in.

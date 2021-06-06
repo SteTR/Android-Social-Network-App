@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 /**
  * Class used to reference information to Recycler View cards.
+ *
+ * @author Bryce Fujita
+ * @author Jonathan Lee
  */
 public class WeatherCard implements Serializable {
 

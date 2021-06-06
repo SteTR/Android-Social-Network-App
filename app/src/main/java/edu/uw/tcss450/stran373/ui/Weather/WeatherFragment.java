@@ -58,6 +58,9 @@ public class WeatherFragment extends Fragment {
         mModel.connect(mJWT);
     }
 
+    /**
+     * Used to allow the weather fragment to resume.
+     */
     @Override
     public void onResume() {
         super.onResume();

@@ -8,23 +8,55 @@ import java.io.Serializable;
  */
 public class InviteCard implements Serializable {
 
+    /**
+     * Represents the first name.
+     */
     private final String mFirstName;
+
+    /**
+     * Represents the last name.
+     */
     private final String mLastName;
+
+    /**
+     * Represents the member ID.
+     */
     private final String mMemberID;
+
+    /**
+     * Checks if the checkbox is selected.
+     */
     private boolean isSelected;
-
-
 
     /**
      * Necessary builder function to build the contact card
      * @author Andrew Bennett
      */
     public static class Builder {
+
+        /**
+         * Represents the first name.
+         */
         private String mFirstName;
+
+        /**
+         * Represents the last name.
+         */
         private String mLastName;
+
+        /**
+         * Represents the member ID.
+         */
         private String mMemberID;
+
+        /**
+         * Represents the selected  (checkbox).
+         */
         private boolean isSelected;
 
+        /**
+         * Default constructor for the Builder.
+         */
         public Builder()
         {
             mLastName = "Default";
@@ -33,6 +65,13 @@ public class InviteCard implements Serializable {
             isSelected = false;
         }
 
+        /**
+         * Parameterized Builder constructor for an Invite Card.
+         *
+         * @param theContactID is the contact ID.
+         * @param theFirstName is the first name.
+         * @param theLastName is the last name.
+         */
         public Builder(final String theContactID, final String theFirstName, final String theLastName)
         {
             this.mMemberID = theContactID;
@@ -81,13 +120,13 @@ public class InviteCard implements Serializable {
 
     /**
      * Builds the Invite
-     * @param builder Builder for invite cards
+     * @param theBuilder Builder for invite cards
      */
-    private InviteCard(final Builder builder)
+    private InviteCard(final Builder theBuilder)
     {
-        this.mFirstName = builder.mFirstName;
-        this.mLastName = builder.mLastName;
-        this.mMemberID = builder.mMemberID;
+        this.mFirstName = theBuilder.mFirstName;
+        this.mLastName = theBuilder.mLastName;
+        this.mMemberID = theBuilder.mMemberID;
     }
 
     /**
@@ -118,6 +157,11 @@ public class InviteCard implements Serializable {
      */
     public boolean isSelected(){return isSelected;}
 
+    /**
+     * Used to change its selected status (checkbox).
+     *
+     * @param theChecked the selected status
+     */
     public void setSelected(boolean theChecked) { this.isSelected = theChecked;}
 
 }
