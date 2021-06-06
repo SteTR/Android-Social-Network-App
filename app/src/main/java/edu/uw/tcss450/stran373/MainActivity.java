@@ -43,6 +43,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.DecimalFormat;
 
+import edu.uw.tcss450.stran373.model.NewInviteCountViewModel;
 import edu.uw.tcss450.stran373.ui.Home.HomeViewModel;
 import edu.uw.tcss450.stran373.ui.Home.LocationViewModel;
 import edu.uw.tcss450.stran373.databinding.ActivityMainBinding;
@@ -62,15 +63,11 @@ import edu.uw.tcss450.stran373.utils.Utils;
 public class MainActivity extends AppCompatActivity {
 
     private Double mLat;
-
     private Double mLng;
-
     private LocationManager mManager;
 
     private static final int REQUEST_LOCATION = 8414;
-
     private static final long UPDATE_INTERVAL = 10000;
-
     public static final long FASTEST_UPDATE = UPDATE_INTERVAL / 2;
 
     /**
@@ -86,21 +83,18 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private MainPushMessageReceiver mPushMessageReceiver;
+    private MainPushInviteReceiver mPushInviteReceiver;
     private NewMessageCountViewModel mNewMessageModel;
+    private NewInviteCountViewModel mNewInviteModel;
 
     public static int CHAT_ID;
     public static int NEW_MESSAGE;
 
     private FusedLocationProviderClient mFusedLocationClient;
-
     private HomeViewModel mHomeModel;
-
     private LocationRequest mRequest;
-
     private LocationCallback mCallback;
-
     private Location mLoc;
-
     private LocationViewModel mLocModel;
 
     /**
@@ -148,8 +142,6 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.navigation_single_chat) {
                 //When the user navigates to the chats page, reset the new message count.
-                //This will need some extra logic for your project as it should have
-                //multiple chat rooms.
                 mNewMessageModel.reset();
             }
         });
@@ -166,6 +158,29 @@ public class MainActivity extends AppCompatActivity {
                 badge.setVisible(false);
             }
         });
+
+        mNewInviteModel = new ViewModelProvider(this).get(NewInviteCountViewModel.class);
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.navigation_contacts) {
+                //When the user navigates to the contacts page, reset the new invite count.
+                mNewInviteModel.reset();
+            }
+        });
+        mNewInviteModel.addInviteCountObserver(this, count -> {
+            BadgeDrawable badge = binding.navView.getOrCreateBadge(R.id.navigation_contacts);
+            badge.setMaxCharacterCount(2);
+            if (count > 0) {
+                //new invites! update and show the notification badge.
+                badge.setNumber(count);
+                badge.setVisible(true);
+            } else {
+                //user did some action to clear the new invites, remove the badge
+                badge.clearNumber();
+                badge.setVisible(false);
+            }
+        });
+
         // Prompt the user for permission to access the device's location.
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(
@@ -260,6 +275,12 @@ public class MainActivity extends AppCompatActivity {
         }
         IntentFilter iFilter = new IntentFilter(PushReceiver.RECEIVED_NEW_MESSAGE);
         registerReceiver(mPushMessageReceiver, iFilter);
+
+        if (mPushInviteReceiver == null) {
+            mPushInviteReceiver = new MainPushInviteReceiver();
+        }
+        iFilter = new IntentFilter(PushReceiver.RECEIVED_NEW_INVITE);
+        registerReceiver(mPushInviteReceiver, iFilter);
     }
     @Override
     public void onPause() {
@@ -267,6 +288,10 @@ public class MainActivity extends AppCompatActivity {
         mFusedLocationClient.removeLocationUpdates(mCallback);
         if (mPushMessageReceiver != null){
             unregisterReceiver(mPushMessageReceiver);
+        }
+
+        if (mPushInviteReceiver != null){
+            unregisterReceiver(mPushInviteReceiver);
         }
     }
 
@@ -374,6 +399,32 @@ public class MainActivity extends AppCompatActivity {
                 mModel.addMessage(intent.getIntExtra("chatid", -1), cm);
                 CHAT_ID = intent.getIntExtra("chatid", -1);
                 NEW_MESSAGE = 1;
+            }
+            if (intent.hasExtra("INVITE")) {
+                Log.d("MainActivity", "invite received in mainactivity");
+                if (nd.getId() != R.id.navigation_contacts) {
+                    mNewInviteModel.increment();
+                }
+            }
+        }
+    }
+
+    /**
+     * A BroadcastReceiver that listens for invites sent from PushReceiver
+     */
+    private class MainPushInviteReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            NavController nc =
+                    Navigation.findNavController(
+                            MainActivity.this, R.id.nav_host_fragment);
+            NavDestination nd = nc.getCurrentDestination();
+            if (intent.hasExtra("INVITE")) {
+                Log.d("MainActivity", "invite received in mainactivity");
+                if (nd.getId() != R.id.navigation_contacts) {
+                    mNewInviteModel.increment();
+                }
             }
         }
     }
