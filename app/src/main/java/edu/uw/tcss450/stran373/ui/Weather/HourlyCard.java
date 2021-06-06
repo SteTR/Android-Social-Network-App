@@ -4,12 +4,24 @@ import java.io.Serializable;
 
 /**
  * This class is used for each Hour displayed in the Weather page.
+ *
+ * @author Bryce Fujita
  */
 public class HourlyCard implements Serializable {
 
+    /**
+     * Represents the time in hours as an integer.
+     */
     private final int mTime;
+
+    /**
+     * Represents the time formatted as a string.
+     */
     private final String mTemp;
 
+    /**
+     * Represents the weather condition.
+     */
     private final int mCond;
 
     /**
@@ -68,6 +80,11 @@ public class HourlyCard implements Serializable {
      */
     public String getTemp() { return mTemp; }
 
+    /**
+     * Get the weather condition.
+     *
+     * @return the weather condition.
+     */
     public int getCond() { return mCond; }
 
 }

@@ -45,6 +45,9 @@ import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
  */
 public class WeatherViewModel extends AndroidViewModel {
 
+    /**
+     * Represents all the days of the week.
+     */
     private String[] DAYS_OF_WEEK = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
 
     /**
@@ -78,6 +81,9 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private long mZip;
 
+    /**
+     * Represents the current JWT used to access weather data.
+     */
     private String mJWT;
 
     /**
