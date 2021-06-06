@@ -109,6 +109,8 @@
     <string name="contact_search">Search Users</string>
     <string name="create_chat">Create Chat</string>
 
+    <string name="map_fragment_name">Choose a location.</string>
+
     <!-- Contact search method string array-->
     <string-array name="search_array">
         <item>First, Last</item>

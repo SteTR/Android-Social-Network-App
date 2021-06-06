@@ -73,6 +73,7 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
          */
         private void updateHourlyIcon(HourlyCard theCard) {
             int hour = theCard.getTimeNum();
+
             if (theCard.getCond() < 233) {
                 binding.imageCurrent.setImageResource(R.drawable.ic_thunder);
             } else if (theCard.getCond() < 532 && theCard.getCond() > 299) {
@@ -93,11 +94,11 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
          * @param theResources
          */
         private void nightOrDay(int theHour, int[] theResources) {
-            boolean night = theHour > 16 || theHour < 4;
-            if (night) {
-                binding.imageCurrent.setImageResource(theResources[0]);
-            } else {
+            boolean day = theHour < 17 && theHour > 5;
+            if (day) {
                 binding.imageCurrent.setImageResource(theResources[1]);
+            } else {
+                binding.imageCurrent.setImageResource(theResources[0]);
             }
         }
 

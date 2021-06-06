@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public class InviteCardRecyclerViewAdapter extends RecyclerView.Adapter<InviteCa
      */
     private final List<InviteCard> mInvites;
 
+    private InviteListViewModel mModel;
+
     interface OnItemCheckListener {
         void onItemCheck(InviteCard card);
         void onItemUncheck(InviteCard card);
@@ -32,10 +35,12 @@ public class InviteCardRecyclerViewAdapter extends RecyclerView.Adapter<InviteCa
     @NonNull
     private InviteCardRecyclerViewAdapter.OnItemCheckListener onItemClick;
 
-    public InviteCardRecyclerViewAdapter(final List<InviteCard> theInviteCards, @NonNull InviteCardRecyclerViewAdapter.OnItemCheckListener onItemCheckListener)
+    public InviteCardRecyclerViewAdapter(final List<InviteCard> theInviteCards, InviteListViewModel theModel,
+                                         @NonNull InviteCardRecyclerViewAdapter.OnItemCheckListener onItemCheckListener)
     {
         this.mInvites = theInviteCards;
         this.onItemClick = onItemCheckListener;
+        mModel = theModel;
     }
 
     /**
@@ -65,7 +70,29 @@ public class InviteCardRecyclerViewAdapter extends RecyclerView.Adapter<InviteCa
         holder.buttonInvite.setOnClickListener(view -> {
             onItemClick.onItemCheck(invite);
             invite.setSelected(true);
+            removeInvite(invite.getMemberID());
         });
+    }
+
+    /**
+     *
+     *
+     * @param theInviteNum
+     */
+    private void removeInvite(String theInviteNum) {
+        boolean found = false;
+        int i = 0;
+        while (i < mInvites.size() && !found) {
+            int a = Integer.parseInt(mInvites.get(i).getMemberID());
+            int b = Integer.parseInt(theInviteNum);
+            if (a == b) {
+                found = true;
+                mInvites.remove(i);
+                mModel.removeFromList(theInviteNum);
+            } else {
+                i++;
+            }
+        }
     }
 
 

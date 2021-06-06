@@ -86,7 +86,7 @@ public class InviteListFragment extends Fragment {
         mModel.addInviteListObserver(getViewLifecycleOwner(), inviteList -> {
             if (!inviteList.isEmpty()) {
                 binding.inviteRecycler.setAdapter(
-                        new InviteCardRecyclerViewAdapter(inviteList,
+                        new InviteCardRecyclerViewAdapter(inviteList, mModel,
                                 new InviteCardRecyclerViewAdapter.OnItemCheckListener() {
                                     //The listeners to build the list in Sprint 3
                                     @Override
