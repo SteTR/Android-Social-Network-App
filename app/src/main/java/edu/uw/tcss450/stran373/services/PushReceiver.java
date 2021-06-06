@@ -28,6 +28,7 @@ public class PushReceiver extends BroadcastReceiver {
 
     public static final String RECEIVED_NEW_MESSAGE = "new message from pushy";
     public static final String RECEIVED_CHAT_CREATION = "chatcreation";
+    public static final String RECEIVED_NEW_INVITE = "new invite from pushy";
 
     private static final String CHANNEL_ID = "1";
 
@@ -72,15 +73,8 @@ public class PushReceiver extends BroadcastReceiver {
                 // Just update the chats page
             }
 
-        } else {
-            //the following variables are used to store the information sent from Pushy
-            //In the WS, you define what gets sent. You can change it there to suit your needs
-            //Then here on the Android side, decide what to do with the message you got
-
-            //for the lab, the WS is only sending chat messages so the type will always be msg
-            //for your project, the WS needs to send different types of push messages.
-            //So perform logic/routing based on the "type"
-            //feel free to change the key or type of values.
+        }
+        else if (typeOfMessage.equals("msg")) {
             ChatMessage message = null;
             int chatId = -1;
             try {
@@ -137,6 +131,51 @@ public class PushReceiver extends BroadcastReceiver {
                 notificationManager.notify(1, builder.build());
                 CHAT_ID = chatId;
                 NEW_MESSAGE = 1;
+            }
+        }
+        else if (typeOfMessage.equals("invite")) {
+            ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
+            ActivityManager.getMyMemoryState(appProcessInfo);
+
+            if (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE) {
+                //app is in the foreground so send the message to the active Activities
+                Log.d("PUSHY", "Invite received in foreground");
+
+                //create an Intent to broadcast a message to other parts of the app.
+                Intent j = new Intent(RECEIVED_NEW_INVITE);
+                j.putExtra("INVITE", "new invite");
+
+                context.sendBroadcast(j);
+                Log.d("PUSHY", "sent invite broadcast");
+            } else {
+                //app is in the background so create and post a notification
+                Log.d("PUSHY", "Invite received in background");
+
+                Intent i = new Intent(context, AuthActivity.class);
+                i.putExtras(intent.getExtras());
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                        i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                //research more on notifications the how to display them
+                //https://developer.android.com/guide/topics/ui/notifiers/notifications
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setAutoCancel(true)
+                        .setSmallIcon(R.drawable.ic_baseline_invite_notifications_24)
+                        .setContentTitle("New Invite!")
+                        .setContentText("You have received a new pending request.")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent);
+
+                // Automatically configure a ChatMessageNotification Channel for devices running Android O+
+                Pushy.setNotificationChannel(builder, context);
+
+                // Get an instance of the NotificationManager service
+                NotificationManager notificationManager =
+                        (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+
+                // Build the notification and display it
+                notificationManager.notify(1, builder.build());
             }
         }
     }
