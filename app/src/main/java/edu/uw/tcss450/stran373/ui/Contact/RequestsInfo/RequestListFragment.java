@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
@@ -92,11 +93,15 @@ public class RequestListFragment extends Fragment {
                                     @Override
                                     public void onAcceptCheck(RequestCard card) {
                                         mModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
+                                        mModel.removeRequest(card);
+                                        binding.requestRecycler.getAdapter().notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onDeclineCheck(RequestCard card) {
                                         mModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+                                        mModel.removeRequest(card);
+                                        binding.requestRecycler.getAdapter().notifyDataSetChanged();
                                     }
                                 }
                         )

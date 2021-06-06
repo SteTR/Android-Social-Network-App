@@ -46,6 +46,19 @@ public class RequestListViewModel extends AndroidViewModel {
 
 
     /**
+     * Remove this request from the view model
+     */
+    public void removeRequest(RequestCard theRequest) {
+        mRequestCards.getValue().remove(theRequest);
+    }
+
+    /**
+     * Get request cards
+     */
+    public MutableLiveData<List<RequestCard>> getRequests() {
+        return mRequestCards;
+    }
+    /**
      * Add an observer to the Request cards to check for change of state
      *
      * @param owner the lifecycle owner of this observer

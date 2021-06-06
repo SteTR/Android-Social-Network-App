@@ -51,6 +51,13 @@ public class InviteListViewModel extends AndroidViewModel {
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Remove this invite from the view model
+     */
+    public void removeInvite(InviteCard theCard) {
+        mInviteCards.getValue().remove(theCard);
+    }
+
 
     /**
      * Add an observer to the contact cards to check for change of state

@@ -94,10 +94,13 @@ public class InviteListFragment extends Fragment {
                                         currentSelectedItems.add(card);
                                         Snackbar.make(getView(), R.string.invite_sent, Snackbar.LENGTH_LONG).show();
                                         mModel.connectPost(card.getMemberID(), mUserViewModel.getJwt());
+                                        mModel.removeInvite(card);
+                                        binding.inviteRecycler.getAdapter().notifyDataSetChanged();
                                     }
                                     @Override
                                     public void onItemUncheck(InviteCard card) {
                                         currentSelectedItems.remove(card);
+                                        mModel.removeInvite(card);
                                     }
                                 }
                                 ));
