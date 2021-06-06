@@ -125,9 +125,9 @@ public class HourlyRecyclerViewAdapter extends RecyclerView.Adapter<HourlyRecycl
         private void nightOrDay(int theHour, int[] theResources) {
             boolean night = theHour > 16 || theHour < 4;
             if (night) {
-                binding.imageCurrent.setImageResource(theResources[0]);
+                mBinding.imageCurrent.setImageResource(theResources[0]);
             } else {
-                binding.imageCurrent.setImageResource(theResources[1]);
+                mBinding.imageCurrent.setImageResource(theResources[1]);
             }
         }
 
