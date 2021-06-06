@@ -19,10 +19,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.IntFunction;
 
 import edu.uw.tcss450.stran373.R;
@@ -71,14 +73,21 @@ public class RequestListViewModel extends AndroidViewModel {
     }
 
     /**
-     * Handle an error when we actually pull from our Requests endpoint
+     * Handle an error from the Requests endpoint
      *
      * @param error that may occur during a request from the endpoint
      */
     private void handleError(final VolleyError error) {
-        //We will need to improve this error handler
-        Log.e("CONNECTION ERROR", mResponse.getValue().toString());
-        throw new IllegalStateException(error.getMessage());
+        if (Objects.isNull(error.networkResponse)) {
+            Log.e("NETWORK ERROR", error.getMessage());
+        }
+        else {
+            String data = new String(error.networkResponse.data, Charset.defaultCharset());
+            Log.e("CLIENT ERROR",
+                    error.networkResponse.statusCode +
+                            " " +
+                            data);
+        }
     }
 
 

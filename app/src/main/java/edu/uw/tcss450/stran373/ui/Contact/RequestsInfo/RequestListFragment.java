@@ -84,15 +84,21 @@ public class RequestListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         FragmentRequestListBinding binding = FragmentRequestListBinding.bind(getView());
 
-        //Next sprint we will need to add listeners here so that they can accept/reject lists
+        //Listener for the requests
         mModel.addRequestListObserver(getViewLifecycleOwner(), requestList -> {
             if (!requestList.isEmpty()) {
                 binding.requestRecycler.setAdapter(
                         new RequestCardRecyclerViewAdapter(requestList,
+
+                                //This is a custom class that can be used in the future to build lists
+                                //to accept reject. As of now, they act as button listeners
                                 new RequestCardRecyclerViewAdapter.OnItemCheckListener() {
                                     @Override
                                     public void onAcceptCheck(RequestCard card) {
                                         mModel.connectPost(card.getMemberID(), "Accept", mUserViewModel.getJwt());
+
+                                        //Remove the request from the view model and notify the
+                                        //adapter that the data set has changed
                                         mModel.removeRequest(card);
                                         binding.requestRecycler.getAdapter().notifyDataSetChanged();
                                     }
@@ -100,6 +106,9 @@ public class RequestListFragment extends Fragment {
                                     @Override
                                     public void onDeclineCheck(RequestCard card) {
                                         mModel.connectPost(card.getMemberID(), "Decline", mUserViewModel.getJwt());
+
+                                        //Remove the request from the view model and notify the
+                                        //adapter that the data set has changed
                                         mModel.removeRequest(card);
                                         binding.requestRecycler.getAdapter().notifyDataSetChanged();
                                     }
@@ -109,10 +118,12 @@ public class RequestListFragment extends Fragment {
             }
         });
 
+        //Button to navigate to contacts
         binding.contactButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         RequestListFragmentDirections.actionRequestListFragmentToNavigationContacts()));
 
+        //Button to navigate to the invites
         binding.inviteButton.setOnClickListener(button ->
                 Navigation.findNavController(getView()).navigate(
                         RequestListFragmentDirections.actionRequestListFragmentToInviteListFragment()));
