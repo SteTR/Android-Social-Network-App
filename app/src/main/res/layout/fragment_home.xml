@@ -87,9 +87,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recylcer_chats"
         android:layout_width="400dp"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="6dp"
         app:layoutManager="LinearLayoutManager"
@@ -139,7 +139,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:text="Recent Chats"
@@ -147,6 +147,7 @@
         app:layout_constraintBottom_toTopOf="@+id/recylcer_chats"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/divider" />
+        app:layout_constraintTop_toTopOf="@+id/divider"
+        app:layout_constraintVertical_bias="0.448" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
