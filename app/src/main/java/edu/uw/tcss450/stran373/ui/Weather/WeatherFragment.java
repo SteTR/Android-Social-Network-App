@@ -1,9 +1,11 @@
 package edu.uw.tcss450.stran373.ui.Weather;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import edu.uw.tcss450.stran373.MainActivity;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
+import edu.uw.tcss450.stran373.ui.Home.LocationViewModel;
 
 /**
  * The fragment used for the application's weather feature.
@@ -48,20 +51,24 @@ public class WeatherFragment extends Fragment {
      *
      * @param theSavedInstanceState is a Bundle object that keeps track of the saved instance state.
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle theSavedInstanceState) {
         super.onCreate(theSavedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
         MainActivity main = (MainActivity) getActivity();
         mJWT = main.getTheArgs().getJwt();
-        mModel.setZip(98109);
-        mModel.connect(mJWT);
+        LocationViewModel loc = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
+        mModel.connect(mJWT,loc.getLocation().getLatitude(),loc.getLocation().getLongitude());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mModel.connect(mJWT);
+        MainActivity main = (MainActivity) getActivity();
+        mJWT = main.getTheArgs().getJwt();
+        LocationViewModel loc = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
+        mModel.connect(mJWT,loc.getLocation().getLatitude(),loc.getLocation().getLongitude());
     }
 
     /**

@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -35,6 +36,7 @@ import java.time.YearMonth;
 import edu.uw.tcss450.stran373.UserInfoViewModel;
 import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.databinding.FragmentWeatherBinding;
+import edu.uw.tcss450.stran373.ui.Home.LocationViewModel;
 
 /**
  * ViewModel used for the WeatherFragment. This will be used to handle the main
@@ -384,6 +386,34 @@ public class WeatherViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void connectCurrent(double theLat, double theLon) {
+        final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" +
+                theLat + "&lon=" + theLon;
+        Log.d("Getting Location at", url);
+        Request request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> handleResult(response, "Current Location"),
+                this::handleError) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", mJWT);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
+    }
+
     /**
      * How to handle retrieved list
      * @param result The list returned
@@ -424,8 +454,10 @@ public class WeatherViewModel extends AndroidViewModel {
      * to then retrieve information from OpenWeatherApi.
      * @param theJWT a string used for authorization
      */
-    public void connect(String theJWT) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void connect(String theJWT, double theLat, double theLon) {
         mJWT = theJWT;
+        connectCurrent(theLat,theLon);
         Log.d("Connecting with", mJWT);
         final String url = "https://production-tcss450-backend.herokuapp.com/weather/get";
         Request request = new JsonObjectRequest(
