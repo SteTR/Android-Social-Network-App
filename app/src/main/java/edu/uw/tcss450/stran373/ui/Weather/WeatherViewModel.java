@@ -47,7 +47,10 @@ import edu.uw.tcss450.stran373.ui.Home.LocationViewModel;
  */
 public class WeatherViewModel extends AndroidViewModel {
 
-    private String[] DAYS_OF_WEEK = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
+    /**
+     * A Constant array used to store the different days of the week.
+     */
+    private final static String[] DAYS_OF_WEEK = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
 
     /**
      * LiveData to hold the list of WeatherCard objects.
@@ -80,6 +83,9 @@ public class WeatherViewModel extends AndroidViewModel {
      */
     private long mZip;
 
+    /**
+     * The JWT used for authorization in the backend.
+     */
     private String mJWT;
 
     /**
@@ -386,6 +392,11 @@ public class WeatherViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
     }
 
+    /**
+     * Adds weather card for the current location.
+     * @param theLat int Current Location's latitude
+     * @param theLon int Current Location's longitude
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void connectCurrent(double theLat, double theLon) {
         final String url = "https://production-tcss450-backend.herokuapp.com/weather?lat=" +
