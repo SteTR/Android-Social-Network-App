@@ -111,7 +111,7 @@ public class HomeViewModel extends AndroidViewModel {
                 temp = (Double) current.get("temp");
             }
             // Weather card for Seattle, Washington
-            Weather wc = new Weather("Current Location", currentCondition,temp + " F°");
+            Weather wc = new Weather("Seattle, WA", currentCondition,temp + " F°");
             mWeather.setValue(wc);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -43,8 +43,6 @@ public class InviteListViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
 
-    private String mJWT;
-
     public InviteListViewModel(@NonNull Application application) {
         super(application);
         mInviteCards = new MutableLiveData<>();
@@ -125,7 +123,6 @@ public class InviteListViewModel extends AndroidViewModel {
      */
     public void connectGet(final String theJWT) {
         //Need to add our contact endpoint
-        setmJWT(theJWT);
         String user_auth = theJWT;
         String url = getApplication().getResources().getString(R.string.base_url)+"invites";
 
@@ -161,7 +158,6 @@ public class InviteListViewModel extends AndroidViewModel {
     public void connectPost(final String theID, final String theJWT) {
 
         String user_auth = theJWT;
-        setmJWT(theJWT);
         String url = getApplication().getResources().getString(R.string.base_url)+"invites";
         //Create the body for the JSON request
         JSONObject body = new JSONObject();
@@ -191,33 +187,5 @@ public class InviteListViewModel extends AndroidViewModel {
 
         //Instantiate the RequestQueue and add the request to the queue
         Volley.newRequestQueue(getApplication().getApplicationContext()).add(request);
-    }
-
-    /**
-     *
-     *
-     * @param theNum
-     */
-    public void removeFromList(String theNum) {
-        boolean found = false;
-        int i = 0;
-        while (i < mInviteCards.getValue().size() && !found) {
-            int a = Integer.parseInt(mInviteCards.getValue().get(i).getMemberID());
-            int b = Integer.parseInt(theNum);
-            if (a == b) {
-                found = true;
-                mInviteCards.getValue().remove(i);
-            } else {
-                i++;
-            }
-        }
-    }
-
-    private void setmJWT(String theJWT) {
-        mJWT = theJWT;
-    }
-
-    public String getmJWT() {
-        return mJWT;
     }
 }
