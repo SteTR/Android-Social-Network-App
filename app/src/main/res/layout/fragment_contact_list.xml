@@ -79,7 +79,7 @@
             android:layout_gravity="bottom|end"
             app:efab_closingAnticipateTension="0"
             app:efab_icon="@drawable/ic_baseline_menu_open_24"
-            app:efab_iconAnimationRotationDeg="-225" />
+            app:efab_iconAnimationRotationDeg="-270" />
 
         <com.nambimobile.widgets.efab.FabOption
             android:id="@+id/expandable_fab_search"
@@ -99,7 +99,7 @@
             android:id="@+id/expandable_fab_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_icon="@drawable/ic_map_black_24dp"
+            app:fab_icon="@drawable/ic_contacts_add_chat"
             app:label_text="@string/create_chat" />
     </com.nambimobile.widgets.efab.ExpandableFabLayout>
 
