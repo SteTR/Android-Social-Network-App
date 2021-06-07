@@ -92,7 +92,7 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="edu.uw.tcss450.stran373.ui.Weather.MapFragment"
-        android:label="fragment_map"
+        android:label="Choose Location"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/changePasswordFragment"

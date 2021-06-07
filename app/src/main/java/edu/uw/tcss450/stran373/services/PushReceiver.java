@@ -24,6 +24,12 @@ import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIB
 import static edu.uw.tcss450.stran373.MainActivity.CHAT_ID;
 import static edu.uw.tcss450.stran373.MainActivity.NEW_MESSAGE;
 
+/**
+ * This class receive notifications from push server and send broadcast to other parts of the app
+ *
+ * @author Steven Tran
+ * @author Haoying Li
+ */
 public class PushReceiver extends BroadcastReceiver {
 
     public static final String RECEIVED_NEW_MESSAGE = "new message from pushy";

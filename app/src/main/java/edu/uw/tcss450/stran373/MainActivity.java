@@ -59,6 +59,12 @@ import edu.uw.tcss450.stran373.utils.Utils;
 
 /**
  * A class used to contain all of the Main Fragments used.
+ *
+ * @author Andrew Bennett
+ * @author Bryce Fujita
+ * @author Jonathan Lee
+ * @author Steven Tran
+ * @author Haoying Li
  */
 public class MainActivity extends AppCompatActivity {
 

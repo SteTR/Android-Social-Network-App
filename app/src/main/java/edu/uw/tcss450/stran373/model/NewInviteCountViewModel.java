@@ -6,6 +6,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * A view model for counting new invites
+ *
+ * @author Haoying Li
+ */
 public class NewInviteCountViewModel extends ViewModel {
     private MutableLiveData<Integer> mNewInviteCount;
 

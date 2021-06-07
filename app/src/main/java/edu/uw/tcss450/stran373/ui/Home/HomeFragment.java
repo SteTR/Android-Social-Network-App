@@ -28,6 +28,12 @@ import edu.uw.tcss450.stran373.ui.Contact.RequestsInfo.RequestListViewModel;
 /**
  * A simple {@link Fragment} subclass.
  * A blank fragment used for UI at the moment.
+ *
+ * @author Andrew Bennett
+ * @author Bryce Fujita
+ * @author Jonathan Lee
+ * @author Steven Tran
+ * @author Haoying Li
  */
 public class HomeFragment extends Fragment {
 

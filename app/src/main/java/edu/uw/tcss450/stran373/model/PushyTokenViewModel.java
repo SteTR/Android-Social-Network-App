@@ -27,6 +27,11 @@ import edu.uw.tcss450.stran373.R;
 import edu.uw.tcss450.stran373.io.RequestQueueSingleton;
 import me.pushy.sdk.Pushy;
 
+/**
+ * A view moael for sending and retrieving push token
+ *
+ * @author Haoying Li
+ */
 public class PushyTokenViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> mPushyToken;
