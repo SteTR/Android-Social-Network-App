@@ -65,6 +65,7 @@ public class WeatherFragment extends Fragment {
     /**
      * Used to allow the weather fragment to resume.
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onResume() {
         super.onResume();
